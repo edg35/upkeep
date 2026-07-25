@@ -1,29 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Upkeep — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS + Prisma + PostgreSQL backend for the Upkeep household management app.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Data Model
+
+```mermaid
+erDiagram
+    User {
+        string user_id PK
+        string email
+        string name
+        DateTime updated_at
+    }
+    Household {
+        string household_id PK
+        string name
+        string created_by FK
+        DateTime updated_at
+    }
+    HouseholdMember {
+        string household_id PK "FK"
+        string user_id PK "FK"
+        Role role
+    }
+    HouseholdInvitation {
+        string invitation_id PK
+        string household_id FK
+        string code
+        string invited_by FK
+        string email
+        DateTime created_at
+        DateTime expires_at
+        InvitationStatus status
+    }
+    HouseholdJoinRequest {
+        string household_id PK "FK"
+        string requested_by PK "FK"
+        JoinRequestStatus status
+        DateTime created_at
+    }
+    Category {
+        string category_id PK
+        string household_id FK
+        string name
+        string description
+        string icon
+        string color
+    }
+    Item {
+        string item_id PK
+        string name
+        string category_id FK
+        string icon
+        ItemType item_type
+        string notes
+        string purchase_link
+        DateTime created_at
+        DateTime updated_at
+        string created_by FK
+    }
+    ItemSchedule {
+        string item_id PK "FK"
+        TrackingMode tracking_mode
+        int interval_days
+        DateTime fixed_due_date
+        string recurrence_rule
+        int lead_time_days
+        DateTime last_completed_at
+        DateTime next_due_date
+        DateTime updated_at
+    }
+    ItemHistory {
+        string history_id PK
+        string item_id FK
+        DateTime completed_at
+        string completed_by FK
+        string notes
+    }
+    Reminder {
+        string reminder_id PK
+        string item_id FK
+        string user_id FK
+        DateTime remind_at
+    }
+
+    User ||--o{ Household : "creates"
+    User ||--o{ HouseholdMember : "member of"
+    User ||--o{ HouseholdInvitation : "sends"
+    User ||--o{ HouseholdJoinRequest : "requests"
+    User ||--o{ Item : "creates"
+    User ||--o{ ItemHistory : "completes"
+    User ||--o{ Reminder : "receives"
+    Household ||--o{ HouseholdMember : "has"
+    Household ||--o{ HouseholdInvitation : "has"
+    Household ||--o{ HouseholdJoinRequest : "has"
+    Household ||--o{ Category : "has"
+    Category ||--o{ Item : "contains"
+    Item ||--o| ItemSchedule : "scheduled by"
+    Item ||--o{ ItemHistory : "has"
+    Item ||--o{ Reminder : "triggers"
+```
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) + [Prisma](https://www.prisma.io/) backend.
 
 ## Project setup
 
