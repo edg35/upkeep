@@ -9,12 +9,13 @@ generator client {
 }
 
 model User {
-    user_id           String                @id @default(uuid())
-    email             String                @unique
+    user_id           String                 @id @default(uuid())
+    email             String                 @unique
     name              String
     createdHouseholds Household[]
     memberships       HouseholdMember[]
     invitations       HouseholdInvitation[]
+    requests          HouseholdJoinRequest[]
 }
 
 model Household {
@@ -22,9 +23,10 @@ model Household {
     name         String
     created_by   String
 
-    creator     User                  @relation(fields: [created_by], references: [user_id])
-    members     HouseholdMember[]
-    invitations HouseholdInvitation[]
+    creator               User                   @relation(fields: [created_by], references: [user_id])
+    members               HouseholdMember[]
+    invitations           HouseholdInvitation[]
+    householdJoinRequests HouseholdJoinRequest[]
 }
 
 enum Role {
@@ -45,17 +47,43 @@ model HouseholdMember {
 }
 
 //! For invitations, we can use email to see if user is already in our system, and send a push notification on top of and email
+
+enum InvitationStatus {
+    PENDING
+    ACCEPTED
+    DECLINED
+    EXPIRED
+}
+
 model HouseholdInvitation {
-    invitation_id String   @id @default(uuid())
+    invitation_id String           @id @default(uuid())
     household_id  String
-    code          String   @unique
+    code          String           @unique
     invited_by    String
     email         String
-    created_at    DateTime @default(now())
+    created_at    DateTime         @default(now())
     expires_at    DateTime
+    status        InvitationStatus @default(PENDING)
 
     household Household @relation(fields: [household_id], references: [household_id])
     inviter   User      @relation(fields: [invited_by], references: [user_id])
 
     @@unique([household_id, email])
+}
+
+enum JoinRequestStatus {
+    PENDING
+    ACCEPTED
+    DECLINED
+}
+
+model HouseholdJoinRequest {
+    household_id String
+    requested_by String
+    status       JoinRequestStatus @default(PENDING)
+
+    household Household @relation(fields: [household_id], references: [household_id])
+    requester User      @relation(fields: [requested_by], references: [user_id])
+
+    @@id([household_id, requested_by])
 }
