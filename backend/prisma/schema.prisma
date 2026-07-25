@@ -12,6 +12,7 @@ model User {
     user_id           String                 @id @default(uuid())
     email             String                 @unique
     name              String
+    updated_at        DateTime               @updatedAt
     createdHouseholds Household[]
     memberships       HouseholdMember[]
     invitations       HouseholdInvitation[]
@@ -22,9 +23,10 @@ model User {
 }
 
 model Household {
-    household_id String @id @default(uuid())
+    household_id String   @id @default(uuid())
     name         String
     created_by   String
+    updated_at   DateTime @updatedAt
 
     creator               User                   @relation(fields: [created_by], references: [user_id])
     members               HouseholdMember[]
@@ -41,7 +43,6 @@ enum Role {
 model HouseholdMember {
     household_id String
     user_id      String
-    email        String
     role         Role
 
     household Household @relation(fields: [household_id], references: [household_id])
@@ -50,7 +51,7 @@ model HouseholdMember {
     @@id([household_id, user_id])
 }
 
-//! For invitations, we can use email to see if user is already in our system, and send a push notification on top of and email
+//! For invitations, we can use email to see if user is already in our system, and send a push notification on top of an email
 enum InvitationStatus {
     PENDING
     ACCEPTED
@@ -84,6 +85,7 @@ model HouseholdJoinRequest {
     household_id String
     requested_by String
     status       JoinRequestStatus @default(PENDING)
+    created_at   DateTime          @default(now())
 
     household Household @relation(fields: [household_id], references: [household_id])
     requester User      @relation(fields: [requested_by], references: [user_id])
@@ -119,6 +121,7 @@ model Item {
     notes         String?
     purchase_link String?
     created_at    DateTime @default(now())
+    updated_at    DateTime @updatedAt
     created_by    String
 
     category  Category      @relation(fields: [category_id], references: [category_id])
@@ -139,10 +142,11 @@ model ItemSchedule {
     tracking_mode     TrackingMode
     interval_days     Int?
     fixed_due_date    DateTime?
-    reccurrance_rule  String?
+    recurrence_rule   String?
     lead_time_days    Int?
     last_completed_at DateTime?
     next_due_date     DateTime
+    updated_at        DateTime     @updatedAt
 
     item Item @relation(fields: [item_id], references: [item_id])
 
@@ -150,6 +154,7 @@ model ItemSchedule {
 }
 
 model ItemHistory {
+    history_id   String   @id @default(uuid())
     item_id      String
     completed_at DateTime @default(now())
     completed_by String
@@ -157,18 +162,16 @@ model ItemHistory {
 
     item      Item @relation(fields: [item_id], references: [item_id])
     completer User @relation(fields: [completed_by], references: [user_id])
-
-    @@id([item_id, completed_at])
 }
 
 model Reminder {
     reminder_id String   @id @default(uuid())
     item_id     String
-    user_id     String?
+    user_id     String
     remind_at   DateTime
 
-    item Item  @relation(fields: [item_id], references: [item_id])
-    user User? @relation(fields: [user_id], references: [user_id])
+    item Item @relation(fields: [item_id], references: [item_id])
+    user User @relation(fields: [user_id], references: [user_id])
 
     @@unique([item_id, user_id, remind_at])
 }
