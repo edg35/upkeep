@@ -16,6 +16,9 @@ model User {
     memberships       HouseholdMember[]
     invitations       HouseholdInvitation[]
     requests          HouseholdJoinRequest[]
+    items             Item[]
+    itemHistories     ItemHistory[]
+    reminders         Reminder[]
 }
 
 model Household {
@@ -89,6 +92,7 @@ model HouseholdJoinRequest {
 }
 
 model Category {
+    category_id  String  @id @default(uuid())
     household_id String
     name         String
     description  String?
@@ -96,6 +100,75 @@ model Category {
     color        String?
 
     household Household @relation(fields: [household_id], references: [household_id])
+    items     Item[]
+}
 
-    @@id([household_id, name])
+enum ItemType {
+    CONSUMABLE
+    MAINTENANCE
+    BILL
+    APPOINTMENT
+}
+
+model Item {
+    item_id       String   @id @default(uuid())
+    name          String
+    category_id   String
+    icon          String?
+    item_type     ItemType
+    notes         String?
+    purchase_link String?
+    created_at    DateTime @default(now())
+    created_by    String
+
+    category  Category      @relation(fields: [category_id], references: [category_id])
+    creator   User          @relation(fields: [created_by], references: [user_id])
+    schedule  ItemSchedule?
+    histories ItemHistory[]
+    reminders Reminder[]
+}
+
+enum TrackingMode {
+    INTERVAL
+    FIXED_DATE
+    RECURRING
+}
+
+model ItemSchedule {
+    item_id           String
+    tracking_mode     TrackingMode
+    interval_days     Int?
+    fixed_due_date    DateTime?
+    reccurrance_rule  String?
+    lead_time_days    Int?
+    last_completed_at DateTime?
+    next_due_date     DateTime
+
+    item Item @relation(fields: [item_id], references: [item_id])
+
+    @@id([item_id])
+}
+
+model ItemHistory {
+    item_id      String
+    completed_at DateTime @default(now())
+    completed_by String
+    notes        String?
+
+    item      Item @relation(fields: [item_id], references: [item_id])
+    completer User @relation(fields: [completed_by], references: [user_id])
+
+    @@id([item_id, completed_at])
+}
+
+model Reminder {
+    reminder_id String   @id @default(uuid())
+    item_id     String
+    user_id     String?
+    remind_at   DateTime
+
+    item Item  @relation(fields: [item_id], references: [item_id])
+    user User? @relation(fields: [user_id], references: [user_id])
+
+    @@unique([item_id, user_id, remind_at])
 }
