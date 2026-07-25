@@ -27,6 +27,7 @@ model Household {
     members               HouseholdMember[]
     invitations           HouseholdInvitation[]
     householdJoinRequests HouseholdJoinRequest[]
+    categories            Category[]
 }
 
 enum Role {
@@ -47,7 +48,6 @@ model HouseholdMember {
 }
 
 //! For invitations, we can use email to see if user is already in our system, and send a push notification on top of and email
-
 enum InvitationStatus {
     PENDING
     ACCEPTED
@@ -86,4 +86,16 @@ model HouseholdJoinRequest {
     requester User      @relation(fields: [requested_by], references: [user_id])
 
     @@id([household_id, requested_by])
+}
+
+model Category {
+    household_id String
+    name         String
+    description  String?
+    icon         String?
+    color        String?
+
+    household Household @relation(fields: [household_id], references: [household_id])
+
+    @@id([household_id, name])
 }
