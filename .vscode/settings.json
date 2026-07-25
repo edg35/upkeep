@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/Users/ethangreen/code/projects/upkeep/frontend/linux"
+    "cmake.sourceDirectory": "/Users/ethangreen/code/projects/upkeep/frontend/linux",
+    "prisma.pinToPrisma6": true
 }

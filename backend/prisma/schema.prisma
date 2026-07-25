@@ -1,8 +1,61 @@
 datasource db {
     provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider = "prisma-client"
+    provider = "prisma-client-js"
     output   = "../generated"
+}
+
+model User {
+    user_id           String                @id @default(uuid())
+    email             String                @unique
+    name              String
+    createdHouseholds Household[]
+    memberships       HouseholdMember[]
+    invitations       HouseholdInvitation[]
+}
+
+model Household {
+    household_id String @id @default(uuid())
+    name         String
+    created_by   String
+
+    creator     User                  @relation(fields: [created_by], references: [user_id])
+    members     HouseholdMember[]
+    invitations HouseholdInvitation[]
+}
+
+enum Role {
+    OWNER
+    MEMBER
+}
+
+model HouseholdMember {
+    household_id String
+    user_id      String
+    email        String
+    role         Role
+
+    household Household @relation(fields: [household_id], references: [household_id])
+    user      User      @relation(fields: [user_id], references: [user_id])
+
+    @@id([household_id, user_id])
+}
+
+//! For invitations, we can use email to see if user is already in our system, and send a push notification on top of and email
+model HouseholdInvitation {
+    invitation_id String   @id @default(uuid())
+    household_id  String
+    code          String   @unique
+    invited_by    String
+    email         String
+    created_at    DateTime @default(now())
+    expires_at    DateTime
+
+    household Household @relation(fields: [household_id], references: [household_id])
+    inviter   User      @relation(fields: [invited_by], references: [user_id])
+
+    @@unique([household_id, email])
 }
