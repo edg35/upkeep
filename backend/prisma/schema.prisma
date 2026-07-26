@@ -11,6 +11,8 @@ generator client {
 model User {
     user_id           String                 @id @default(uuid())
     email             String                 @unique
+    email_verified    Boolean                @default(false)
+    password_hash     String?
     name              String
     updated_at        DateTime               @updatedAt
     createdHouseholds Household[]
@@ -20,6 +22,19 @@ model User {
     items             Item[]
     itemHistories     ItemHistory[]
     reminders         Reminder[]
+    refreshTokens     RefreshToken[]
+}
+
+model RefreshToken {
+    token_id    String    @id @default(uuid())
+    user_id     String
+    token_hash  String    @unique
+    device_info String?
+    created_at  DateTime  @default(now())
+    expires_at  DateTime
+    revoked_at  DateTime?
+
+    user User @relation(fields: [user_id], references: [user_id])
 }
 
 model Household {
