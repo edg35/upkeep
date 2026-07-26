@@ -2,6 +2,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'auth_token_holder.dart';
+
 // TODO: move to env config once you set up flavors/dotenv
 const _baseUrl = 'http://10.0.2.2:3000'; // Android emulator -> localhost
 // use 'http://localhost:3000' for iOS simulator
@@ -16,8 +18,17 @@ final dioProvider = Provider<Dio>((ref) {
   );
 
   dio.interceptors.add(LogInterceptor(responseBody: true));
-  // Auth interceptor for the token slot in flutter_secure_storage
-  // gets added in the auth-flow issue (VER-... auth flow).
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        final token = AuthTokenHolder.accessToken;
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        handler.next(options);
+      },
+    ),
+  );
 
   return dio;
 });
