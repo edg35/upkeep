@@ -1,17 +1,45 @@
 # frontend
 
-A new Flutter project.
+Upkeep mobile app, built with Flutter (Riverpod for state, go_router for navigation).
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Install dependencies:
 
-A few resources to get you started if this is your first Flutter project:
+```
+flutter pub get
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Run on iOS Simulator
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+open -a Simulator
+flutter run
+```
+
+### Run on Android emulator
+
+```
+flutter emulators --launch <emulator_id>
+flutter run
+```
+
+Use `flutter emulators` to list available emulators and find `<emulator_id>`.
+
+### Other targets
+
+```
+flutter run -d chrome   # web
+flutter run -d macos    # macOS desktop
+```
+
+## Testing
+
+```
+flutter analyze
+flutter test
+```
+
+## Notes
+
+- The API client (`lib/core/network/api_client.dart`) points at `http://10.0.2.2:3000`, which is the Android emulator's alias for the host machine's `localhost`. If testing against a local backend on iOS Simulator, web, or macOS, use `http://localhost:3000` instead.
