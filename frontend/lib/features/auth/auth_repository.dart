@@ -4,10 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/network/api_client.dart';
 
-class AuthRepository {
+abstract class AuthApi {
+  Future<Map<String, dynamic>> signup({
+    required String email,
+    required String password,
+    required String name,
+  });
+
+  Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  });
+
+  Future<Map<String, dynamic>> refresh(String refreshToken);
+
+  Future<void> logout(String refreshToken);
+}
+
+class AuthRepository implements AuthApi {
   AuthRepository(this._dio);
   final Dio _dio;
 
+  @override
   Future<Map<String, dynamic>> signup({
     required String email,
     required String password,
@@ -20,6 +38,7 @@ class AuthRepository {
     return res.data as Map<String, dynamic>;
   }
 
+  @override
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
@@ -31,11 +50,21 @@ class AuthRepository {
     return res.data as Map<String, dynamic>;
   }
 
+  @override
+  Future<Map<String, dynamic>> refresh(String refreshToken) async {
+    final res = await _dio.post(
+      '/auth/refresh',
+      data: {'refreshToken': refreshToken},
+    );
+    return res.data as Map<String, dynamic>;
+  }
+
+  @override
   Future<void> logout(String refreshToken) {
     return _dio.post('/auth/logout', data: {'refreshToken': refreshToken});
   }
 }
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
+final authRepositoryProvider = Provider<AuthApi>((ref) {
   return AuthRepository(ref.watch(dioProvider));
 });

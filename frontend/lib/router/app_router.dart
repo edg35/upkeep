@@ -1,20 +1,48 @@
-// router/app_router.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/auth/auth_controller.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/signup_screen.dart';
+import '../features/auth/splash_screen.dart';
 import '../features/auth/welcome_screen.dart';
 import '../features/bills/bills_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
 import '../features/items/items_screen.dart';
 import '../features/settings/settings_screen.dart';
 
+/// Notifies GoRouter to re-run its redirect whenever session restoration
+/// finishes or auth state otherwise changes (e.g. logout from a 401).
+class _RouterRefreshNotifier extends ChangeNotifier {
+  _RouterRefreshNotifier(Ref ref) {
+    ref.listen(sessionInitProvider, (_, _) => notifyListeners());
+    ref.listen(authControllerProvider, (_, _) => notifyListeners());
+  }
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final refreshNotifier = _RouterRefreshNotifier(ref);
+  ref.onDispose(refreshNotifier.dispose);
+
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
+    refreshListenable: refreshNotifier,
+    redirect: (context, state) {
+      final initializing = ref.read(sessionInitProvider).isLoading;
+      final isAuthenticated = ref.read(authControllerProvider).isAuthenticated;
+      final atSplash = state.matchedLocation == '/splash';
+
+      if (initializing) {
+        return atSplash ? null : '/splash';
+      }
+      if (atSplash) {
+        return isAuthenticated ? '/dashboard' : '/';
+      }
+      return null;
+    },
     routes: [
+      GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
       GoRoute(path: '/', builder: (context, state) => const WelcomeScreen()),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(path: '/signup', builder: (context, state) => const SignupScreen()),
