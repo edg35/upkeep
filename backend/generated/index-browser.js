@@ -148,8 +148,8 @@ exports.Prisma.HouseholdScalarFieldEnum = {
 };
 
 exports.Prisma.HouseholdMemberScalarFieldEnum = {
-  household_id: 'household_id',
   user_id: 'user_id',
+  household_id: 'household_id',
   role: 'role'
 };
 
