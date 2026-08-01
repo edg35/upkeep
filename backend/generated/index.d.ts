@@ -5597,40 +5597,40 @@ export namespace Prisma {
   }
 
   export type HouseholdMemberMinAggregateOutputType = {
-    household_id: string | null
     user_id: string | null
+    household_id: string | null
     role: $Enums.Role | null
   }
 
   export type HouseholdMemberMaxAggregateOutputType = {
-    household_id: string | null
     user_id: string | null
+    household_id: string | null
     role: $Enums.Role | null
   }
 
   export type HouseholdMemberCountAggregateOutputType = {
-    household_id: number
     user_id: number
+    household_id: number
     role: number
     _all: number
   }
 
 
   export type HouseholdMemberMinAggregateInputType = {
-    household_id?: true
     user_id?: true
+    household_id?: true
     role?: true
   }
 
   export type HouseholdMemberMaxAggregateInputType = {
-    household_id?: true
     user_id?: true
+    household_id?: true
     role?: true
   }
 
   export type HouseholdMemberCountAggregateInputType = {
-    household_id?: true
     user_id?: true
+    household_id?: true
     role?: true
     _all?: true
   }
@@ -5708,8 +5708,8 @@ export namespace Prisma {
   }
 
   export type HouseholdMemberGroupByOutputType = {
-    household_id: string
     user_id: string
+    household_id: string
     role: $Enums.Role
     _count: HouseholdMemberCountAggregateOutputType | null
     _min: HouseholdMemberMinAggregateOutputType | null
@@ -5731,36 +5731,36 @@ export namespace Prisma {
 
 
   export type HouseholdMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    household_id?: boolean
     user_id?: boolean
+    household_id?: boolean
     role?: boolean
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["householdMember"]>
 
   export type HouseholdMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    household_id?: boolean
     user_id?: boolean
+    household_id?: boolean
     role?: boolean
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["householdMember"]>
 
   export type HouseholdMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    household_id?: boolean
     user_id?: boolean
+    household_id?: boolean
     role?: boolean
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["householdMember"]>
 
   export type HouseholdMemberSelectScalar = {
-    household_id?: boolean
     user_id?: boolean
+    household_id?: boolean
     role?: boolean
   }
 
-  export type HouseholdMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"household_id" | "user_id" | "role", ExtArgs["result"]["householdMember"]>
+  export type HouseholdMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "household_id" | "role", ExtArgs["result"]["householdMember"]>
   export type HouseholdMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -5781,8 +5781,8 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      household_id: string
       user_id: string
+      household_id: string
       role: $Enums.Role
     }, ExtArgs["result"]["householdMember"]>
     composites: {}
@@ -5867,8 +5867,8 @@ export namespace Prisma {
      * // Get first 10 HouseholdMembers
      * const householdMembers = await prisma.householdMember.findMany({ take: 10 })
      * 
-     * // Only select the `household_id`
-     * const householdMemberWithHousehold_idOnly = await prisma.householdMember.findMany({ select: { household_id: true } })
+     * // Only select the `user_id`
+     * const householdMemberWithUser_idOnly = await prisma.householdMember.findMany({ select: { user_id: true } })
      * 
      */
     findMany<T extends HouseholdMemberFindManyArgs>(args?: SelectSubset<T, HouseholdMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HouseholdMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -5912,9 +5912,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many HouseholdMembers and only return the `household_id`
-     * const householdMemberWithHousehold_idOnly = await prisma.householdMember.createManyAndReturn({
-     *   select: { household_id: true },
+     * // Create many HouseholdMembers and only return the `user_id`
+     * const householdMemberWithUser_idOnly = await prisma.householdMember.createManyAndReturn({
+     *   select: { user_id: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -6003,9 +6003,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more HouseholdMembers and only return the `household_id`
-     * const householdMemberWithHousehold_idOnly = await prisma.householdMember.updateManyAndReturn({
-     *   select: { household_id: true },
+     * // Update zero or more HouseholdMembers and only return the `user_id`
+     * const householdMemberWithUser_idOnly = await prisma.householdMember.updateManyAndReturn({
+     *   select: { user_id: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6209,8 +6209,8 @@ export namespace Prisma {
    * Fields of the HouseholdMember model
    */
   interface HouseholdMemberFieldRefs {
-    readonly household_id: FieldRef<"HouseholdMember", 'String'>
     readonly user_id: FieldRef<"HouseholdMember", 'String'>
+    readonly household_id: FieldRef<"HouseholdMember", 'String'>
     readonly role: FieldRef<"HouseholdMember", 'Role'>
   }
     
@@ -14414,8 +14414,8 @@ export namespace Prisma {
 
 
   export const HouseholdMemberScalarFieldEnum: {
-    household_id: 'household_id',
     user_id: 'user_id',
+    household_id: 'household_id',
     role: 'role'
   };
 
@@ -14887,36 +14887,35 @@ export namespace Prisma {
     AND?: HouseholdMemberWhereInput | HouseholdMemberWhereInput[]
     OR?: HouseholdMemberWhereInput[]
     NOT?: HouseholdMemberWhereInput | HouseholdMemberWhereInput[]
-    household_id?: StringFilter<"HouseholdMember"> | string
     user_id?: StringFilter<"HouseholdMember"> | string
+    household_id?: StringFilter<"HouseholdMember"> | string
     role?: EnumRoleFilter<"HouseholdMember"> | $Enums.Role
     household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type HouseholdMemberOrderByWithRelationInput = {
-    household_id?: SortOrder
     user_id?: SortOrder
+    household_id?: SortOrder
     role?: SortOrder
     household?: HouseholdOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
 
   export type HouseholdMemberWhereUniqueInput = Prisma.AtLeast<{
-    household_id_user_id?: HouseholdMemberHousehold_idUser_idCompoundUniqueInput
+    user_id?: string
     AND?: HouseholdMemberWhereInput | HouseholdMemberWhereInput[]
     OR?: HouseholdMemberWhereInput[]
     NOT?: HouseholdMemberWhereInput | HouseholdMemberWhereInput[]
     household_id?: StringFilter<"HouseholdMember"> | string
-    user_id?: StringFilter<"HouseholdMember"> | string
     role?: EnumRoleFilter<"HouseholdMember"> | $Enums.Role
     household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "household_id_user_id">
+  }, "user_id">
 
   export type HouseholdMemberOrderByWithAggregationInput = {
-    household_id?: SortOrder
     user_id?: SortOrder
+    household_id?: SortOrder
     role?: SortOrder
     _count?: HouseholdMemberCountOrderByAggregateInput
     _max?: HouseholdMemberMaxOrderByAggregateInput
@@ -14927,8 +14926,8 @@ export namespace Prisma {
     AND?: HouseholdMemberScalarWhereWithAggregatesInput | HouseholdMemberScalarWhereWithAggregatesInput[]
     OR?: HouseholdMemberScalarWhereWithAggregatesInput[]
     NOT?: HouseholdMemberScalarWhereWithAggregatesInput | HouseholdMemberScalarWhereWithAggregatesInput[]
-    household_id?: StringWithAggregatesFilter<"HouseholdMember"> | string
     user_id?: StringWithAggregatesFilter<"HouseholdMember"> | string
+    household_id?: StringWithAggregatesFilter<"HouseholdMember"> | string
     role?: EnumRoleWithAggregatesFilter<"HouseholdMember"> | $Enums.Role
   }
 
@@ -15639,8 +15638,8 @@ export namespace Prisma {
   }
 
   export type HouseholdMemberUncheckedCreateInput = {
-    household_id: string
     user_id: string
+    household_id: string
     role: $Enums.Role
   }
 
@@ -15651,14 +15650,14 @@ export namespace Prisma {
   }
 
   export type HouseholdMemberUncheckedUpdateInput = {
-    household_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type HouseholdMemberCreateManyInput = {
-    household_id: string
     user_id: string
+    household_id: string
     role: $Enums.Role
   }
 
@@ -15667,8 +15666,8 @@ export namespace Prisma {
   }
 
   export type HouseholdMemberUncheckedUpdateManyInput = {
-    household_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
@@ -16464,26 +16463,21 @@ export namespace Prisma {
     isNot?: HouseholdWhereInput
   }
 
-  export type HouseholdMemberHousehold_idUser_idCompoundUniqueInput = {
-    household_id: string
-    user_id: string
-  }
-
   export type HouseholdMemberCountOrderByAggregateInput = {
-    household_id?: SortOrder
     user_id?: SortOrder
+    household_id?: SortOrder
     role?: SortOrder
   }
 
   export type HouseholdMemberMaxOrderByAggregateInput = {
-    household_id?: SortOrder
     user_id?: SortOrder
+    household_id?: SortOrder
     role?: SortOrder
   }
 
   export type HouseholdMemberMinOrderByAggregateInput = {
-    household_id?: SortOrder
     user_id?: SortOrder
+    household_id?: SortOrder
     role?: SortOrder
   }
 
@@ -18289,8 +18283,8 @@ export namespace Prisma {
     AND?: HouseholdMemberScalarWhereInput | HouseholdMemberScalarWhereInput[]
     OR?: HouseholdMemberScalarWhereInput[]
     NOT?: HouseholdMemberScalarWhereInput | HouseholdMemberScalarWhereInput[]
-    household_id?: StringFilter<"HouseholdMember"> | string
     user_id?: StringFilter<"HouseholdMember"> | string
+    household_id?: StringFilter<"HouseholdMember"> | string
     role?: EnumRoleFilter<"HouseholdMember"> | $Enums.Role
   }
 

@@ -56,14 +56,14 @@ enum Role {
 }
 
 model HouseholdMember {
+  user_id      String @id
   household_id String
-  user_id      String
   role         Role
 
   household Household @relation(fields: [household_id], references: [household_id])
   user      User      @relation(fields: [user_id], references: [user_id])
 
-  @@id([household_id, user_id])
+  @@index([household_id])
 }
 
 //! For invitations, we can use email to see if user is already in our system, and send a push notification on top of an email
