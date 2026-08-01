@@ -34,6 +34,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout-all')
   logoutAll(@Req() req: any) {
-    return this.authService.logoutAll(req.user.sub);
+    return this.authService.logoutAll(req.user.user_id);
   }
 }
