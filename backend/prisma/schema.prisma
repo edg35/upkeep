@@ -48,6 +48,7 @@ model Household {
     invitations           HouseholdInvitation[]
     householdJoinRequests HouseholdJoinRequest[]
     categories            Category[]
+    items                 Item[]
 }
 
 enum Role {
@@ -128,22 +129,27 @@ enum ItemType {
 }
 
 model Item {
-    item_id       String   @id @default(uuid())
+    item_id       String    @id @default(uuid())
     name          String
     category_id   String
+    household_id  String
     icon          String?
     item_type     ItemType
     notes         String?
     purchase_link String?
-    created_at    DateTime @default(now())
-    updated_at    DateTime @updatedAt
+    deleted_at    DateTime?
+    created_at    DateTime  @default(now())
+    updated_at    DateTime  @updatedAt
     created_by    String
 
     category  Category      @relation(fields: [category_id], references: [category_id])
+    household Household     @relation(fields: [household_id], references: [household_id])
     creator   User          @relation(fields: [created_by], references: [user_id])
     schedule  ItemSchedule?
     histories ItemHistory[]
     reminders Reminder[]
+
+    @@index([household_id, deleted_at])
 }
 
 enum TrackingMode {
@@ -177,6 +183,8 @@ model ItemHistory {
 
     item      Item @relation(fields: [item_id], references: [item_id])
     completer User @relation(fields: [completed_by], references: [user_id])
+
+    @@index([item_id])
 }
 
 model Reminder {

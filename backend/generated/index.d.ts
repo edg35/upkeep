@@ -1940,6 +1940,7 @@ export namespace Prisma {
     invitations: number
     householdJoinRequests: number
     categories: number
+    items: number
   }
 
   export type HouseholdCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1947,6 +1948,7 @@ export namespace Prisma {
     invitations?: boolean | HouseholdCountOutputTypeCountInvitationsArgs
     householdJoinRequests?: boolean | HouseholdCountOutputTypeCountHouseholdJoinRequestsArgs
     categories?: boolean | HouseholdCountOutputTypeCountCategoriesArgs
+    items?: boolean | HouseholdCountOutputTypeCountItemsArgs
   }
 
   // Custom InputTypes
@@ -1986,6 +1988,13 @@ export namespace Prisma {
    */
   export type HouseholdCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CategoryWhereInput
+  }
+
+  /**
+   * HouseholdCountOutputType without action
+   */
+  export type HouseholdCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItemWhereInput
   }
 
 
@@ -4588,6 +4597,7 @@ export namespace Prisma {
     invitations?: boolean | Household$invitationsArgs<ExtArgs>
     householdJoinRequests?: boolean | Household$householdJoinRequestsArgs<ExtArgs>
     categories?: boolean | Household$categoriesArgs<ExtArgs>
+    items?: boolean | Household$itemsArgs<ExtArgs>
     _count?: boolean | HouseholdCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["household"]>
 
@@ -4621,6 +4631,7 @@ export namespace Prisma {
     invitations?: boolean | Household$invitationsArgs<ExtArgs>
     householdJoinRequests?: boolean | Household$householdJoinRequestsArgs<ExtArgs>
     categories?: boolean | Household$categoriesArgs<ExtArgs>
+    items?: boolean | Household$itemsArgs<ExtArgs>
     _count?: boolean | HouseholdCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type HouseholdIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4638,6 +4649,7 @@ export namespace Prisma {
       invitations: Prisma.$HouseholdInvitationPayload<ExtArgs>[]
       householdJoinRequests: Prisma.$HouseholdJoinRequestPayload<ExtArgs>[]
       categories: Prisma.$CategoryPayload<ExtArgs>[]
+      items: Prisma.$ItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       household_id: string
@@ -5043,6 +5055,7 @@ export namespace Prisma {
     invitations<T extends Household$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Household$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HouseholdInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     householdJoinRequests<T extends Household$householdJoinRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Household$householdJoinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HouseholdJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     categories<T extends Household$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Household$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    items<T extends Household$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Household$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5565,6 +5578,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+  /**
+   * Household.items
+   */
+  export type Household$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Item
+     */
+    select?: ItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Item
+     */
+    omit?: ItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemInclude<ExtArgs> | null
+    where?: ItemWhereInput
+    orderBy?: ItemOrderByWithRelationInput | ItemOrderByWithRelationInput[]
+    cursor?: ItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItemScalarFieldEnum | ItemScalarFieldEnum[]
   }
 
   /**
@@ -9899,10 +9936,12 @@ export namespace Prisma {
     item_id: string | null
     name: string | null
     category_id: string | null
+    household_id: string | null
     icon: string | null
     item_type: $Enums.ItemType | null
     notes: string | null
     purchase_link: string | null
+    deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
     created_by: string | null
@@ -9912,10 +9951,12 @@ export namespace Prisma {
     item_id: string | null
     name: string | null
     category_id: string | null
+    household_id: string | null
     icon: string | null
     item_type: $Enums.ItemType | null
     notes: string | null
     purchase_link: string | null
+    deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
     created_by: string | null
@@ -9925,10 +9966,12 @@ export namespace Prisma {
     item_id: number
     name: number
     category_id: number
+    household_id: number
     icon: number
     item_type: number
     notes: number
     purchase_link: number
+    deleted_at: number
     created_at: number
     updated_at: number
     created_by: number
@@ -9940,10 +9983,12 @@ export namespace Prisma {
     item_id?: true
     name?: true
     category_id?: true
+    household_id?: true
     icon?: true
     item_type?: true
     notes?: true
     purchase_link?: true
+    deleted_at?: true
     created_at?: true
     updated_at?: true
     created_by?: true
@@ -9953,10 +9998,12 @@ export namespace Prisma {
     item_id?: true
     name?: true
     category_id?: true
+    household_id?: true
     icon?: true
     item_type?: true
     notes?: true
     purchase_link?: true
+    deleted_at?: true
     created_at?: true
     updated_at?: true
     created_by?: true
@@ -9966,10 +10013,12 @@ export namespace Prisma {
     item_id?: true
     name?: true
     category_id?: true
+    household_id?: true
     icon?: true
     item_type?: true
     notes?: true
     purchase_link?: true
+    deleted_at?: true
     created_at?: true
     updated_at?: true
     created_by?: true
@@ -10052,10 +10101,12 @@ export namespace Prisma {
     item_id: string
     name: string
     category_id: string
+    household_id: string
     icon: string | null
     item_type: $Enums.ItemType
     notes: string | null
     purchase_link: string | null
+    deleted_at: Date | null
     created_at: Date
     updated_at: Date
     created_by: string
@@ -10082,14 +10133,17 @@ export namespace Prisma {
     item_id?: boolean
     name?: boolean
     category_id?: boolean
+    household_id?: boolean
     icon?: boolean
     item_type?: boolean
     notes?: boolean
     purchase_link?: boolean
+    deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     schedule?: boolean | Item$scheduleArgs<ExtArgs>
     histories?: boolean | Item$historiesArgs<ExtArgs>
@@ -10101,14 +10155,17 @@ export namespace Prisma {
     item_id?: boolean
     name?: boolean
     category_id?: boolean
+    household_id?: boolean
     icon?: boolean
     item_type?: boolean
     notes?: boolean
     purchase_link?: boolean
+    deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item"]>
 
@@ -10116,14 +10173,17 @@ export namespace Prisma {
     item_id?: boolean
     name?: boolean
     category_id?: boolean
+    household_id?: boolean
     icon?: boolean
     item_type?: boolean
     notes?: boolean
     purchase_link?: boolean
+    deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item"]>
 
@@ -10131,18 +10191,21 @@ export namespace Prisma {
     item_id?: boolean
     name?: boolean
     category_id?: boolean
+    household_id?: boolean
     icon?: boolean
     item_type?: boolean
     notes?: boolean
     purchase_link?: boolean
+    deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
   }
 
-  export type ItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"item_id" | "name" | "category_id" | "icon" | "item_type" | "notes" | "purchase_link" | "created_at" | "updated_at" | "created_by", ExtArgs["result"]["item"]>
+  export type ItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"item_id" | "name" | "category_id" | "household_id" | "icon" | "item_type" | "notes" | "purchase_link" | "deleted_at" | "created_at" | "updated_at" | "created_by", ExtArgs["result"]["item"]>
   export type ItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     schedule?: boolean | Item$scheduleArgs<ExtArgs>
     histories?: boolean | Item$historiesArgs<ExtArgs>
@@ -10151,10 +10214,12 @@ export namespace Prisma {
   }
   export type ItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>
+    household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -10162,6 +10227,7 @@ export namespace Prisma {
     name: "Item"
     objects: {
       category: Prisma.$CategoryPayload<ExtArgs>
+      household: Prisma.$HouseholdPayload<ExtArgs>
       creator: Prisma.$UserPayload<ExtArgs>
       schedule: Prisma.$ItemSchedulePayload<ExtArgs> | null
       histories: Prisma.$ItemHistoryPayload<ExtArgs>[]
@@ -10171,10 +10237,12 @@ export namespace Prisma {
       item_id: string
       name: string
       category_id: string
+      household_id: string
       icon: string | null
       item_type: $Enums.ItemType
       notes: string | null
       purchase_link: string | null
+      deleted_at: Date | null
       created_at: Date
       updated_at: Date
       created_by: string
@@ -10573,6 +10641,7 @@ export namespace Prisma {
   export interface Prisma__ItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    household<T extends HouseholdDefaultArgs<ExtArgs> = {}>(args?: Subset<T, HouseholdDefaultArgs<ExtArgs>>): Prisma__HouseholdClient<$Result.GetResult<Prisma.$HouseholdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     schedule<T extends Item$scheduleArgs<ExtArgs> = {}>(args?: Subset<T, Item$scheduleArgs<ExtArgs>>): Prisma__ItemScheduleClient<$Result.GetResult<Prisma.$ItemSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     histories<T extends Item$historiesArgs<ExtArgs> = {}>(args?: Subset<T, Item$historiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10609,10 +10678,12 @@ export namespace Prisma {
     readonly item_id: FieldRef<"Item", 'String'>
     readonly name: FieldRef<"Item", 'String'>
     readonly category_id: FieldRef<"Item", 'String'>
+    readonly household_id: FieldRef<"Item", 'String'>
     readonly icon: FieldRef<"Item", 'String'>
     readonly item_type: FieldRef<"Item", 'ItemType'>
     readonly notes: FieldRef<"Item", 'String'>
     readonly purchase_link: FieldRef<"Item", 'String'>
+    readonly deleted_at: FieldRef<"Item", 'DateTime'>
     readonly created_at: FieldRef<"Item", 'DateTime'>
     readonly updated_at: FieldRef<"Item", 'DateTime'>
     readonly created_by: FieldRef<"Item", 'String'>
@@ -14462,10 +14533,12 @@ export namespace Prisma {
     item_id: 'item_id',
     name: 'name',
     category_id: 'category_id',
+    household_id: 'household_id',
     icon: 'icon',
     item_type: 'item_type',
     notes: 'notes',
     purchase_link: 'purchase_link',
+    deleted_at: 'deleted_at',
     created_at: 'created_at',
     updated_at: 'updated_at',
     created_by: 'created_by'
@@ -14834,6 +14907,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationListRelationFilter
     householdJoinRequests?: HouseholdJoinRequestListRelationFilter
     categories?: CategoryListRelationFilter
+    items?: ItemListRelationFilter
   }
 
   export type HouseholdOrderByWithRelationInput = {
@@ -14846,6 +14920,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationOrderByRelationAggregateInput
     householdJoinRequests?: HouseholdJoinRequestOrderByRelationAggregateInput
     categories?: CategoryOrderByRelationAggregateInput
+    items?: ItemOrderByRelationAggregateInput
   }
 
   export type HouseholdWhereUniqueInput = Prisma.AtLeast<{
@@ -14861,6 +14936,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationListRelationFilter
     householdJoinRequests?: HouseholdJoinRequestListRelationFilter
     categories?: CategoryListRelationFilter
+    items?: ItemListRelationFilter
   }, "household_id">
 
   export type HouseholdOrderByWithAggregationInput = {
@@ -15129,14 +15205,17 @@ export namespace Prisma {
     item_id?: StringFilter<"Item"> | string
     name?: StringFilter<"Item"> | string
     category_id?: StringFilter<"Item"> | string
+    household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
     notes?: StringNullableFilter<"Item"> | string | null
     purchase_link?: StringNullableFilter<"Item"> | string | null
+    deleted_at?: DateTimeNullableFilter<"Item"> | Date | string | null
     created_at?: DateTimeFilter<"Item"> | Date | string
     updated_at?: DateTimeFilter<"Item"> | Date | string
     created_by?: StringFilter<"Item"> | string
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     schedule?: XOR<ItemScheduleNullableScalarRelationFilter, ItemScheduleWhereInput> | null
     histories?: ItemHistoryListRelationFilter
@@ -15147,14 +15226,17 @@ export namespace Prisma {
     item_id?: SortOrder
     name?: SortOrder
     category_id?: SortOrder
+    household_id?: SortOrder
     icon?: SortOrderInput | SortOrder
     item_type?: SortOrder
     notes?: SortOrderInput | SortOrder
     purchase_link?: SortOrderInput | SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     created_by?: SortOrder
     category?: CategoryOrderByWithRelationInput
+    household?: HouseholdOrderByWithRelationInput
     creator?: UserOrderByWithRelationInput
     schedule?: ItemScheduleOrderByWithRelationInput
     histories?: ItemHistoryOrderByRelationAggregateInput
@@ -15168,14 +15250,17 @@ export namespace Prisma {
     NOT?: ItemWhereInput | ItemWhereInput[]
     name?: StringFilter<"Item"> | string
     category_id?: StringFilter<"Item"> | string
+    household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
     notes?: StringNullableFilter<"Item"> | string | null
     purchase_link?: StringNullableFilter<"Item"> | string | null
+    deleted_at?: DateTimeNullableFilter<"Item"> | Date | string | null
     created_at?: DateTimeFilter<"Item"> | Date | string
     updated_at?: DateTimeFilter<"Item"> | Date | string
     created_by?: StringFilter<"Item"> | string
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     schedule?: XOR<ItemScheduleNullableScalarRelationFilter, ItemScheduleWhereInput> | null
     histories?: ItemHistoryListRelationFilter
@@ -15186,10 +15271,12 @@ export namespace Prisma {
     item_id?: SortOrder
     name?: SortOrder
     category_id?: SortOrder
+    household_id?: SortOrder
     icon?: SortOrderInput | SortOrder
     item_type?: SortOrder
     notes?: SortOrderInput | SortOrder
     purchase_link?: SortOrderInput | SortOrder
+    deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     created_by?: SortOrder
@@ -15205,10 +15292,12 @@ export namespace Prisma {
     item_id?: StringWithAggregatesFilter<"Item"> | string
     name?: StringWithAggregatesFilter<"Item"> | string
     category_id?: StringWithAggregatesFilter<"Item"> | string
+    household_id?: StringWithAggregatesFilter<"Item"> | string
     icon?: StringNullableWithAggregatesFilter<"Item"> | string | null
     item_type?: EnumItemTypeWithAggregatesFilter<"Item"> | $Enums.ItemType
     notes?: StringNullableWithAggregatesFilter<"Item"> | string | null
     purchase_link?: StringNullableWithAggregatesFilter<"Item"> | string | null
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"Item"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Item"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Item"> | Date | string
     created_by?: StringWithAggregatesFilter<"Item"> | string
@@ -15576,6 +15665,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
     categories?: CategoryCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateInput = {
@@ -15587,6 +15677,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
     categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUpdateInput = {
@@ -15598,6 +15689,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateInput = {
@@ -15609,6 +15701,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdCreateManyInput = {
@@ -15866,9 +15959,11 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     category: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
@@ -15879,10 +15974,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -15898,9 +15995,11 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
@@ -15911,10 +16010,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -15927,10 +16028,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -15943,6 +16046,7 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15951,10 +16055,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -16637,10 +16743,12 @@ export namespace Prisma {
     item_id?: SortOrder
     name?: SortOrder
     category_id?: SortOrder
+    household_id?: SortOrder
     icon?: SortOrder
     item_type?: SortOrder
     notes?: SortOrder
     purchase_link?: SortOrder
+    deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     created_by?: SortOrder
@@ -16650,10 +16758,12 @@ export namespace Prisma {
     item_id?: SortOrder
     name?: SortOrder
     category_id?: SortOrder
+    household_id?: SortOrder
     icon?: SortOrder
     item_type?: SortOrder
     notes?: SortOrder
     purchase_link?: SortOrder
+    deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     created_by?: SortOrder
@@ -16663,10 +16773,12 @@ export namespace Prisma {
     item_id?: SortOrder
     name?: SortOrder
     category_id?: SortOrder
+    household_id?: SortOrder
     icon?: SortOrder
     item_type?: SortOrder
     notes?: SortOrder
     purchase_link?: SortOrder
+    deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     created_by?: SortOrder
@@ -17232,6 +17344,13 @@ export namespace Prisma {
     connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
   }
 
+  export type ItemCreateNestedManyWithoutHouseholdInput = {
+    create?: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput> | ItemCreateWithoutHouseholdInput[] | ItemUncheckedCreateWithoutHouseholdInput[]
+    connectOrCreate?: ItemCreateOrConnectWithoutHouseholdInput | ItemCreateOrConnectWithoutHouseholdInput[]
+    createMany?: ItemCreateManyHouseholdInputEnvelope
+    connect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+  }
+
   export type HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput = {
     create?: XOR<HouseholdMemberCreateWithoutHouseholdInput, HouseholdMemberUncheckedCreateWithoutHouseholdInput> | HouseholdMemberCreateWithoutHouseholdInput[] | HouseholdMemberUncheckedCreateWithoutHouseholdInput[]
     connectOrCreate?: HouseholdMemberCreateOrConnectWithoutHouseholdInput | HouseholdMemberCreateOrConnectWithoutHouseholdInput[]
@@ -17258,6 +17377,13 @@ export namespace Prisma {
     connectOrCreate?: CategoryCreateOrConnectWithoutHouseholdInput | CategoryCreateOrConnectWithoutHouseholdInput[]
     createMany?: CategoryCreateManyHouseholdInputEnvelope
     connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
+  export type ItemUncheckedCreateNestedManyWithoutHouseholdInput = {
+    create?: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput> | ItemCreateWithoutHouseholdInput[] | ItemUncheckedCreateWithoutHouseholdInput[]
+    connectOrCreate?: ItemCreateOrConnectWithoutHouseholdInput | ItemCreateOrConnectWithoutHouseholdInput[]
+    createMany?: ItemCreateManyHouseholdInputEnvelope
+    connect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput = {
@@ -17324,6 +17450,20 @@ export namespace Prisma {
     deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
   }
 
+  export type ItemUpdateManyWithoutHouseholdNestedInput = {
+    create?: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput> | ItemCreateWithoutHouseholdInput[] | ItemUncheckedCreateWithoutHouseholdInput[]
+    connectOrCreate?: ItemCreateOrConnectWithoutHouseholdInput | ItemCreateOrConnectWithoutHouseholdInput[]
+    upsert?: ItemUpsertWithWhereUniqueWithoutHouseholdInput | ItemUpsertWithWhereUniqueWithoutHouseholdInput[]
+    createMany?: ItemCreateManyHouseholdInputEnvelope
+    set?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    disconnect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    delete?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    connect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    update?: ItemUpdateWithWhereUniqueWithoutHouseholdInput | ItemUpdateWithWhereUniqueWithoutHouseholdInput[]
+    updateMany?: ItemUpdateManyWithWhereWithoutHouseholdInput | ItemUpdateManyWithWhereWithoutHouseholdInput[]
+    deleteMany?: ItemScalarWhereInput | ItemScalarWhereInput[]
+  }
+
   export type HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput = {
     create?: XOR<HouseholdMemberCreateWithoutHouseholdInput, HouseholdMemberUncheckedCreateWithoutHouseholdInput> | HouseholdMemberCreateWithoutHouseholdInput[] | HouseholdMemberUncheckedCreateWithoutHouseholdInput[]
     connectOrCreate?: HouseholdMemberCreateOrConnectWithoutHouseholdInput | HouseholdMemberCreateOrConnectWithoutHouseholdInput[]
@@ -17378,6 +17518,20 @@ export namespace Prisma {
     update?: CategoryUpdateWithWhereUniqueWithoutHouseholdInput | CategoryUpdateWithWhereUniqueWithoutHouseholdInput[]
     updateMany?: CategoryUpdateManyWithWhereWithoutHouseholdInput | CategoryUpdateManyWithWhereWithoutHouseholdInput[]
     deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type ItemUncheckedUpdateManyWithoutHouseholdNestedInput = {
+    create?: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput> | ItemCreateWithoutHouseholdInput[] | ItemUncheckedCreateWithoutHouseholdInput[]
+    connectOrCreate?: ItemCreateOrConnectWithoutHouseholdInput | ItemCreateOrConnectWithoutHouseholdInput[]
+    upsert?: ItemUpsertWithWhereUniqueWithoutHouseholdInput | ItemUpsertWithWhereUniqueWithoutHouseholdInput[]
+    createMany?: ItemCreateManyHouseholdInputEnvelope
+    set?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    disconnect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    delete?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    connect?: ItemWhereUniqueInput | ItemWhereUniqueInput[]
+    update?: ItemUpdateWithWhereUniqueWithoutHouseholdInput | ItemUpdateWithWhereUniqueWithoutHouseholdInput[]
+    updateMany?: ItemUpdateManyWithWhereWithoutHouseholdInput | ItemUpdateManyWithWhereWithoutHouseholdInput[]
+    deleteMany?: ItemScalarWhereInput | ItemScalarWhereInput[]
   }
 
   export type HouseholdCreateNestedOneWithoutMembersInput = {
@@ -17538,6 +17692,12 @@ export namespace Prisma {
     connect?: CategoryWhereUniqueInput
   }
 
+  export type HouseholdCreateNestedOneWithoutItemsInput = {
+    create?: XOR<HouseholdCreateWithoutItemsInput, HouseholdUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: HouseholdCreateOrConnectWithoutItemsInput
+    connect?: HouseholdWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutItemsInput = {
     create?: XOR<UserCreateWithoutItemsInput, UserUncheckedCreateWithoutItemsInput>
     connectOrCreate?: UserCreateOrConnectWithoutItemsInput
@@ -17594,6 +17754,14 @@ export namespace Prisma {
     upsert?: CategoryUpsertWithoutItemsInput
     connect?: CategoryWhereUniqueInput
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutItemsInput, CategoryUpdateWithoutItemsInput>, CategoryUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type HouseholdUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<HouseholdCreateWithoutItemsInput, HouseholdUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: HouseholdCreateOrConnectWithoutItemsInput
+    upsert?: HouseholdUpsertWithoutItemsInput
+    connect?: HouseholdWhereUniqueInput
+    update?: XOR<XOR<HouseholdUpdateToOneWithWhereWithoutItemsInput, HouseholdUpdateWithoutItemsInput>, HouseholdUncheckedUpdateWithoutItemsInput>
   }
 
   export type UserUpdateOneRequiredWithoutItemsNestedInput = {
@@ -18029,6 +18197,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
     categories?: CategoryCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateWithoutCreatorInput = {
@@ -18039,6 +18208,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
     categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdCreateOrConnectWithoutCreatorInput = {
@@ -18130,9 +18300,11 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     category: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
@@ -18142,10 +18314,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
@@ -18367,10 +18541,12 @@ export namespace Prisma {
     item_id?: StringFilter<"Item"> | string
     name?: StringFilter<"Item"> | string
     category_id?: StringFilter<"Item"> | string
+    household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
     notes?: StringNullableFilter<"Item"> | string | null
     purchase_link?: StringNullableFilter<"Item"> | string | null
+    deleted_at?: DateTimeNullableFilter<"Item"> | Date | string | null
     created_at?: DateTimeFilter<"Item"> | Date | string
     updated_at?: DateTimeFilter<"Item"> | Date | string
     created_by?: StringFilter<"Item"> | string
@@ -18675,6 +18851,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ItemCreateWithoutHouseholdInput = {
+    item_id?: string
+    name: string
+    icon?: string | null
+    item_type: $Enums.ItemType
+    notes?: string | null
+    purchase_link?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    category: CategoryCreateNestedOneWithoutItemsInput
+    creator: UserCreateNestedOneWithoutItemsInput
+    schedule?: ItemScheduleCreateNestedOneWithoutItemInput
+    histories?: ItemHistoryCreateNestedManyWithoutItemInput
+    reminders?: ReminderCreateNestedManyWithoutItemInput
+  }
+
+  export type ItemUncheckedCreateWithoutHouseholdInput = {
+    item_id?: string
+    name: string
+    category_id: string
+    icon?: string | null
+    item_type: $Enums.ItemType
+    notes?: string | null
+    purchase_link?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by: string
+    schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
+    histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+  }
+
+  export type ItemCreateOrConnectWithoutHouseholdInput = {
+    where: ItemWhereUniqueInput
+    create: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput>
+  }
+
+  export type ItemCreateManyHouseholdInputEnvelope = {
+    data: ItemCreateManyHouseholdInput | ItemCreateManyHouseholdInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCreatedHouseholdsInput = {
     update: XOR<UserUpdateWithoutCreatedHouseholdsInput, UserUncheckedUpdateWithoutCreatedHouseholdsInput>
     create: XOR<UserCreateWithoutCreatedHouseholdsInput, UserUncheckedCreateWithoutCreatedHouseholdsInput>
@@ -18794,6 +19014,22 @@ export namespace Prisma {
     color?: StringNullableFilter<"Category"> | string | null
   }
 
+  export type ItemUpsertWithWhereUniqueWithoutHouseholdInput = {
+    where: ItemWhereUniqueInput
+    update: XOR<ItemUpdateWithoutHouseholdInput, ItemUncheckedUpdateWithoutHouseholdInput>
+    create: XOR<ItemCreateWithoutHouseholdInput, ItemUncheckedCreateWithoutHouseholdInput>
+  }
+
+  export type ItemUpdateWithWhereUniqueWithoutHouseholdInput = {
+    where: ItemWhereUniqueInput
+    data: XOR<ItemUpdateWithoutHouseholdInput, ItemUncheckedUpdateWithoutHouseholdInput>
+  }
+
+  export type ItemUpdateManyWithWhereWithoutHouseholdInput = {
+    where: ItemScalarWhereInput
+    data: XOR<ItemUpdateManyMutationInput, ItemUncheckedUpdateManyWithoutHouseholdInput>
+  }
+
   export type HouseholdCreateWithoutMembersInput = {
     household_id?: string
     name: string
@@ -18802,6 +19038,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
     categories?: CategoryCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateWithoutMembersInput = {
@@ -18812,6 +19049,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
     categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdCreateOrConnectWithoutMembersInput = {
@@ -18875,6 +19113,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateWithoutMembersInput = {
@@ -18885,6 +19124,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type UserUpsertWithoutMembershipsInput = {
@@ -18938,6 +19178,7 @@ export namespace Prisma {
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
     categories?: CategoryCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateWithoutInvitationsInput = {
@@ -18948,6 +19189,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
     categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdCreateOrConnectWithoutInvitationsInput = {
@@ -19011,6 +19253,7 @@ export namespace Prisma {
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateWithoutInvitationsInput = {
@@ -19021,6 +19264,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type UserUpsertWithoutInvitationsInput = {
@@ -19074,6 +19318,7 @@ export namespace Prisma {
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
     categories?: CategoryCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateWithoutHouseholdJoinRequestsInput = {
@@ -19084,6 +19329,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
     categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdCreateOrConnectWithoutHouseholdJoinRequestsInput = {
@@ -19147,6 +19393,7 @@ export namespace Prisma {
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateWithoutHouseholdJoinRequestsInput = {
@@ -19157,6 +19404,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type UserUpsertWithoutRequestsInput = {
@@ -19210,6 +19458,7 @@ export namespace Prisma {
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
+    items?: ItemCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdUncheckedCreateWithoutCategoriesInput = {
@@ -19220,6 +19469,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
+    items?: ItemUncheckedCreateNestedManyWithoutHouseholdInput
   }
 
   export type HouseholdCreateOrConnectWithoutCategoriesInput = {
@@ -19234,8 +19484,10 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
@@ -19245,10 +19497,12 @@ export namespace Prisma {
   export type ItemUncheckedCreateWithoutCategoryInput = {
     item_id?: string
     name: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -19286,6 +19540,7 @@ export namespace Prisma {
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateWithoutCategoriesInput = {
@@ -19296,6 +19551,7 @@ export namespace Prisma {
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type ItemUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -19335,6 +19591,33 @@ export namespace Prisma {
   export type CategoryCreateOrConnectWithoutItemsInput = {
     where: CategoryWhereUniqueInput
     create: XOR<CategoryCreateWithoutItemsInput, CategoryUncheckedCreateWithoutItemsInput>
+  }
+
+  export type HouseholdCreateWithoutItemsInput = {
+    household_id?: string
+    name: string
+    updated_at?: Date | string
+    creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
+    members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
+    invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
+    householdJoinRequests?: HouseholdJoinRequestCreateNestedManyWithoutHouseholdInput
+    categories?: CategoryCreateNestedManyWithoutHouseholdInput
+  }
+
+  export type HouseholdUncheckedCreateWithoutItemsInput = {
+    household_id?: string
+    name: string
+    created_by: string
+    updated_at?: Date | string
+    members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
+    invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
+    householdJoinRequests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutHouseholdInput
+    categories?: CategoryUncheckedCreateNestedManyWithoutHouseholdInput
+  }
+
+  export type HouseholdCreateOrConnectWithoutItemsInput = {
+    where: HouseholdWhereUniqueInput
+    create: XOR<HouseholdCreateWithoutItemsInput, HouseholdUncheckedCreateWithoutItemsInput>
   }
 
   export type UserCreateWithoutItemsInput = {
@@ -19476,6 +19759,39 @@ export namespace Prisma {
     color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type HouseholdUpsertWithoutItemsInput = {
+    update: XOR<HouseholdUpdateWithoutItemsInput, HouseholdUncheckedUpdateWithoutItemsInput>
+    create: XOR<HouseholdCreateWithoutItemsInput, HouseholdUncheckedCreateWithoutItemsInput>
+    where?: HouseholdWhereInput
+  }
+
+  export type HouseholdUpdateToOneWithWhereWithoutItemsInput = {
+    where?: HouseholdWhereInput
+    data: XOR<HouseholdUpdateWithoutItemsInput, HouseholdUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type HouseholdUpdateWithoutItemsInput = {
+    household_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
+    members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
+    invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
+    householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
+    categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+  }
+
+  export type HouseholdUncheckedUpdateWithoutItemsInput = {
+    household_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
+    invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
+    householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
+    categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+  }
+
   export type UserUpsertWithoutItemsInput = {
     update: XOR<UserUpdateWithoutItemsInput, UserUncheckedUpdateWithoutItemsInput>
     create: XOR<UserCreateWithoutItemsInput, UserUncheckedCreateWithoutItemsInput>
@@ -19591,9 +19907,11 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     category: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
@@ -19603,10 +19921,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -19637,9 +19957,11 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
@@ -19649,10 +19971,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -19667,9 +19991,11 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     category: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
@@ -19679,10 +20005,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -19750,9 +20078,11 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
@@ -19762,10 +20092,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -19823,9 +20155,11 @@ export namespace Prisma {
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     category: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
@@ -19835,10 +20169,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -19906,9 +20242,11 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
@@ -19918,10 +20256,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -20003,10 +20343,12 @@ export namespace Prisma {
     item_id?: string
     name: string
     category_id: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -20041,6 +20383,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateWithoutCreatorInput = {
@@ -20051,6 +20394,7 @@ export namespace Prisma {
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
     householdJoinRequests?: HouseholdJoinRequestUncheckedUpdateManyWithoutHouseholdNestedInput
     categories?: CategoryUncheckedUpdateManyWithoutHouseholdNestedInput
+    items?: ItemUncheckedUpdateManyWithoutHouseholdNestedInput
   }
 
   export type HouseholdUncheckedUpdateManyWithoutCreatorInput = {
@@ -20129,9 +20473,11 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
@@ -20141,10 +20487,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
@@ -20156,10 +20504,12 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category_id?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20259,6 +20609,20 @@ export namespace Prisma {
     color?: string | null
   }
 
+  export type ItemCreateManyHouseholdInput = {
+    item_id?: string
+    name: string
+    category_id: string
+    icon?: string | null
+    item_type: $Enums.ItemType
+    notes?: string | null
+    purchase_link?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by: string
+  }
+
   export type HouseholdMemberUpdateWithoutHouseholdInput = {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
@@ -20348,13 +20712,63 @@ export namespace Prisma {
     color?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type ItemUpdateWithoutHouseholdInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    creator?: UserUpdateOneRequiredWithoutItemsNestedInput
+    schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
+    histories?: ItemHistoryUpdateManyWithoutItemNestedInput
+    reminders?: ReminderUpdateManyWithoutItemNestedInput
+  }
+
+  export type ItemUncheckedUpdateWithoutHouseholdInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category_id?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
+    histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+  }
+
+  export type ItemUncheckedUpdateManyWithoutHouseholdInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category_id?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ItemCreateManyCategoryInput = {
     item_id?: string
     name: string
+    household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
     purchase_link?: string | null
+    deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
     created_by: string
@@ -20367,8 +20781,10 @@ export namespace Prisma {
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
@@ -20378,10 +20794,12 @@ export namespace Prisma {
   export type ItemUncheckedUpdateWithoutCategoryInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
@@ -20393,10 +20811,12 @@ export namespace Prisma {
   export type ItemUncheckedUpdateManyWithoutCategoryInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
