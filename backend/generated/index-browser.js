@@ -184,10 +184,12 @@ exports.Prisma.ItemScalarFieldEnum = {
   item_id: 'item_id',
   name: 'name',
   category_id: 'category_id',
+  household_id: 'household_id',
   icon: 'icon',
   item_type: 'item_type',
   notes: 'notes',
   purchase_link: 'purchase_link',
+  deleted_at: 'deleted_at',
   created_at: 'created_at',
   updated_at: 'updated_at',
   created_by: 'created_by'
