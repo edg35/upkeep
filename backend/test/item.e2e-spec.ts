@@ -206,6 +206,37 @@ describe('ItemController (e2e)', () => {
     );
   });
 
+  it('creates a reminder for each household member when lead_time_days is set', async () => {
+    const { auth, category, user } = await setup();
+
+    const res = await request(app.getHttpServer())
+      .post('/items')
+      .set(auth)
+      .send({
+        name: 'Rent',
+        category_id: category.category_id,
+        item_type: 'BILL',
+        schedule: {
+          tracking_mode: 'INTERVAL',
+          interval_days: 30,
+          lead_time_days: 3,
+        },
+      })
+      .expect(201);
+    const itemId = res.body.item_id;
+
+    const reminders = await prisma.reminder.findMany({
+      where: { item_id: itemId },
+    });
+
+    expect(reminders).toHaveLength(1); // only one member in this household
+    expect(reminders[0].user_id).toBe(user.user_id);
+    expect(reminders[0].remind_at.getTime()).toBe(
+      new Date(res.body.schedule.next_due_date).getTime() -
+        3 * 24 * 60 * 60 * 1000,
+    );
+  });
+
   it('returns 404 for an item belonging to a different household', async () => {
     const { auth: authA } = await setup();
     const b = await setup();

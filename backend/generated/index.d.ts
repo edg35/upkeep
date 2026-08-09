@@ -13397,6 +13397,7 @@ export namespace Prisma {
     item_id: string | null
     user_id: string | null
     remind_at: Date | null
+    sent_at: Date | null
   }
 
   export type ReminderMaxAggregateOutputType = {
@@ -13404,6 +13405,7 @@ export namespace Prisma {
     item_id: string | null
     user_id: string | null
     remind_at: Date | null
+    sent_at: Date | null
   }
 
   export type ReminderCountAggregateOutputType = {
@@ -13411,6 +13413,7 @@ export namespace Prisma {
     item_id: number
     user_id: number
     remind_at: number
+    sent_at: number
     _all: number
   }
 
@@ -13420,6 +13423,7 @@ export namespace Prisma {
     item_id?: true
     user_id?: true
     remind_at?: true
+    sent_at?: true
   }
 
   export type ReminderMaxAggregateInputType = {
@@ -13427,6 +13431,7 @@ export namespace Prisma {
     item_id?: true
     user_id?: true
     remind_at?: true
+    sent_at?: true
   }
 
   export type ReminderCountAggregateInputType = {
@@ -13434,6 +13439,7 @@ export namespace Prisma {
     item_id?: true
     user_id?: true
     remind_at?: true
+    sent_at?: true
     _all?: true
   }
 
@@ -13514,6 +13520,7 @@ export namespace Prisma {
     item_id: string
     user_id: string
     remind_at: Date
+    sent_at: Date | null
     _count: ReminderCountAggregateOutputType | null
     _min: ReminderMinAggregateOutputType | null
     _max: ReminderMaxAggregateOutputType | null
@@ -13538,6 +13545,7 @@ export namespace Prisma {
     item_id?: boolean
     user_id?: boolean
     remind_at?: boolean
+    sent_at?: boolean
     item?: boolean | ItemDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
@@ -13547,6 +13555,7 @@ export namespace Prisma {
     item_id?: boolean
     user_id?: boolean
     remind_at?: boolean
+    sent_at?: boolean
     item?: boolean | ItemDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
@@ -13556,6 +13565,7 @@ export namespace Prisma {
     item_id?: boolean
     user_id?: boolean
     remind_at?: boolean
+    sent_at?: boolean
     item?: boolean | ItemDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
@@ -13565,9 +13575,10 @@ export namespace Prisma {
     item_id?: boolean
     user_id?: boolean
     remind_at?: boolean
+    sent_at?: boolean
   }
 
-  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reminder_id" | "item_id" | "user_id" | "remind_at", ExtArgs["result"]["reminder"]>
+  export type ReminderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"reminder_id" | "item_id" | "user_id" | "remind_at" | "sent_at", ExtArgs["result"]["reminder"]>
   export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item?: boolean | ItemDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -13592,6 +13603,7 @@ export namespace Prisma {
       item_id: string
       user_id: string
       remind_at: Date
+      sent_at: Date | null
     }, ExtArgs["result"]["reminder"]>
     composites: {}
   }
@@ -14021,6 +14033,7 @@ export namespace Prisma {
     readonly item_id: FieldRef<"Reminder", 'String'>
     readonly user_id: FieldRef<"Reminder", 'String'>
     readonly remind_at: FieldRef<"Reminder", 'DateTime'>
+    readonly sent_at: FieldRef<"Reminder", 'DateTime'>
   }
     
 
@@ -14577,7 +14590,8 @@ export namespace Prisma {
     reminder_id: 'reminder_id',
     item_id: 'item_id',
     user_id: 'user_id',
-    remind_at: 'remind_at'
+    remind_at: 'remind_at',
+    sent_at: 'sent_at'
   };
 
   export type ReminderScalarFieldEnum = (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum]
@@ -15446,6 +15460,7 @@ export namespace Prisma {
     item_id?: StringFilter<"Reminder"> | string
     user_id?: StringFilter<"Reminder"> | string
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
+    sent_at?: DateTimeNullableFilter<"Reminder"> | Date | string | null
     item?: XOR<ItemScalarRelationFilter, ItemWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -15455,6 +15470,7 @@ export namespace Prisma {
     item_id?: SortOrder
     user_id?: SortOrder
     remind_at?: SortOrder
+    sent_at?: SortOrderInput | SortOrder
     item?: ItemOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -15468,6 +15484,7 @@ export namespace Prisma {
     item_id?: StringFilter<"Reminder"> | string
     user_id?: StringFilter<"Reminder"> | string
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
+    sent_at?: DateTimeNullableFilter<"Reminder"> | Date | string | null
     item?: XOR<ItemScalarRelationFilter, ItemWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "reminder_id" | "item_id_user_id_remind_at">
@@ -15477,6 +15494,7 @@ export namespace Prisma {
     item_id?: SortOrder
     user_id?: SortOrder
     remind_at?: SortOrder
+    sent_at?: SortOrderInput | SortOrder
     _count?: ReminderCountOrderByAggregateInput
     _max?: ReminderMaxOrderByAggregateInput
     _min?: ReminderMinOrderByAggregateInput
@@ -15490,6 +15508,7 @@ export namespace Prisma {
     item_id?: StringWithAggregatesFilter<"Reminder"> | string
     user_id?: StringWithAggregatesFilter<"Reminder"> | string
     remind_at?: DateTimeWithAggregatesFilter<"Reminder"> | Date | string
+    sent_at?: DateTimeNullableWithAggregatesFilter<"Reminder"> | Date | string | null
   }
 
   export type UserCreateInput = {
@@ -16206,6 +16225,7 @@ export namespace Prisma {
   export type ReminderCreateInput = {
     reminder_id?: string
     remind_at: Date | string
+    sent_at?: Date | string | null
     item: ItemCreateNestedOneWithoutRemindersInput
     user: UserCreateNestedOneWithoutRemindersInput
   }
@@ -16215,11 +16235,13 @@ export namespace Prisma {
     item_id: string
     user_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type ReminderUpdateInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     item?: ItemUpdateOneRequiredWithoutRemindersNestedInput
     user?: UserUpdateOneRequiredWithoutRemindersNestedInput
   }
@@ -16229,6 +16251,7 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReminderCreateManyInput = {
@@ -16236,11 +16259,13 @@ export namespace Prisma {
     item_id: string
     user_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type ReminderUpdateManyMutationInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReminderUncheckedUpdateManyInput = {
@@ -16248,6 +16273,7 @@ export namespace Prisma {
     item_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -16924,6 +16950,7 @@ export namespace Prisma {
     item_id?: SortOrder
     user_id?: SortOrder
     remind_at?: SortOrder
+    sent_at?: SortOrder
   }
 
   export type ReminderMaxOrderByAggregateInput = {
@@ -16931,6 +16958,7 @@ export namespace Prisma {
     item_id?: SortOrder
     user_id?: SortOrder
     remind_at?: SortOrder
+    sent_at?: SortOrder
   }
 
   export type ReminderMinOrderByAggregateInput = {
@@ -16938,6 +16966,7 @@ export namespace Prisma {
     item_id?: SortOrder
     user_id?: SortOrder
     remind_at?: SortOrder
+    sent_at?: SortOrder
   }
 
   export type HouseholdCreateNestedManyWithoutCreatorInput = {
@@ -18364,6 +18393,7 @@ export namespace Prisma {
   export type ReminderCreateWithoutUserInput = {
     reminder_id?: string
     remind_at: Date | string
+    sent_at?: Date | string | null
     item: ItemCreateNestedOneWithoutRemindersInput
   }
 
@@ -18371,6 +18401,7 @@ export namespace Prisma {
     reminder_id?: string
     item_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type ReminderCreateOrConnectWithoutUserInput = {
@@ -18603,6 +18634,7 @@ export namespace Prisma {
     item_id?: StringFilter<"Reminder"> | string
     user_id?: StringFilter<"Reminder"> | string
     remind_at?: DateTimeFilter<"Reminder"> | Date | string
+    sent_at?: DateTimeNullableFilter<"Reminder"> | Date | string | null
   }
 
   export type RefreshTokenUpsertWithWhereUniqueWithoutUserInput = {
@@ -19711,6 +19743,7 @@ export namespace Prisma {
   export type ReminderCreateWithoutItemInput = {
     reminder_id?: string
     remind_at: Date | string
+    sent_at?: Date | string | null
     user: UserCreateNestedOneWithoutRemindersInput
   }
 
@@ -19718,6 +19751,7 @@ export namespace Prisma {
     reminder_id?: string
     user_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type ReminderCreateOrConnectWithoutItemInput = {
@@ -20364,6 +20398,7 @@ export namespace Prisma {
     reminder_id?: string
     item_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type RefreshTokenCreateManyUserInput = {
@@ -20538,6 +20573,7 @@ export namespace Prisma {
   export type ReminderUpdateWithoutUserInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     item?: ItemUpdateOneRequiredWithoutRemindersNestedInput
   }
 
@@ -20545,12 +20581,14 @@ export namespace Prisma {
     reminder_id?: StringFieldUpdateOperationsInput | string
     item_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReminderUncheckedUpdateManyWithoutUserInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     item_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type RefreshTokenUpdateWithoutUserInput = {
@@ -20833,6 +20871,7 @@ export namespace Prisma {
     reminder_id?: string
     user_id: string
     remind_at: Date | string
+    sent_at?: Date | string | null
   }
 
   export type ItemHistoryUpdateWithoutItemInput = {
@@ -20859,6 +20898,7 @@ export namespace Prisma {
   export type ReminderUpdateWithoutItemInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutRemindersNestedInput
   }
 
@@ -20866,12 +20906,14 @@ export namespace Prisma {
     reminder_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReminderUncheckedUpdateManyWithoutItemInput = {
     reminder_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 
