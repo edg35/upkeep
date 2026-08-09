@@ -188,13 +188,15 @@ model ItemHistory {
 }
 
 model Reminder {
-    reminder_id String   @id @default(uuid())
+    reminder_id String    @id @default(uuid())
     item_id     String
     user_id     String
     remind_at   DateTime
+    sent_at     DateTime?
 
     item Item @relation(fields: [item_id], references: [item_id])
     user User @relation(fields: [user_id], references: [user_id])
 
     @@unique([item_id, user_id, remind_at])
+    @@index([remind_at, sent_at])
 }

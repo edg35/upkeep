@@ -219,7 +219,8 @@ exports.Prisma.ReminderScalarFieldEnum = {
   reminder_id: 'reminder_id',
   item_id: 'item_id',
   user_id: 'user_id',
-  remind_at: 'remind_at'
+  remind_at: 'remind_at',
+  sent_at: 'sent_at'
 };
 
 exports.Prisma.SortOrder = {

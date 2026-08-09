@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ItemSchedule, ItemType } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
+import { ReminderService } from '../reminder/reminder.service';
 import { CompleteItemDto } from './dto/complete-item.dto';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -21,7 +22,10 @@ interface ItemFilters {
 
 @Injectable()
 export class ItemService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private reminderService: ReminderService,
+  ) {}
 
   private async assertCategoryInHousehold(
     householdId: string,
@@ -80,6 +84,14 @@ export class ItemService {
           next_due_date: nextDueDate,
         },
       });
+
+      await this.reminderService.syncForItem(
+        tx,
+        item.item_id,
+        householdId,
+        nextDueDate,
+        dto.schedule.lead_time_days,
+      );
 
       return { ...item, schedule };
     });
@@ -149,6 +161,9 @@ export class ItemService {
           new Date(),
         );
 
+        const leadTimeDays =
+          dto.schedule.lead_time_days ?? existing!.lead_time_days;
+
         schedule = await tx.itemSchedule.update({
           where: { item_id: itemId },
           data: {
@@ -162,6 +177,14 @@ export class ItemService {
             next_due_date: nextDueDate,
           },
         });
+
+        await this.reminderService.syncForItem(
+          tx,
+          itemId,
+          householdId,
+          nextDueDate,
+          leadTimeDays,
+        );
       }
 
       return { ...item, ...(schedule ? { schedule } : {}) };
@@ -216,6 +239,14 @@ export class ItemService {
         where: { item_id: itemId },
         data: { last_completed_at: completedAt, next_due_date: nextDueDate },
       });
+
+      await this.reminderService.syncForItem(
+        tx,
+        itemId,
+        householdId,
+        nextDueDate,
+        schedule.lead_time_days,
+      );
 
       return { item: { ...item, schedule: updatedSchedule }, history };
     });

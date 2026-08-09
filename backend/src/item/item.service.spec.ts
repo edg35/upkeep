@@ -3,6 +3,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ItemType, TrackingMode } from '../../generated';
 import { CreateItemDto } from './dto/create-item.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { ReminderService } from '../reminder/reminder.service';
 import { ItemService } from './item.service';
 
 describe('ItemService', () => {
@@ -17,6 +18,7 @@ describe('ItemService', () => {
     item: { findFirst: jest.Mock; findMany: jest.Mock; update: jest.Mock };
     $transaction: jest.Mock;
   };
+  let reminderService: { syncForItem: jest.Mock };
 
   beforeEach(() => {
     tx = {
@@ -29,7 +31,11 @@ describe('ItemService', () => {
       item: { findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
       $transaction: jest.fn((cb: (tx: unknown) => unknown) => cb(tx)),
     };
-    service = new ItemService(prisma as unknown as PrismaService);
+    reminderService = { syncForItem: jest.fn() };
+    service = new ItemService(
+      prisma as unknown as PrismaService,
+      reminderService as unknown as ReminderService,
+    );
   });
 
   describe('create', () => {
@@ -78,6 +84,13 @@ describe('ItemService', () => {
             next_due_date: expect.any(Date),
           }),
         }),
+      );
+      expect(reminderService.syncForItem).toHaveBeenCalledWith(
+        tx,
+        'i1',
+        'h1',
+        expect.any(Date),
+        undefined,
       );
     });
   });
@@ -192,6 +205,13 @@ describe('ItemService', () => {
           next_due_date: new Date('2026-03-03T00:00:00.000Z'),
         },
       });
+      expect(reminderService.syncForItem).toHaveBeenCalledWith(
+        tx,
+        'i1',
+        'h1',
+        new Date('2026-03-03T00:00:00.000Z'),
+        undefined,
+      );
     });
 
     it('throws NotFoundException when the item does not exist in this household', async () => {

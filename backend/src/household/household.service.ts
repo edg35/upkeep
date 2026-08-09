@@ -134,6 +134,14 @@ export class HouseholdService {
     });
   }
 
+  async getMemberIds(householdId: string): Promise<string[]> {
+    const members = await this.prisma.householdMember.findMany({
+      where: { household_id: householdId },
+      select: { user_id: true },
+    });
+    return members.map((m) => m.user_id);
+  }
+
   listJoinRequests(householdId: string) {
     return this.prisma.householdJoinRequest.findMany({
       where: { household_id: householdId, status: 'PENDING' },
