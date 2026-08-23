@@ -6,8 +6,8 @@ class ItemsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Items')),
-      body: const Center(child: Text('Items — coming soon')),
+      appBar: AppBar(title: const Text('Tasks')),
+      body: const Center(child: Text('Tasks — coming soon')),
     );
   }
 }
