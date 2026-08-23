@@ -9,15 +9,31 @@ import '../features/auth/splash_screen.dart';
 import '../features/auth/welcome_screen.dart';
 import '../features/bills/bills_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
+import '../features/household/create_household_screen.dart';
+import '../features/household/household_controller.dart';
+import '../features/household/household_settings_screen.dart';
+import '../features/household/join_household_screen.dart';
+import '../features/household/onboarding_screen.dart';
+import '../features/household/pending_request_screen.dart';
 import '../features/items/items_screen.dart';
 import '../features/settings/settings_screen.dart';
 
-/// Notifies GoRouter to re-run its redirect whenever session restoration
-/// finishes or auth state otherwise changes (e.g. logout from a 401).
+const _onboardingPaths = {
+  '/onboarding',
+  '/onboarding/create',
+  '/onboarding/join',
+  '/onboarding/pending',
+};
+
+/// Notifies GoRouter to re-run its redirect whenever session restoration,
+/// auth state, or household state changes (e.g. logout from a 401, or
+/// finishing onboarding).
 class _RouterRefreshNotifier extends ChangeNotifier {
   _RouterRefreshNotifier(Ref ref) {
     ref.listen(sessionInitProvider, (_, _) => notifyListeners());
     ref.listen(authControllerProvider, (_, _) => notifyListeners());
+    ref.listen(householdInitProvider, (_, _) => notifyListeners());
+    ref.listen(householdControllerProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -36,8 +52,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (initializing) {
         return atSplash ? null : '/splash';
       }
+      if (!isAuthenticated) {
+        return atSplash ? '/' : null;
+      }
+
+      final householdLoading = ref.read(householdInitProvider).isLoading;
+      if (householdLoading) {
+        return atSplash ? null : '/splash';
+      }
+
+      final hasHousehold = ref.read(householdControllerProvider).household != null;
+      final atOnboarding = _onboardingPaths.contains(state.matchedLocation);
+
       if (atSplash) {
-        return isAuthenticated ? '/dashboard' : '/';
+        return hasHousehold ? '/dashboard' : '/onboarding';
+      }
+      if (!hasHousehold && !atOnboarding) {
+        return '/onboarding';
+      }
+      if (hasHousehold && atOnboarding) {
+        return '/dashboard';
       }
       return null;
     },
@@ -46,6 +80,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/', builder: (context, state) => const WelcomeScreen()),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(path: '/signup', builder: (context, state) => const SignupScreen()),
+      GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
+      GoRoute(
+        path: '/onboarding/create',
+        builder: (context, state) => const CreateHouseholdScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/join',
+        builder: (context, state) => const JoinHouseholdScreen(),
+      ),
+      GoRoute(
+        path: '/onboarding/pending',
+        builder: (context, state) => const PendingRequestScreen(),
+      ),
+      GoRoute(
+        path: '/household/settings',
+        builder: (context, state) => const HouseholdSettingsScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => ScaffoldWithNavBar(shell: shell),
         branches: [

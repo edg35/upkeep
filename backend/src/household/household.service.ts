@@ -8,13 +8,27 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
+import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
 
 const INVITE_EXPIRY_DAYS = 7;
+const INVITE_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no ambiguous 0/O/1/I
 
 @Injectable()
 export class HouseholdService {
   constructor(private prisma: PrismaService) {}
+
+  private generateInviteCode(name: string): string {
+    const prefix = (name.replace(/[^A-Za-z]/g, '').toUpperCase() + 'XXX').slice(
+      0,
+      3,
+    );
+    let suffix = '';
+    for (let i = 0; i < 4; i++) {
+      suffix += INVITE_CODE_CHARS[Math.floor(Math.random() * INVITE_CODE_CHARS.length)];
+    }
+    return `${prefix}-${suffix}`;
+  }
 
   async create(userId: string, name: string) {
     const existing = await this.prisma.householdMember.findUnique({
@@ -24,19 +38,35 @@ export class HouseholdService {
       throw new ConflictException('You already belong to a household.');
     }
 
-    return this.prisma.$transaction(async (tx) => {
-      const household = await tx.household.create({
-        data: { name, created_by: userId },
-      });
-      await tx.householdMember.create({
-        data: {
-          user_id: userId,
-          household_id: household.household_id,
-          role: 'OWNER',
-        },
-      });
-      return household;
-    });
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const invite_code = this.generateInviteCode(name);
+      try {
+        return await this.prisma.$transaction(async (tx) => {
+          const household = await tx.household.create({
+            data: { name, created_by: userId, invite_code },
+          });
+          await tx.householdMember.create({
+            data: {
+              user_id: userId,
+              household_id: household.household_id,
+              role: 'OWNER',
+            },
+          });
+          return household;
+        });
+      } catch (e) {
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === 'P2002'
+        ) {
+          continue;
+        }
+        throw e;
+      }
+    }
+    throw new ConflictException(
+      'Could not generate a unique invite code, please try again.',
+    );
   }
 
   search(query: string) {
@@ -252,5 +282,113 @@ export class HouseholdService {
         data: { role: 'OWNER' },
       }),
     ]);
+  }
+
+  // --- Onboarding support ---
+
+  async getMine(userId: string) {
+    const membership = await this.prisma.householdMember.findUnique({
+      where: { user_id: userId },
+    });
+    if (!membership) return null;
+
+    const household = await this.prisma.household.findUniqueOrThrow({
+      where: { household_id: membership.household_id },
+      select: {
+        household_id: true,
+        name: true,
+        invite_code: true,
+        _count: { select: { members: true } },
+      },
+    });
+
+    return {
+      household_id: household.household_id,
+      name: household.name,
+      invite_code: household.invite_code,
+      member_count: household._count.members,
+      role: membership.role,
+    };
+  }
+
+  async listMembers(householdId: string) {
+    const members = await this.prisma.householdMember.findMany({
+      where: { household_id: householdId },
+      include: { user: { select: { user_id: true, name: true } } },
+      orderBy: { role: 'asc' },
+    });
+
+    return members.map((m) => ({
+      user_id: m.user_id,
+      name: m.user.name,
+      role: m.role,
+    }));
+  }
+
+  async redeemInviteCode(userId: string, code: string) {
+    const alreadyMember = await this.prisma.householdMember.findUnique({
+      where: { user_id: userId },
+    });
+    if (alreadyMember) {
+      throw new ConflictException('You already belong to a household.');
+    }
+
+    const household = await this.prisma.household.findUnique({
+      where: { invite_code: code.toUpperCase() },
+    });
+    if (!household) throw new NotFoundException('Invite code not found.');
+
+    return this.prisma.householdMember.create({
+      data: {
+        user_id: userId,
+        household_id: household.household_id,
+        role: 'MEMBER',
+      },
+    });
+  }
+
+  listPendingInvitationsForEmail(email: string) {
+    return this.prisma.householdInvitation.findMany({
+      where: {
+        email: { equals: email, mode: 'insensitive' },
+        status: 'PENDING',
+        expires_at: { gt: new Date() },
+      },
+      include: {
+        household: {
+          select: {
+            household_id: true,
+            name: true,
+            _count: { select: { members: true } },
+          },
+        },
+        inviter: { select: { name: true } },
+      },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  getMyJoinRequest(userId: string) {
+    return this.prisma.householdJoinRequest.findFirst({
+      where: { requested_by: userId, status: 'PENDING' },
+      include: {
+        household: {
+          select: {
+            household_id: true,
+            name: true,
+            creator: { select: { name: true } },
+          },
+        },
+      },
+    });
+  }
+
+  async cancelMyJoinRequest(userId: string) {
+    const result = await this.prisma.householdJoinRequest.deleteMany({
+      where: { requested_by: userId, status: 'PENDING' },
+    });
+    if (result.count === 0) {
+      throw new NotFoundException('No pending join request found.');
+    }
   }
 }

@@ -37,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           password: _passwordController.text,
           keepSignedIn: _keepSignedIn,
         );
-    if (success && mounted) context.go('/dashboard');
+    if (success && mounted) context.go('/splash');
   }
 
   @override

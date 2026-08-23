@@ -40,6 +40,7 @@ model RefreshToken {
 model Household {
     household_id String   @id @default(uuid())
     name         String
+    invite_code  String   @unique
     created_by   String
     updated_at   DateTime @updatedAt
 
