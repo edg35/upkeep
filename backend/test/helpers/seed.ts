@@ -17,6 +17,7 @@ export async function seedUserWithHousehold(
     data: {
       name: overrides.householdName ?? 'Test Household',
       created_by: user.user_id,
+      invite_code: `TST-${counter.toString().padStart(4, '0')}`,
     },
   });
   await prisma.householdMember.create({

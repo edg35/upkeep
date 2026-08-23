@@ -4449,6 +4449,7 @@ export namespace Prisma {
   export type HouseholdMinAggregateOutputType = {
     household_id: string | null
     name: string | null
+    invite_code: string | null
     created_by: string | null
     updated_at: Date | null
   }
@@ -4456,6 +4457,7 @@ export namespace Prisma {
   export type HouseholdMaxAggregateOutputType = {
     household_id: string | null
     name: string | null
+    invite_code: string | null
     created_by: string | null
     updated_at: Date | null
   }
@@ -4463,6 +4465,7 @@ export namespace Prisma {
   export type HouseholdCountAggregateOutputType = {
     household_id: number
     name: number
+    invite_code: number
     created_by: number
     updated_at: number
     _all: number
@@ -4472,6 +4475,7 @@ export namespace Prisma {
   export type HouseholdMinAggregateInputType = {
     household_id?: true
     name?: true
+    invite_code?: true
     created_by?: true
     updated_at?: true
   }
@@ -4479,6 +4483,7 @@ export namespace Prisma {
   export type HouseholdMaxAggregateInputType = {
     household_id?: true
     name?: true
+    invite_code?: true
     created_by?: true
     updated_at?: true
   }
@@ -4486,6 +4491,7 @@ export namespace Prisma {
   export type HouseholdCountAggregateInputType = {
     household_id?: true
     name?: true
+    invite_code?: true
     created_by?: true
     updated_at?: true
     _all?: true
@@ -4566,6 +4572,7 @@ export namespace Prisma {
   export type HouseholdGroupByOutputType = {
     household_id: string
     name: string
+    invite_code: string
     created_by: string
     updated_at: Date
     _count: HouseholdCountAggregateOutputType | null
@@ -4590,6 +4597,7 @@ export namespace Prisma {
   export type HouseholdSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     household_id?: boolean
     name?: boolean
+    invite_code?: boolean
     created_by?: boolean
     updated_at?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
@@ -4604,6 +4612,7 @@ export namespace Prisma {
   export type HouseholdSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     household_id?: boolean
     name?: boolean
+    invite_code?: boolean
     created_by?: boolean
     updated_at?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
@@ -4612,6 +4621,7 @@ export namespace Prisma {
   export type HouseholdSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     household_id?: boolean
     name?: boolean
+    invite_code?: boolean
     created_by?: boolean
     updated_at?: boolean
     creator?: boolean | UserDefaultArgs<ExtArgs>
@@ -4620,11 +4630,12 @@ export namespace Prisma {
   export type HouseholdSelectScalar = {
     household_id?: boolean
     name?: boolean
+    invite_code?: boolean
     created_by?: boolean
     updated_at?: boolean
   }
 
-  export type HouseholdOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"household_id" | "name" | "created_by" | "updated_at", ExtArgs["result"]["household"]>
+  export type HouseholdOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"household_id" | "name" | "invite_code" | "created_by" | "updated_at", ExtArgs["result"]["household"]>
   export type HouseholdInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     creator?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Household$membersArgs<ExtArgs>
@@ -4654,6 +4665,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       household_id: string
       name: string
+      invite_code: string
       created_by: string
       updated_at: Date
     }, ExtArgs["result"]["household"]>
@@ -5087,6 +5099,7 @@ export namespace Prisma {
   interface HouseholdFieldRefs {
     readonly household_id: FieldRef<"Household", 'String'>
     readonly name: FieldRef<"Household", 'String'>
+    readonly invite_code: FieldRef<"Household", 'String'>
     readonly created_by: FieldRef<"Household", 'String'>
     readonly updated_at: FieldRef<"Household", 'DateTime'>
   }
@@ -14490,6 +14503,7 @@ export namespace Prisma {
   export const HouseholdScalarFieldEnum: {
     household_id: 'household_id',
     name: 'name',
+    invite_code: 'invite_code',
     created_by: 'created_by',
     updated_at: 'updated_at'
   };
@@ -14914,6 +14928,7 @@ export namespace Prisma {
     NOT?: HouseholdWhereInput | HouseholdWhereInput[]
     household_id?: StringFilter<"Household"> | string
     name?: StringFilter<"Household"> | string
+    invite_code?: StringFilter<"Household"> | string
     created_by?: StringFilter<"Household"> | string
     updated_at?: DateTimeFilter<"Household"> | Date | string
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -14927,6 +14942,7 @@ export namespace Prisma {
   export type HouseholdOrderByWithRelationInput = {
     household_id?: SortOrder
     name?: SortOrder
+    invite_code?: SortOrder
     created_by?: SortOrder
     updated_at?: SortOrder
     creator?: UserOrderByWithRelationInput
@@ -14939,6 +14955,7 @@ export namespace Prisma {
 
   export type HouseholdWhereUniqueInput = Prisma.AtLeast<{
     household_id?: string
+    invite_code?: string
     AND?: HouseholdWhereInput | HouseholdWhereInput[]
     OR?: HouseholdWhereInput[]
     NOT?: HouseholdWhereInput | HouseholdWhereInput[]
@@ -14951,11 +14968,12 @@ export namespace Prisma {
     householdJoinRequests?: HouseholdJoinRequestListRelationFilter
     categories?: CategoryListRelationFilter
     items?: ItemListRelationFilter
-  }, "household_id">
+  }, "household_id" | "invite_code">
 
   export type HouseholdOrderByWithAggregationInput = {
     household_id?: SortOrder
     name?: SortOrder
+    invite_code?: SortOrder
     created_by?: SortOrder
     updated_at?: SortOrder
     _count?: HouseholdCountOrderByAggregateInput
@@ -14969,6 +14987,7 @@ export namespace Prisma {
     NOT?: HouseholdScalarWhereWithAggregatesInput | HouseholdScalarWhereWithAggregatesInput[]
     household_id?: StringWithAggregatesFilter<"Household"> | string
     name?: StringWithAggregatesFilter<"Household"> | string
+    invite_code?: StringWithAggregatesFilter<"Household"> | string
     created_by?: StringWithAggregatesFilter<"Household"> | string
     updated_at?: DateTimeWithAggregatesFilter<"Household"> | Date | string
   }
@@ -15678,6 +15697,7 @@ export namespace Prisma {
   export type HouseholdCreateInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
@@ -15690,6 +15710,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
@@ -15702,6 +15723,7 @@ export namespace Prisma {
   export type HouseholdUpdateInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
@@ -15714,6 +15736,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -15726,6 +15749,7 @@ export namespace Prisma {
   export type HouseholdCreateManyInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
   }
@@ -15733,12 +15757,14 @@ export namespace Prisma {
   export type HouseholdUpdateManyMutationInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type HouseholdUncheckedUpdateManyInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16565,6 +16591,7 @@ export namespace Prisma {
   export type HouseholdCountOrderByAggregateInput = {
     household_id?: SortOrder
     name?: SortOrder
+    invite_code?: SortOrder
     created_by?: SortOrder
     updated_at?: SortOrder
   }
@@ -16572,6 +16599,7 @@ export namespace Prisma {
   export type HouseholdMaxOrderByAggregateInput = {
     household_id?: SortOrder
     name?: SortOrder
+    invite_code?: SortOrder
     created_by?: SortOrder
     updated_at?: SortOrder
   }
@@ -16579,6 +16607,7 @@ export namespace Prisma {
   export type HouseholdMinOrderByAggregateInput = {
     household_id?: SortOrder
     name?: SortOrder
+    invite_code?: SortOrder
     created_by?: SortOrder
     updated_at?: SortOrder
   }
@@ -18221,6 +18250,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutCreatorInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
@@ -18232,6 +18262,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutCreatorInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
@@ -18464,6 +18495,7 @@ export namespace Prisma {
     NOT?: HouseholdScalarWhereInput | HouseholdScalarWhereInput[]
     household_id?: StringFilter<"Household"> | string
     name?: StringFilter<"Household"> | string
+    invite_code?: StringFilter<"Household"> | string
     created_by?: StringFilter<"Household"> | string
     updated_at?: DateTimeFilter<"Household"> | Date | string
   }
@@ -19065,6 +19097,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutMembersInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     invitations?: HouseholdInvitationCreateNestedManyWithoutHouseholdInput
@@ -19076,6 +19109,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutMembersInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutHouseholdInput
@@ -19140,6 +19174,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutMembersInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
@@ -19151,6 +19186,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutMembersInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -19205,6 +19241,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutInvitationsInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
@@ -19216,6 +19253,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutInvitationsInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
@@ -19280,6 +19318,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutInvitationsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
@@ -19291,6 +19330,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutInvitationsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -19345,6 +19385,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutHouseholdJoinRequestsInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
@@ -19356,6 +19397,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutHouseholdJoinRequestsInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
@@ -19420,6 +19462,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutHouseholdJoinRequestsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
@@ -19431,6 +19474,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutHouseholdJoinRequestsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -19485,6 +19529,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutCategoriesInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
@@ -19496,6 +19541,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutCategoriesInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
@@ -19567,6 +19613,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutCategoriesInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
@@ -19578,6 +19625,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutCategoriesInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -19628,6 +19676,7 @@ export namespace Prisma {
   export type HouseholdCreateWithoutItemsInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
     creator: UserCreateNestedOneWithoutCreatedHouseholdsInput
     members?: HouseholdMemberCreateNestedManyWithoutHouseholdInput
@@ -19639,6 +19688,7 @@ export namespace Prisma {
   export type HouseholdUncheckedCreateWithoutItemsInput = {
     household_id?: string
     name: string
+    invite_code: string
     created_by: string
     updated_at?: Date | string
     members?: HouseholdMemberUncheckedCreateNestedManyWithoutHouseholdInput
@@ -19807,6 +19857,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutItemsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     creator?: UserUpdateOneRequiredWithoutCreatedHouseholdsNestedInput
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
@@ -19818,6 +19869,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutItemsInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     created_by?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -20349,6 +20401,7 @@ export namespace Prisma {
   export type HouseholdCreateManyCreatorInput = {
     household_id?: string
     name: string
+    invite_code: string
     updated_at?: Date | string
   }
 
@@ -20413,6 +20466,7 @@ export namespace Prisma {
   export type HouseholdUpdateWithoutCreatorInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUpdateManyWithoutHouseholdNestedInput
@@ -20424,6 +20478,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateWithoutCreatorInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: HouseholdMemberUncheckedUpdateManyWithoutHouseholdNestedInput
     invitations?: HouseholdInvitationUncheckedUpdateManyWithoutHouseholdNestedInput
@@ -20435,6 +20490,7 @@ export namespace Prisma {
   export type HouseholdUncheckedUpdateManyWithoutCreatorInput = {
     household_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    invite_code?: StringFieldUpdateOperationsInput | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

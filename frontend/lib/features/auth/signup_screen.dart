@@ -56,7 +56,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-    if (success && mounted) context.go('/dashboard');
+    if (success && mounted) context.go('/splash');
   }
 
   @override

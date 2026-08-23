@@ -32,9 +32,30 @@ export class HouseholdController {
     return this.householdService.create(user.user_id, dto.name);
   }
 
+  @Get('me')
+  getMine(@CurrentUser() user) {
+    return this.householdService.getMine(user.user_id);
+  }
+
   @Get('search')
   search(@Query('q') query: string) {
     return this.householdService.search(query ?? '');
+  }
+
+  @UseGuards(HouseholdMemberGuard)
+  @Get('members')
+  listMembers(@CurrentHousehold() household) {
+    return this.householdService.listMembers(household.household_id);
+  }
+
+  @Get('invitations/pending')
+  getPendingInvitations(@CurrentUser() user) {
+    return this.householdService.listPendingInvitationsForEmail(user.email);
+  }
+
+  @Post('invite-code/:code/redeem')
+  redeemInviteCode(@CurrentUser() user, @Param('code') code: string) {
+    return this.householdService.redeemInviteCode(user.user_id, code);
   }
 
   @UseGuards(HouseholdMemberGuard)
@@ -46,7 +67,7 @@ export class HouseholdController {
   ) {
     return this.householdService.createInvitation(
       user.user_id,
-      household.id,
+      household.household_id,
       dto.email,
     );
   }
@@ -65,10 +86,20 @@ export class HouseholdController {
     return this.householdService.requestToJoin(user.user_id, dto.household_id);
   }
 
+  @Get('join-requests/mine')
+  getMyJoinRequest(@CurrentUser() user) {
+    return this.householdService.getMyJoinRequest(user.user_id);
+  }
+
+  @Delete('join-requests/mine')
+  cancelMyJoinRequest(@CurrentUser() user) {
+    return this.householdService.cancelMyJoinRequest(user.user_id);
+  }
+
   @UseGuards(HouseholdMemberGuard, HouseholdOwnerGuard)
   @Get('join-requests')
   getJoinRequests(@CurrentHousehold() household) {
-    return this.householdService.listJoinRequests(household.id);
+    return this.householdService.listJoinRequests(household.household_id);
   }
 
   @UseGuards(HouseholdMemberGuard, HouseholdOwnerGuard)
@@ -77,7 +108,10 @@ export class HouseholdController {
     @CurrentHousehold() household,
     @Param('requesterId') requesterId: string,
   ) {
-    return this.householdService.approveJoinRequest(household.id, requesterId);
+    return this.householdService.approveJoinRequest(
+      household.household_id,
+      requesterId,
+    );
   }
 
   @UseGuards(HouseholdMemberGuard, HouseholdOwnerGuard)
@@ -86,7 +120,10 @@ export class HouseholdController {
     @CurrentHousehold() household,
     @Param('requesterId') requesterId: string,
   ) {
-    return this.householdService.declineJoinRequest(household.id, requesterId);
+    return this.householdService.declineJoinRequest(
+      household.household_id,
+      requesterId,
+    );
   }
 
   @UseGuards(HouseholdMemberGuard)
@@ -104,7 +141,7 @@ export class HouseholdController {
   ) {
     return this.householdService.transferOwnership(
       user.user_id,
-      household.id,
+      household.household_id,
       dto.new_owner_user_id,
     );
   }

@@ -143,6 +143,7 @@ exports.Prisma.RefreshTokenScalarFieldEnum = {
 exports.Prisma.HouseholdScalarFieldEnum = {
   household_id: 'household_id',
   name: 'name',
+  invite_code: 'invite_code',
   created_by: 'created_by',
   updated_at: 'updated_at'
 };
