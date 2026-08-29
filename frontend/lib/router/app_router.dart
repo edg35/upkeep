@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/theme/app_theme.dart';
 import '../features/auth/auth_controller.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/signup_screen.dart';
 import '../features/auth/splash_screen.dart';
 import '../features/auth/welcome_screen.dart';
-import '../features/bills/bills_screen.dart';
+import '../features/calendar/calendar_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
 import '../features/household/create_household_screen.dart';
 import '../features/household/household_controller.dart';
@@ -17,6 +18,7 @@ import '../features/household/onboarding_screen.dart';
 import '../features/household/pending_request_screen.dart';
 import '../features/items/items_screen.dart';
 import '../features/settings/settings_screen.dart';
+import '../features/tasks/add_task_screen.dart';
 
 const _onboardingPaths = {
   '/onboarding',
@@ -97,6 +99,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/household/settings',
         builder: (context, state) => const HouseholdSettingsScreen(),
       ),
+      GoRoute(
+        path: '/tasks/add',
+        builder: (context, state) => const AddTaskScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => ScaffoldWithNavBar(shell: shell),
         branches: [
@@ -111,16 +117,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/items',
-                builder: (context, state) => const ItemsScreen(),
+                path: '/calendar',
+                builder: (context, state) => const CalendarScreen(),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/bills',
-                builder: (context, state) => const BillsScreen(),
+                path: '/items',
+                builder: (context, state) => const ItemsScreen(),
               ),
             ],
           ),
@@ -138,6 +144,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
+class _NavDestination {
+  const _NavDestination(this.icon, this.label);
+  final IconData icon;
+  final String label;
+}
+
+const _navDestinations = [
+  _NavDestination(Icons.home_rounded, 'Home'),
+  _NavDestination(Icons.calendar_today_rounded, 'Calendar'),
+  _NavDestination(Icons.format_list_bulleted_rounded, 'Tasks'),
+  _NavDestination(Icons.person_rounded, 'Profile'),
+];
+
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({super.key, required this.shell});
   final StatefulNavigationShell shell;
@@ -146,25 +165,121 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: shell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: shell.currentIndex,
-        onDestinationSelected: (i) =>
-            shell.goBranch(i, initialLocation: i == shell.currentIndex),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-          NavigationDestination(
-            icon: Icon(Icons.inventory_2_outlined),
-            label: 'Items',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.receipt_long_outlined),
-            label: 'Bills',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            label: 'Settings',
-          ),
-        ],
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 64,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(32),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.ink.withValues(alpha: 0.08),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var i = 0; i < _navDestinations.length; i++)
+                      _NavItem(
+                        destination: _navDestinations[i],
+                        selected: shell.currentIndex == i,
+                        onTap: () =>
+                            shell.goBranch(i, initialLocation: i == shell.currentIndex),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            _QuickAddButton(onTap: () => context.push('/tasks/add')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  const _NavItem({
+    required this.destination,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _NavDestination destination;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.symmetric(horizontal: selected ? 16 : 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.ink : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              destination.icon,
+              size: 22,
+              color: selected ? AppColors.paper : AppColors.ink,
+            ),
+            if (selected) ...[
+              const SizedBox(width: 8),
+              Text(
+                destination.label,
+                style: AppTypography.row.copyWith(
+                  color: AppColors.paper,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAddButton extends StatelessWidget {
+  const _QuickAddButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 64,
+        height: 64,
+        decoration: BoxDecoration(
+          color: AppColors.sage,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.sage.withValues(alpha: 0.4),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: const Icon(Icons.add_rounded, color: AppColors.paper, size: 30),
       ),
     );
   }
