@@ -97,6 +97,20 @@ export class ItemService {
     });
   }
 
+  private readonly latestCompletionInclude = {
+    schedule: true,
+    category: true,
+    histories: {
+      orderBy: { completed_at: 'desc' as const },
+      take: 1,
+      select: {
+        completed_at: true,
+        completed_by: true,
+        completer: { select: { name: true } },
+      },
+    },
+  };
+
   findAll(householdId: string, filters: ItemFilters) {
     return this.prisma.item.findMany({
       where: {
@@ -107,14 +121,14 @@ export class ItemService {
           ? { item_type: filters.item_type as ItemType }
           : {}),
       },
-      include: { schedule: true },
+      include: this.latestCompletionInclude,
     });
   }
 
   async findOne(householdId: string, itemId: string) {
     const item = await this.prisma.item.findFirst({
       where: { item_id: itemId, household_id: householdId, deleted_at: null },
-      include: { schedule: true },
+      include: this.latestCompletionInclude,
     });
     if (!item) throw new NotFoundException('Item not found');
     return item;
