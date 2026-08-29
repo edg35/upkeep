@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import 'current_member.dart';
 import 'household_controller.dart';
 import 'household_settings_controller.dart';
 import 'widgets/invite_code_card.dart';
@@ -47,6 +48,7 @@ class HouseholdSettingsScreen extends ConsumerWidget {
     }
 
     final isOwner = household.isOwner;
+    final currentUserId = ref.watch(currentUserIdProvider);
     final settingsState = ref.watch(householdSettingsControllerProvider(isOwner));
     final settingsController = ref.read(householdSettingsControllerProvider(isOwner).notifier);
 
@@ -157,10 +159,7 @@ class HouseholdSettingsScreen extends ConsumerWidget {
                       (m) => MemberRow(
                         name: m.name,
                         role: m.role,
-                        // The current user's id isn't available client-side
-                        // (AuthState only holds tokens), so "(you)" labeling
-                        // is left for a follow-up.
-                        isCurrentUser: false,
+                        isCurrentUser: m.userId == currentUserId,
                         showMenu: isOwner && m.role != 'OWNER',
                         onRemoveTapped: () {
                           ScaffoldMessenger.of(context).showSnackBar(

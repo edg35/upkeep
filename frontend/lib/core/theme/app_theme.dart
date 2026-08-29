@@ -15,6 +15,8 @@ class AppColors {
   static const clay = Color(0xFFD98F4E);
   static const rose = Color(0xFFC4685C);
   static const muted = Color(0xFF74857A);
+  static const plum = Color(0xFF8B6FA8);
+  static const sky = Color(0xFF6E90B0);
 }
 
 /// Upkeep design system v0.1 — named type scale (Poppins, with Caveat for
