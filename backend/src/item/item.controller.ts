@@ -26,6 +26,7 @@ import { ItemService } from './item.service';
 export class ItemController {
   constructor(private itemService: ItemService) {}
 
+  // create an item
   @Post()
   create(
     @CurrentHousehold() household,
@@ -35,6 +36,7 @@ export class ItemController {
     return this.itemService.create(household.household_id, user.user_id, dto);
   }
 
+  // get all items for a household, optionally filtered by category_id and/or item_type
   @Get()
   findAll(
     @CurrentHousehold() household,
@@ -47,11 +49,13 @@ export class ItemController {
     });
   }
 
+  // get a single item by id
   @Get(':id')
   findOne(@CurrentHousehold() household, @Param('id') id: string) {
     return this.itemService.findOne(household.household_id, id);
   }
 
+  // update an item by id
   @Patch(':id')
   update(
     @CurrentHousehold() household,
@@ -61,11 +65,13 @@ export class ItemController {
     return this.itemService.update(household.household_id, id, dto);
   }
 
+  // delete an item by id
   @Delete(':id')
   remove(@CurrentHousehold() household, @Param('id') id: string) {
     return this.itemService.remove(household.household_id, id);
   }
 
+  // mark an item as complete
   @Post(':id/complete')
   complete(
     @CurrentHousehold() household,
