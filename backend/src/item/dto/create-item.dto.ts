@@ -1,6 +1,8 @@
 // item/dto/create-item.dto.ts
 import { Type } from 'class-transformer';
 import {
+  ArrayUnique,
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -19,8 +21,9 @@ export class CreateItemDto {
   @MaxLength(150)
   name: string;
 
+  @IsOptional()
   @IsUUID()
-  category_id: string;
+  category_id?: string;
 
   @IsOptional()
   @IsString()
@@ -42,4 +45,10 @@ export class CreateItemDto {
   @ValidateNested()
   @Type(() => CreateItemScheduleDto)
   schedule: CreateItemScheduleDto;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsUUID('4', { each: true })
+  assignee_user_ids?: string[];
 }

@@ -39,6 +39,38 @@ describe('computeInitialDueDate', () => {
 
     expect(result).toEqual(now);
   });
+
+  it('uses initial_due_date as-is, overriding INTERVAL mode entirely', () => {
+    const now = new Date('2026-01-01T00:00:00.000Z');
+    const override = new Date('2026-09-05T00:00:00.000Z');
+
+    const result = computeInitialDueDate(
+      {
+        tracking_mode: TrackingMode.INTERVAL,
+        interval_days: 7,
+        initial_due_date: override,
+      },
+      now,
+    );
+
+    expect(result).toEqual(override);
+  });
+
+  it('uses initial_due_date as-is, overriding RECURRING mode entirely', () => {
+    const now = new Date('2026-01-01T00:00:00.000Z');
+    const override = new Date('2026-09-05T00:00:00.000Z');
+
+    const result = computeInitialDueDate(
+      {
+        tracking_mode: TrackingMode.RECURRING,
+        recurrence_rule: 'FREQ=DAILY',
+        initial_due_date: override,
+      },
+      now,
+    );
+
+    expect(result).toEqual(override);
+  });
 });
 
 describe('computeNextDueDateOnCompletion', () => {

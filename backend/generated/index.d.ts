@@ -54,6 +54,11 @@ export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
  */
 export type Item = $Result.DefaultSelection<Prisma.$ItemPayload>
 /**
+ * Model ItemAssignee
+ * 
+ */
+export type ItemAssignee = $Result.DefaultSelection<Prisma.$ItemAssigneePayload>
+/**
  * Model ItemSchedule
  * 
  */
@@ -337,6 +342,16 @@ export class PrismaClient<
     * ```
     */
   get item(): Prisma.ItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.itemAssignee`: Exposes CRUD operations for the **ItemAssignee** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ItemAssignees
+    * const itemAssignees = await prisma.itemAssignee.findMany()
+    * ```
+    */
+  get itemAssignee(): Prisma.ItemAssigneeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.itemSchedule`: Exposes CRUD operations for the **ItemSchedule** model.
@@ -816,6 +831,7 @@ export namespace Prisma {
     HouseholdJoinRequest: 'HouseholdJoinRequest',
     Category: 'Category',
     Item: 'Item',
+    ItemAssignee: 'ItemAssignee',
     ItemSchedule: 'ItemSchedule',
     ItemHistory: 'ItemHistory',
     Reminder: 'Reminder'
@@ -837,7 +853,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "refreshToken" | "household" | "householdMember" | "householdInvitation" | "householdJoinRequest" | "category" | "item" | "itemSchedule" | "itemHistory" | "reminder"
+      modelProps: "user" | "refreshToken" | "household" | "householdMember" | "householdInvitation" | "householdJoinRequest" | "category" | "item" | "itemAssignee" | "itemSchedule" | "itemHistory" | "reminder"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1433,6 +1449,80 @@ export namespace Prisma {
           }
         }
       }
+      ItemAssignee: {
+        payload: Prisma.$ItemAssigneePayload<ExtArgs>
+        fields: Prisma.ItemAssigneeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ItemAssigneeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ItemAssigneeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          findFirst: {
+            args: Prisma.ItemAssigneeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ItemAssigneeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          findMany: {
+            args: Prisma.ItemAssigneeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>[]
+          }
+          create: {
+            args: Prisma.ItemAssigneeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          createMany: {
+            args: Prisma.ItemAssigneeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ItemAssigneeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>[]
+          }
+          delete: {
+            args: Prisma.ItemAssigneeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          update: {
+            args: Prisma.ItemAssigneeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          deleteMany: {
+            args: Prisma.ItemAssigneeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ItemAssigneeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ItemAssigneeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>[]
+          }
+          upsert: {
+            args: Prisma.ItemAssigneeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ItemAssigneePayload>
+          }
+          aggregate: {
+            args: Prisma.ItemAssigneeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateItemAssignee>
+          }
+          groupBy: {
+            args: Prisma.ItemAssigneeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ItemAssigneeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ItemAssigneeCountArgs<ExtArgs>
+            result: $Utils.Optional<ItemAssigneeCountAggregateOutputType> | number
+          }
+        }
+      }
       ItemSchedule: {
         payload: Prisma.$ItemSchedulePayload<ExtArgs>
         fields: Prisma.ItemScheduleFieldRefs
@@ -1759,6 +1849,7 @@ export namespace Prisma {
     householdJoinRequest?: HouseholdJoinRequestOmit
     category?: CategoryOmit
     item?: ItemOmit
+    itemAssignee?: ItemAssigneeOmit
     itemSchedule?: ItemScheduleOmit
     itemHistory?: ItemHistoryOmit
     reminder?: ReminderOmit
@@ -1850,6 +1941,7 @@ export namespace Prisma {
     itemHistories: number
     reminders: number
     refreshTokens: number
+    itemAssignments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1861,6 +1953,7 @@ export namespace Prisma {
     itemHistories?: boolean | UserCountOutputTypeCountItemHistoriesArgs
     reminders?: boolean | UserCountOutputTypeCountRemindersArgs
     refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
+    itemAssignments?: boolean | UserCountOutputTypeCountItemAssignmentsArgs
   }
 
   // Custom InputTypes
@@ -1928,6 +2021,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRefreshTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RefreshTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountItemAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItemAssigneeWhereInput
   }
 
 
@@ -2036,11 +2136,13 @@ export namespace Prisma {
   export type ItemCountOutputType = {
     histories: number
     reminders: number
+    assignees: number
   }
 
   export type ItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     histories?: boolean | ItemCountOutputTypeCountHistoriesArgs
     reminders?: boolean | ItemCountOutputTypeCountRemindersArgs
+    assignees?: boolean | ItemCountOutputTypeCountAssigneesArgs
   }
 
   // Custom InputTypes
@@ -2066,6 +2168,13 @@ export namespace Prisma {
    */
   export type ItemCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReminderWhereInput
+  }
+
+  /**
+   * ItemCountOutputType without action
+   */
+  export type ItemCountOutputTypeCountAssigneesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItemAssigneeWhereInput
   }
 
 
@@ -2253,6 +2362,7 @@ export namespace Prisma {
     itemHistories?: boolean | User$itemHistoriesArgs<ExtArgs>
     reminders?: boolean | User$remindersArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    itemAssignments?: boolean | User$itemAssignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2293,6 +2403,7 @@ export namespace Prisma {
     itemHistories?: boolean | User$itemHistoriesArgs<ExtArgs>
     reminders?: boolean | User$remindersArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
+    itemAssignments?: boolean | User$itemAssignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2309,6 +2420,7 @@ export namespace Prisma {
       itemHistories: Prisma.$ItemHistoryPayload<ExtArgs>[]
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
       refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+      itemAssignments: Prisma.$ItemAssigneePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       user_id: string
@@ -2719,6 +2831,7 @@ export namespace Prisma {
     itemHistories<T extends User$itemHistoriesArgs<ExtArgs> = {}>(args?: Subset<T, User$itemHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reminders<T extends User$remindersArgs<ExtArgs> = {}>(args?: Subset<T, User$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    itemAssignments<T extends User$itemAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$itemAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3331,6 +3444,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RefreshTokenScalarFieldEnum | RefreshTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.itemAssignments
+   */
+  export type User$itemAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    where?: ItemAssigneeWhereInput
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    cursor?: ItemAssigneeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItemAssigneeScalarFieldEnum | ItemAssigneeScalarFieldEnum[]
   }
 
   /**
@@ -10113,7 +10250,7 @@ export namespace Prisma {
   export type ItemGroupByOutputType = {
     item_id: string
     name: string
-    category_id: string
+    category_id: string | null
     household_id: string
     icon: string | null
     item_type: $Enums.ItemType
@@ -10155,12 +10292,13 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     schedule?: boolean | Item$scheduleArgs<ExtArgs>
     histories?: boolean | Item$historiesArgs<ExtArgs>
     reminders?: boolean | Item$remindersArgs<ExtArgs>
+    assignees?: boolean | Item$assigneesArgs<ExtArgs>
     _count?: boolean | ItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item"]>
 
@@ -10177,7 +10315,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item"]>
@@ -10195,7 +10333,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     created_by?: boolean
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item"]>
@@ -10217,21 +10355,22 @@ export namespace Prisma {
 
   export type ItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"item_id" | "name" | "category_id" | "household_id" | "icon" | "item_type" | "notes" | "purchase_link" | "deleted_at" | "created_at" | "updated_at" | "created_by", ExtArgs["result"]["item"]>
   export type ItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
     schedule?: boolean | Item$scheduleArgs<ExtArgs>
     histories?: boolean | Item$historiesArgs<ExtArgs>
     reminders?: boolean | Item$remindersArgs<ExtArgs>
+    assignees?: boolean | Item$assigneesArgs<ExtArgs>
     _count?: boolean | ItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    category?: boolean | CategoryDefaultArgs<ExtArgs>
+    category?: boolean | Item$categoryArgs<ExtArgs>
     household?: boolean | HouseholdDefaultArgs<ExtArgs>
     creator?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -10239,17 +10378,18 @@ export namespace Prisma {
   export type $ItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Item"
     objects: {
-      category: Prisma.$CategoryPayload<ExtArgs>
+      category: Prisma.$CategoryPayload<ExtArgs> | null
       household: Prisma.$HouseholdPayload<ExtArgs>
       creator: Prisma.$UserPayload<ExtArgs>
       schedule: Prisma.$ItemSchedulePayload<ExtArgs> | null
       histories: Prisma.$ItemHistoryPayload<ExtArgs>[]
       reminders: Prisma.$ReminderPayload<ExtArgs>[]
+      assignees: Prisma.$ItemAssigneePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       item_id: string
       name: string
-      category_id: string
+      category_id: string | null
       household_id: string
       icon: string | null
       item_type: $Enums.ItemType
@@ -10653,12 +10793,13 @@ export namespace Prisma {
    */
   export interface Prisma__ItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    category<T extends Item$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Item$categoryArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     household<T extends HouseholdDefaultArgs<ExtArgs> = {}>(args?: Subset<T, HouseholdDefaultArgs<ExtArgs>>): Prisma__HouseholdClient<$Result.GetResult<Prisma.$HouseholdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     creator<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     schedule<T extends Item$scheduleArgs<ExtArgs> = {}>(args?: Subset<T, Item$scheduleArgs<ExtArgs>>): Prisma__ItemScheduleClient<$Result.GetResult<Prisma.$ItemSchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     histories<T extends Item$historiesArgs<ExtArgs> = {}>(args?: Subset<T, Item$historiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reminders<T extends Item$remindersArgs<ExtArgs> = {}>(args?: Subset<T, Item$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignees<T extends Item$assigneesArgs<ExtArgs> = {}>(args?: Subset<T, Item$assigneesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11096,6 +11237,25 @@ export namespace Prisma {
   }
 
   /**
+   * Item.category
+   */
+  export type Item$categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Category
+     */
+    omit?: CategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    where?: CategoryWhereInput
+  }
+
+  /**
    * Item.schedule
    */
   export type Item$scheduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11163,6 +11323,30 @@ export namespace Prisma {
   }
 
   /**
+   * Item.assignees
+   */
+  export type Item$assigneesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    where?: ItemAssigneeWhereInput
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    cursor?: ItemAssigneeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ItemAssigneeScalarFieldEnum | ItemAssigneeScalarFieldEnum[]
+  }
+
+  /**
    * Item without action
    */
   export type ItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11178,6 +11362,1046 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ItemAssignee
+   */
+
+  export type AggregateItemAssignee = {
+    _count: ItemAssigneeCountAggregateOutputType | null
+    _min: ItemAssigneeMinAggregateOutputType | null
+    _max: ItemAssigneeMaxAggregateOutputType | null
+  }
+
+  export type ItemAssigneeMinAggregateOutputType = {
+    item_id: string | null
+    user_id: string | null
+    created_at: Date | null
+  }
+
+  export type ItemAssigneeMaxAggregateOutputType = {
+    item_id: string | null
+    user_id: string | null
+    created_at: Date | null
+  }
+
+  export type ItemAssigneeCountAggregateOutputType = {
+    item_id: number
+    user_id: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type ItemAssigneeMinAggregateInputType = {
+    item_id?: true
+    user_id?: true
+    created_at?: true
+  }
+
+  export type ItemAssigneeMaxAggregateInputType = {
+    item_id?: true
+    user_id?: true
+    created_at?: true
+  }
+
+  export type ItemAssigneeCountAggregateInputType = {
+    item_id?: true
+    user_id?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type ItemAssigneeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ItemAssignee to aggregate.
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItemAssignees to fetch.
+     */
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ItemAssigneeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItemAssignees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItemAssignees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ItemAssignees
+    **/
+    _count?: true | ItemAssigneeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ItemAssigneeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ItemAssigneeMaxAggregateInputType
+  }
+
+  export type GetItemAssigneeAggregateType<T extends ItemAssigneeAggregateArgs> = {
+        [P in keyof T & keyof AggregateItemAssignee]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateItemAssignee[P]>
+      : GetScalarType<T[P], AggregateItemAssignee[P]>
+  }
+
+
+
+
+  export type ItemAssigneeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ItemAssigneeWhereInput
+    orderBy?: ItemAssigneeOrderByWithAggregationInput | ItemAssigneeOrderByWithAggregationInput[]
+    by: ItemAssigneeScalarFieldEnum[] | ItemAssigneeScalarFieldEnum
+    having?: ItemAssigneeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ItemAssigneeCountAggregateInputType | true
+    _min?: ItemAssigneeMinAggregateInputType
+    _max?: ItemAssigneeMaxAggregateInputType
+  }
+
+  export type ItemAssigneeGroupByOutputType = {
+    item_id: string
+    user_id: string
+    created_at: Date
+    _count: ItemAssigneeCountAggregateOutputType | null
+    _min: ItemAssigneeMinAggregateOutputType | null
+    _max: ItemAssigneeMaxAggregateOutputType | null
+  }
+
+  type GetItemAssigneeGroupByPayload<T extends ItemAssigneeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ItemAssigneeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ItemAssigneeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ItemAssigneeGroupByOutputType[P]>
+            : GetScalarType<T[P], ItemAssigneeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ItemAssigneeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    item_id?: boolean
+    user_id?: boolean
+    created_at?: boolean
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itemAssignee"]>
+
+  export type ItemAssigneeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    item_id?: boolean
+    user_id?: boolean
+    created_at?: boolean
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itemAssignee"]>
+
+  export type ItemAssigneeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    item_id?: boolean
+    user_id?: boolean
+    created_at?: boolean
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["itemAssignee"]>
+
+  export type ItemAssigneeSelectScalar = {
+    item_id?: boolean
+    user_id?: boolean
+    created_at?: boolean
+  }
+
+  export type ItemAssigneeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"item_id" | "user_id" | "created_at", ExtArgs["result"]["itemAssignee"]>
+  export type ItemAssigneeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ItemAssigneeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ItemAssigneeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item?: boolean | ItemDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ItemAssigneePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ItemAssignee"
+    objects: {
+      item: Prisma.$ItemPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      item_id: string
+      user_id: string
+      created_at: Date
+    }, ExtArgs["result"]["itemAssignee"]>
+    composites: {}
+  }
+
+  type ItemAssigneeGetPayload<S extends boolean | null | undefined | ItemAssigneeDefaultArgs> = $Result.GetResult<Prisma.$ItemAssigneePayload, S>
+
+  type ItemAssigneeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ItemAssigneeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ItemAssigneeCountAggregateInputType | true
+    }
+
+  export interface ItemAssigneeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ItemAssignee'], meta: { name: 'ItemAssignee' } }
+    /**
+     * Find zero or one ItemAssignee that matches the filter.
+     * @param {ItemAssigneeFindUniqueArgs} args - Arguments to find a ItemAssignee
+     * @example
+     * // Get one ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ItemAssigneeFindUniqueArgs>(args: SelectSubset<T, ItemAssigneeFindUniqueArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ItemAssignee that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ItemAssigneeFindUniqueOrThrowArgs} args - Arguments to find a ItemAssignee
+     * @example
+     * // Get one ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ItemAssigneeFindUniqueOrThrowArgs>(args: SelectSubset<T, ItemAssigneeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ItemAssignee that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeFindFirstArgs} args - Arguments to find a ItemAssignee
+     * @example
+     * // Get one ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ItemAssigneeFindFirstArgs>(args?: SelectSubset<T, ItemAssigneeFindFirstArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ItemAssignee that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeFindFirstOrThrowArgs} args - Arguments to find a ItemAssignee
+     * @example
+     * // Get one ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ItemAssigneeFindFirstOrThrowArgs>(args?: SelectSubset<T, ItemAssigneeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ItemAssignees that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ItemAssignees
+     * const itemAssignees = await prisma.itemAssignee.findMany()
+     * 
+     * // Get first 10 ItemAssignees
+     * const itemAssignees = await prisma.itemAssignee.findMany({ take: 10 })
+     * 
+     * // Only select the `item_id`
+     * const itemAssigneeWithItem_idOnly = await prisma.itemAssignee.findMany({ select: { item_id: true } })
+     * 
+     */
+    findMany<T extends ItemAssigneeFindManyArgs>(args?: SelectSubset<T, ItemAssigneeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ItemAssignee.
+     * @param {ItemAssigneeCreateArgs} args - Arguments to create a ItemAssignee.
+     * @example
+     * // Create one ItemAssignee
+     * const ItemAssignee = await prisma.itemAssignee.create({
+     *   data: {
+     *     // ... data to create a ItemAssignee
+     *   }
+     * })
+     * 
+     */
+    create<T extends ItemAssigneeCreateArgs>(args: SelectSubset<T, ItemAssigneeCreateArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ItemAssignees.
+     * @param {ItemAssigneeCreateManyArgs} args - Arguments to create many ItemAssignees.
+     * @example
+     * // Create many ItemAssignees
+     * const itemAssignee = await prisma.itemAssignee.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ItemAssigneeCreateManyArgs>(args?: SelectSubset<T, ItemAssigneeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ItemAssignees and returns the data saved in the database.
+     * @param {ItemAssigneeCreateManyAndReturnArgs} args - Arguments to create many ItemAssignees.
+     * @example
+     * // Create many ItemAssignees
+     * const itemAssignee = await prisma.itemAssignee.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ItemAssignees and only return the `item_id`
+     * const itemAssigneeWithItem_idOnly = await prisma.itemAssignee.createManyAndReturn({
+     *   select: { item_id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ItemAssigneeCreateManyAndReturnArgs>(args?: SelectSubset<T, ItemAssigneeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ItemAssignee.
+     * @param {ItemAssigneeDeleteArgs} args - Arguments to delete one ItemAssignee.
+     * @example
+     * // Delete one ItemAssignee
+     * const ItemAssignee = await prisma.itemAssignee.delete({
+     *   where: {
+     *     // ... filter to delete one ItemAssignee
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ItemAssigneeDeleteArgs>(args: SelectSubset<T, ItemAssigneeDeleteArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ItemAssignee.
+     * @param {ItemAssigneeUpdateArgs} args - Arguments to update one ItemAssignee.
+     * @example
+     * // Update one ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ItemAssigneeUpdateArgs>(args: SelectSubset<T, ItemAssigneeUpdateArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ItemAssignees.
+     * @param {ItemAssigneeDeleteManyArgs} args - Arguments to filter ItemAssignees to delete.
+     * @example
+     * // Delete a few ItemAssignees
+     * const { count } = await prisma.itemAssignee.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ItemAssigneeDeleteManyArgs>(args?: SelectSubset<T, ItemAssigneeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ItemAssignees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ItemAssignees
+     * const itemAssignee = await prisma.itemAssignee.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ItemAssigneeUpdateManyArgs>(args: SelectSubset<T, ItemAssigneeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ItemAssignees and returns the data updated in the database.
+     * @param {ItemAssigneeUpdateManyAndReturnArgs} args - Arguments to update many ItemAssignees.
+     * @example
+     * // Update many ItemAssignees
+     * const itemAssignee = await prisma.itemAssignee.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ItemAssignees and only return the `item_id`
+     * const itemAssigneeWithItem_idOnly = await prisma.itemAssignee.updateManyAndReturn({
+     *   select: { item_id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ItemAssigneeUpdateManyAndReturnArgs>(args: SelectSubset<T, ItemAssigneeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ItemAssignee.
+     * @param {ItemAssigneeUpsertArgs} args - Arguments to update or create a ItemAssignee.
+     * @example
+     * // Update or create a ItemAssignee
+     * const itemAssignee = await prisma.itemAssignee.upsert({
+     *   create: {
+     *     // ... data to create a ItemAssignee
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ItemAssignee we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ItemAssigneeUpsertArgs>(args: SelectSubset<T, ItemAssigneeUpsertArgs<ExtArgs>>): Prisma__ItemAssigneeClient<$Result.GetResult<Prisma.$ItemAssigneePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ItemAssignees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeCountArgs} args - Arguments to filter ItemAssignees to count.
+     * @example
+     * // Count the number of ItemAssignees
+     * const count = await prisma.itemAssignee.count({
+     *   where: {
+     *     // ... the filter for the ItemAssignees we want to count
+     *   }
+     * })
+    **/
+    count<T extends ItemAssigneeCountArgs>(
+      args?: Subset<T, ItemAssigneeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ItemAssigneeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ItemAssignee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ItemAssigneeAggregateArgs>(args: Subset<T, ItemAssigneeAggregateArgs>): Prisma.PrismaPromise<GetItemAssigneeAggregateType<T>>
+
+    /**
+     * Group by ItemAssignee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ItemAssigneeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ItemAssigneeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ItemAssigneeGroupByArgs['orderBy'] }
+        : { orderBy?: ItemAssigneeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ItemAssigneeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItemAssigneeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ItemAssignee model
+   */
+  readonly fields: ItemAssigneeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ItemAssignee.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ItemAssigneeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    item<T extends ItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ItemDefaultArgs<ExtArgs>>): Prisma__ItemClient<$Result.GetResult<Prisma.$ItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ItemAssignee model
+   */
+  interface ItemAssigneeFieldRefs {
+    readonly item_id: FieldRef<"ItemAssignee", 'String'>
+    readonly user_id: FieldRef<"ItemAssignee", 'String'>
+    readonly created_at: FieldRef<"ItemAssignee", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ItemAssignee findUnique
+   */
+  export type ItemAssigneeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter, which ItemAssignee to fetch.
+     */
+    where: ItemAssigneeWhereUniqueInput
+  }
+
+  /**
+   * ItemAssignee findUniqueOrThrow
+   */
+  export type ItemAssigneeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter, which ItemAssignee to fetch.
+     */
+    where: ItemAssigneeWhereUniqueInput
+  }
+
+  /**
+   * ItemAssignee findFirst
+   */
+  export type ItemAssigneeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter, which ItemAssignee to fetch.
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItemAssignees to fetch.
+     */
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ItemAssignees.
+     */
+    cursor?: ItemAssigneeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItemAssignees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItemAssignees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItemAssignees.
+     */
+    distinct?: ItemAssigneeScalarFieldEnum | ItemAssigneeScalarFieldEnum[]
+  }
+
+  /**
+   * ItemAssignee findFirstOrThrow
+   */
+  export type ItemAssigneeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter, which ItemAssignee to fetch.
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItemAssignees to fetch.
+     */
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ItemAssignees.
+     */
+    cursor?: ItemAssigneeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItemAssignees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItemAssignees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ItemAssignees.
+     */
+    distinct?: ItemAssigneeScalarFieldEnum | ItemAssigneeScalarFieldEnum[]
+  }
+
+  /**
+   * ItemAssignee findMany
+   */
+  export type ItemAssigneeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter, which ItemAssignees to fetch.
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ItemAssignees to fetch.
+     */
+    orderBy?: ItemAssigneeOrderByWithRelationInput | ItemAssigneeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ItemAssignees.
+     */
+    cursor?: ItemAssigneeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ItemAssignees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ItemAssignees.
+     */
+    skip?: number
+    distinct?: ItemAssigneeScalarFieldEnum | ItemAssigneeScalarFieldEnum[]
+  }
+
+  /**
+   * ItemAssignee create
+   */
+  export type ItemAssigneeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ItemAssignee.
+     */
+    data: XOR<ItemAssigneeCreateInput, ItemAssigneeUncheckedCreateInput>
+  }
+
+  /**
+   * ItemAssignee createMany
+   */
+  export type ItemAssigneeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ItemAssignees.
+     */
+    data: ItemAssigneeCreateManyInput | ItemAssigneeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ItemAssignee createManyAndReturn
+   */
+  export type ItemAssigneeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * The data used to create many ItemAssignees.
+     */
+    data: ItemAssigneeCreateManyInput | ItemAssigneeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ItemAssignee update
+   */
+  export type ItemAssigneeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ItemAssignee.
+     */
+    data: XOR<ItemAssigneeUpdateInput, ItemAssigneeUncheckedUpdateInput>
+    /**
+     * Choose, which ItemAssignee to update.
+     */
+    where: ItemAssigneeWhereUniqueInput
+  }
+
+  /**
+   * ItemAssignee updateMany
+   */
+  export type ItemAssigneeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ItemAssignees.
+     */
+    data: XOR<ItemAssigneeUpdateManyMutationInput, ItemAssigneeUncheckedUpdateManyInput>
+    /**
+     * Filter which ItemAssignees to update
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * Limit how many ItemAssignees to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ItemAssignee updateManyAndReturn
+   */
+  export type ItemAssigneeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * The data used to update ItemAssignees.
+     */
+    data: XOR<ItemAssigneeUpdateManyMutationInput, ItemAssigneeUncheckedUpdateManyInput>
+    /**
+     * Filter which ItemAssignees to update
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * Limit how many ItemAssignees to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ItemAssignee upsert
+   */
+  export type ItemAssigneeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ItemAssignee to update in case it exists.
+     */
+    where: ItemAssigneeWhereUniqueInput
+    /**
+     * In case the ItemAssignee found by the `where` argument doesn't exist, create a new ItemAssignee with this data.
+     */
+    create: XOR<ItemAssigneeCreateInput, ItemAssigneeUncheckedCreateInput>
+    /**
+     * In case the ItemAssignee was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ItemAssigneeUpdateInput, ItemAssigneeUncheckedUpdateInput>
+  }
+
+  /**
+   * ItemAssignee delete
+   */
+  export type ItemAssigneeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
+    /**
+     * Filter which ItemAssignee to delete.
+     */
+    where: ItemAssigneeWhereUniqueInput
+  }
+
+  /**
+   * ItemAssignee deleteMany
+   */
+  export type ItemAssigneeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ItemAssignees to delete
+     */
+    where?: ItemAssigneeWhereInput
+    /**
+     * Limit how many ItemAssignees to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ItemAssignee without action
+   */
+  export type ItemAssigneeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ItemAssignee
+     */
+    select?: ItemAssigneeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ItemAssignee
+     */
+    omit?: ItemAssigneeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ItemAssigneeInclude<ExtArgs> | null
   }
 
 
@@ -14574,6 +15798,15 @@ export namespace Prisma {
   export type ItemScalarFieldEnum = (typeof ItemScalarFieldEnum)[keyof typeof ItemScalarFieldEnum]
 
 
+  export const ItemAssigneeScalarFieldEnum: {
+    item_id: 'item_id',
+    user_id: 'user_id',
+    created_at: 'created_at'
+  };
+
+  export type ItemAssigneeScalarFieldEnum = (typeof ItemAssigneeScalarFieldEnum)[keyof typeof ItemAssigneeScalarFieldEnum]
+
+
   export const ItemScheduleScalarFieldEnum: {
     item_id: 'item_id',
     tracking_mode: 'tracking_mode',
@@ -14794,6 +16027,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryListRelationFilter
     reminders?: ReminderListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
+    itemAssignments?: ItemAssigneeListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14811,6 +16045,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryOrderByRelationAggregateInput
     reminders?: ReminderOrderByRelationAggregateInput
     refreshTokens?: RefreshTokenOrderByRelationAggregateInput
+    itemAssignments?: ItemAssigneeOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14831,6 +16066,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryListRelationFilter
     reminders?: ReminderListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
+    itemAssignments?: ItemAssigneeListRelationFilter
   }, "user_id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -15237,7 +16473,7 @@ export namespace Prisma {
     NOT?: ItemWhereInput | ItemWhereInput[]
     item_id?: StringFilter<"Item"> | string
     name?: StringFilter<"Item"> | string
-    category_id?: StringFilter<"Item"> | string
+    category_id?: StringNullableFilter<"Item"> | string | null
     household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
@@ -15247,18 +16483,19 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Item"> | Date | string
     updated_at?: DateTimeFilter<"Item"> | Date | string
     created_by?: StringFilter<"Item"> | string
-    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     schedule?: XOR<ItemScheduleNullableScalarRelationFilter, ItemScheduleWhereInput> | null
     histories?: ItemHistoryListRelationFilter
     reminders?: ReminderListRelationFilter
+    assignees?: ItemAssigneeListRelationFilter
   }
 
   export type ItemOrderByWithRelationInput = {
     item_id?: SortOrder
     name?: SortOrder
-    category_id?: SortOrder
+    category_id?: SortOrderInput | SortOrder
     household_id?: SortOrder
     icon?: SortOrderInput | SortOrder
     item_type?: SortOrder
@@ -15274,6 +16511,7 @@ export namespace Prisma {
     schedule?: ItemScheduleOrderByWithRelationInput
     histories?: ItemHistoryOrderByRelationAggregateInput
     reminders?: ReminderOrderByRelationAggregateInput
+    assignees?: ItemAssigneeOrderByRelationAggregateInput
   }
 
   export type ItemWhereUniqueInput = Prisma.AtLeast<{
@@ -15282,7 +16520,7 @@ export namespace Prisma {
     OR?: ItemWhereInput[]
     NOT?: ItemWhereInput | ItemWhereInput[]
     name?: StringFilter<"Item"> | string
-    category_id?: StringFilter<"Item"> | string
+    category_id?: StringNullableFilter<"Item"> | string | null
     household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
@@ -15292,18 +16530,19 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Item"> | Date | string
     updated_at?: DateTimeFilter<"Item"> | Date | string
     created_by?: StringFilter<"Item"> | string
-    category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
+    category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     household?: XOR<HouseholdScalarRelationFilter, HouseholdWhereInput>
     creator?: XOR<UserScalarRelationFilter, UserWhereInput>
     schedule?: XOR<ItemScheduleNullableScalarRelationFilter, ItemScheduleWhereInput> | null
     histories?: ItemHistoryListRelationFilter
     reminders?: ReminderListRelationFilter
+    assignees?: ItemAssigneeListRelationFilter
   }, "item_id">
 
   export type ItemOrderByWithAggregationInput = {
     item_id?: SortOrder
     name?: SortOrder
-    category_id?: SortOrder
+    category_id?: SortOrderInput | SortOrder
     household_id?: SortOrder
     icon?: SortOrderInput | SortOrder
     item_type?: SortOrder
@@ -15324,7 +16563,7 @@ export namespace Prisma {
     NOT?: ItemScalarWhereWithAggregatesInput | ItemScalarWhereWithAggregatesInput[]
     item_id?: StringWithAggregatesFilter<"Item"> | string
     name?: StringWithAggregatesFilter<"Item"> | string
-    category_id?: StringWithAggregatesFilter<"Item"> | string
+    category_id?: StringNullableWithAggregatesFilter<"Item"> | string | null
     household_id?: StringWithAggregatesFilter<"Item"> | string
     icon?: StringNullableWithAggregatesFilter<"Item"> | string | null
     item_type?: EnumItemTypeWithAggregatesFilter<"Item"> | $Enums.ItemType
@@ -15334,6 +16573,55 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"Item"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Item"> | Date | string
     created_by?: StringWithAggregatesFilter<"Item"> | string
+  }
+
+  export type ItemAssigneeWhereInput = {
+    AND?: ItemAssigneeWhereInput | ItemAssigneeWhereInput[]
+    OR?: ItemAssigneeWhereInput[]
+    NOT?: ItemAssigneeWhereInput | ItemAssigneeWhereInput[]
+    item_id?: StringFilter<"ItemAssignee"> | string
+    user_id?: StringFilter<"ItemAssignee"> | string
+    created_at?: DateTimeFilter<"ItemAssignee"> | Date | string
+    item?: XOR<ItemScalarRelationFilter, ItemWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ItemAssigneeOrderByWithRelationInput = {
+    item_id?: SortOrder
+    user_id?: SortOrder
+    created_at?: SortOrder
+    item?: ItemOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ItemAssigneeWhereUniqueInput = Prisma.AtLeast<{
+    item_id_user_id?: ItemAssigneeItem_idUser_idCompoundUniqueInput
+    AND?: ItemAssigneeWhereInput | ItemAssigneeWhereInput[]
+    OR?: ItemAssigneeWhereInput[]
+    NOT?: ItemAssigneeWhereInput | ItemAssigneeWhereInput[]
+    item_id?: StringFilter<"ItemAssignee"> | string
+    user_id?: StringFilter<"ItemAssignee"> | string
+    created_at?: DateTimeFilter<"ItemAssignee"> | Date | string
+    item?: XOR<ItemScalarRelationFilter, ItemWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "item_id_user_id">
+
+  export type ItemAssigneeOrderByWithAggregationInput = {
+    item_id?: SortOrder
+    user_id?: SortOrder
+    created_at?: SortOrder
+    _count?: ItemAssigneeCountOrderByAggregateInput
+    _max?: ItemAssigneeMaxOrderByAggregateInput
+    _min?: ItemAssigneeMinOrderByAggregateInput
+  }
+
+  export type ItemAssigneeScalarWhereWithAggregatesInput = {
+    AND?: ItemAssigneeScalarWhereWithAggregatesInput | ItemAssigneeScalarWhereWithAggregatesInput[]
+    OR?: ItemAssigneeScalarWhereWithAggregatesInput[]
+    NOT?: ItemAssigneeScalarWhereWithAggregatesInput | ItemAssigneeScalarWhereWithAggregatesInput[]
+    item_id?: StringWithAggregatesFilter<"ItemAssignee"> | string
+    user_id?: StringWithAggregatesFilter<"ItemAssignee"> | string
+    created_at?: DateTimeWithAggregatesFilter<"ItemAssignee"> | Date | string
   }
 
   export type ItemScheduleWhereInput = {
@@ -15545,6 +16833,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15562,6 +16851,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15579,6 +16869,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15596,6 +16887,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -16007,18 +17299,19 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -16031,6 +17324,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemUpdateInput = {
@@ -16043,18 +17337,19 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -16067,12 +17362,13 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type ItemCreateManyInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -16099,7 +17395,7 @@ export namespace Prisma {
   export type ItemUncheckedUpdateManyInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -16109,6 +17405,46 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     created_by?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ItemAssigneeCreateInput = {
+    created_at?: Date | string
+    item: ItemCreateNestedOneWithoutAssigneesInput
+    user: UserCreateNestedOneWithoutItemAssignmentsInput
+  }
+
+  export type ItemAssigneeUncheckedCreateInput = {
+    item_id: string
+    user_id: string
+    created_at?: Date | string
+  }
+
+  export type ItemAssigneeUpdateInput = {
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    item?: ItemUpdateOneRequiredWithoutAssigneesNestedInput
+    user?: UserUpdateOneRequiredWithoutItemAssignmentsNestedInput
+  }
+
+  export type ItemAssigneeUncheckedUpdateInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItemAssigneeCreateManyInput = {
+    item_id: string
+    user_id: string
+    created_at?: Date | string
+  }
+
+  export type ItemAssigneeUpdateManyMutationInput = {
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItemAssigneeUncheckedUpdateManyInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ItemScheduleCreateInput = {
@@ -16396,6 +17732,12 @@ export namespace Prisma {
     none?: RefreshTokenWhereInput
   }
 
+  export type ItemAssigneeListRelationFilter = {
+    every?: ItemAssigneeWhereInput
+    some?: ItemAssigneeWhereInput
+    none?: ItemAssigneeWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -16430,6 +17772,10 @@ export namespace Prisma {
   }
 
   export type RefreshTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ItemAssigneeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16784,9 +18130,9 @@ export namespace Prisma {
     not?: NestedEnumItemTypeFilter<$PrismaModel> | $Enums.ItemType
   }
 
-  export type CategoryScalarRelationFilter = {
-    is?: CategoryWhereInput
-    isNot?: CategoryWhereInput
+  export type CategoryNullableScalarRelationFilter = {
+    is?: CategoryWhereInput | null
+    isNot?: CategoryWhereInput | null
   }
 
   export type ItemScheduleNullableScalarRelationFilter = {
@@ -16849,6 +18195,34 @@ export namespace Prisma {
     _max?: NestedEnumItemTypeFilter<$PrismaModel>
   }
 
+  export type ItemScalarRelationFilter = {
+    is?: ItemWhereInput
+    isNot?: ItemWhereInput
+  }
+
+  export type ItemAssigneeItem_idUser_idCompoundUniqueInput = {
+    item_id: string
+    user_id: string
+  }
+
+  export type ItemAssigneeCountOrderByAggregateInput = {
+    item_id?: SortOrder
+    user_id?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ItemAssigneeMaxOrderByAggregateInput = {
+    item_id?: SortOrder
+    user_id?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ItemAssigneeMinOrderByAggregateInput = {
+    item_id?: SortOrder
+    user_id?: SortOrder
+    created_at?: SortOrder
+  }
+
   export type EnumTrackingModeFilter<$PrismaModel = never> = {
     equals?: $Enums.TrackingMode | EnumTrackingModeFieldRefInput<$PrismaModel>
     in?: $Enums.TrackingMode[] | ListEnumTrackingModeFieldRefInput<$PrismaModel>
@@ -16865,11 +18239,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type ItemScalarRelationFilter = {
-    is?: ItemWhereInput
-    isNot?: ItemWhereInput
   }
 
   export type ItemScheduleCountOrderByAggregateInput = {
@@ -17054,6 +18423,13 @@ export namespace Prisma {
     connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
   }
 
+  export type ItemAssigneeCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput> | ItemAssigneeCreateWithoutUserInput[] | ItemAssigneeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutUserInput | ItemAssigneeCreateOrConnectWithoutUserInput[]
+    createMany?: ItemAssigneeCreateManyUserInputEnvelope
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+  }
+
   export type HouseholdUncheckedCreateNestedManyWithoutCreatorInput = {
     create?: XOR<HouseholdCreateWithoutCreatorInput, HouseholdUncheckedCreateWithoutCreatorInput> | HouseholdCreateWithoutCreatorInput[] | HouseholdUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: HouseholdCreateOrConnectWithoutCreatorInput | HouseholdCreateOrConnectWithoutCreatorInput[]
@@ -17108,6 +18484,13 @@ export namespace Prisma {
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
     createMany?: RefreshTokenCreateManyUserInputEnvelope
     connect?: RefreshTokenWhereUniqueInput | RefreshTokenWhereUniqueInput[]
+  }
+
+  export type ItemAssigneeUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput> | ItemAssigneeCreateWithoutUserInput[] | ItemAssigneeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutUserInput | ItemAssigneeCreateOrConnectWithoutUserInput[]
+    createMany?: ItemAssigneeCreateManyUserInputEnvelope
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -17238,6 +18621,20 @@ export namespace Prisma {
     deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
   }
 
+  export type ItemAssigneeUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput> | ItemAssigneeCreateWithoutUserInput[] | ItemAssigneeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutUserInput | ItemAssigneeCreateOrConnectWithoutUserInput[]
+    upsert?: ItemAssigneeUpsertWithWhereUniqueWithoutUserInput | ItemAssigneeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItemAssigneeCreateManyUserInputEnvelope
+    set?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    disconnect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    delete?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    update?: ItemAssigneeUpdateWithWhereUniqueWithoutUserInput | ItemAssigneeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItemAssigneeUpdateManyWithWhereWithoutUserInput | ItemAssigneeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
+  }
+
   export type HouseholdUncheckedUpdateManyWithoutCreatorNestedInput = {
     create?: XOR<HouseholdCreateWithoutCreatorInput, HouseholdUncheckedCreateWithoutCreatorInput> | HouseholdCreateWithoutCreatorInput[] | HouseholdUncheckedCreateWithoutCreatorInput[]
     connectOrCreate?: HouseholdCreateOrConnectWithoutCreatorInput | HouseholdCreateOrConnectWithoutCreatorInput[]
@@ -17348,6 +18745,20 @@ export namespace Prisma {
     update?: RefreshTokenUpdateWithWhereUniqueWithoutUserInput | RefreshTokenUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RefreshTokenUpdateManyWithWhereWithoutUserInput | RefreshTokenUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RefreshTokenScalarWhereInput | RefreshTokenScalarWhereInput[]
+  }
+
+  export type ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput> | ItemAssigneeCreateWithoutUserInput[] | ItemAssigneeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutUserInput | ItemAssigneeCreateOrConnectWithoutUserInput[]
+    upsert?: ItemAssigneeUpsertWithWhereUniqueWithoutUserInput | ItemAssigneeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ItemAssigneeCreateManyUserInputEnvelope
+    set?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    disconnect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    delete?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    update?: ItemAssigneeUpdateWithWhereUniqueWithoutUserInput | ItemAssigneeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ItemAssigneeUpdateManyWithWhereWithoutUserInput | ItemAssigneeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -17782,6 +19193,13 @@ export namespace Prisma {
     connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
   }
 
+  export type ItemAssigneeCreateNestedManyWithoutItemInput = {
+    create?: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput> | ItemAssigneeCreateWithoutItemInput[] | ItemAssigneeUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutItemInput | ItemAssigneeCreateOrConnectWithoutItemInput[]
+    createMany?: ItemAssigneeCreateManyItemInputEnvelope
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+  }
+
   export type ItemScheduleUncheckedCreateNestedOneWithoutItemInput = {
     create?: XOR<ItemScheduleCreateWithoutItemInput, ItemScheduleUncheckedCreateWithoutItemInput>
     connectOrCreate?: ItemScheduleCreateOrConnectWithoutItemInput
@@ -17802,14 +19220,23 @@ export namespace Prisma {
     connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
   }
 
+  export type ItemAssigneeUncheckedCreateNestedManyWithoutItemInput = {
+    create?: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput> | ItemAssigneeCreateWithoutItemInput[] | ItemAssigneeUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutItemInput | ItemAssigneeCreateOrConnectWithoutItemInput[]
+    createMany?: ItemAssigneeCreateManyItemInputEnvelope
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+  }
+
   export type EnumItemTypeFieldUpdateOperationsInput = {
     set?: $Enums.ItemType
   }
 
-  export type CategoryUpdateOneRequiredWithoutItemsNestedInput = {
+  export type CategoryUpdateOneWithoutItemsNestedInput = {
     create?: XOR<CategoryCreateWithoutItemsInput, CategoryUncheckedCreateWithoutItemsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutItemsInput
     upsert?: CategoryUpsertWithoutItemsInput
+    disconnect?: CategoryWhereInput | boolean
+    delete?: CategoryWhereInput | boolean
     connect?: CategoryWhereUniqueInput
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutItemsInput, CategoryUpdateWithoutItemsInput>, CategoryUncheckedUpdateWithoutItemsInput>
   }
@@ -17868,6 +19295,20 @@ export namespace Prisma {
     deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
   }
 
+  export type ItemAssigneeUpdateManyWithoutItemNestedInput = {
+    create?: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput> | ItemAssigneeCreateWithoutItemInput[] | ItemAssigneeUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutItemInput | ItemAssigneeCreateOrConnectWithoutItemInput[]
+    upsert?: ItemAssigneeUpsertWithWhereUniqueWithoutItemInput | ItemAssigneeUpsertWithWhereUniqueWithoutItemInput[]
+    createMany?: ItemAssigneeCreateManyItemInputEnvelope
+    set?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    disconnect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    delete?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    update?: ItemAssigneeUpdateWithWhereUniqueWithoutItemInput | ItemAssigneeUpdateWithWhereUniqueWithoutItemInput[]
+    updateMany?: ItemAssigneeUpdateManyWithWhereWithoutItemInput | ItemAssigneeUpdateManyWithWhereWithoutItemInput[]
+    deleteMany?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
+  }
+
   export type ItemScheduleUncheckedUpdateOneWithoutItemNestedInput = {
     create?: XOR<ItemScheduleCreateWithoutItemInput, ItemScheduleUncheckedCreateWithoutItemInput>
     connectOrCreate?: ItemScheduleCreateOrConnectWithoutItemInput
@@ -17904,6 +19345,48 @@ export namespace Prisma {
     update?: ReminderUpdateWithWhereUniqueWithoutItemInput | ReminderUpdateWithWhereUniqueWithoutItemInput[]
     updateMany?: ReminderUpdateManyWithWhereWithoutItemInput | ReminderUpdateManyWithWhereWithoutItemInput[]
     deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  }
+
+  export type ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput = {
+    create?: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput> | ItemAssigneeCreateWithoutItemInput[] | ItemAssigneeUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: ItemAssigneeCreateOrConnectWithoutItemInput | ItemAssigneeCreateOrConnectWithoutItemInput[]
+    upsert?: ItemAssigneeUpsertWithWhereUniqueWithoutItemInput | ItemAssigneeUpsertWithWhereUniqueWithoutItemInput[]
+    createMany?: ItemAssigneeCreateManyItemInputEnvelope
+    set?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    disconnect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    delete?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    connect?: ItemAssigneeWhereUniqueInput | ItemAssigneeWhereUniqueInput[]
+    update?: ItemAssigneeUpdateWithWhereUniqueWithoutItemInput | ItemAssigneeUpdateWithWhereUniqueWithoutItemInput[]
+    updateMany?: ItemAssigneeUpdateManyWithWhereWithoutItemInput | ItemAssigneeUpdateManyWithWhereWithoutItemInput[]
+    deleteMany?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
+  }
+
+  export type ItemCreateNestedOneWithoutAssigneesInput = {
+    create?: XOR<ItemCreateWithoutAssigneesInput, ItemUncheckedCreateWithoutAssigneesInput>
+    connectOrCreate?: ItemCreateOrConnectWithoutAssigneesInput
+    connect?: ItemWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutItemAssignmentsInput = {
+    create?: XOR<UserCreateWithoutItemAssignmentsInput, UserUncheckedCreateWithoutItemAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutItemAssignmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ItemUpdateOneRequiredWithoutAssigneesNestedInput = {
+    create?: XOR<ItemCreateWithoutAssigneesInput, ItemUncheckedCreateWithoutAssigneesInput>
+    connectOrCreate?: ItemCreateOrConnectWithoutAssigneesInput
+    upsert?: ItemUpsertWithoutAssigneesInput
+    connect?: ItemWhereUniqueInput
+    update?: XOR<XOR<ItemUpdateToOneWithWhereWithoutAssigneesInput, ItemUpdateWithoutAssigneesInput>, ItemUncheckedUpdateWithoutAssigneesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutItemAssignmentsNestedInput = {
+    create?: XOR<UserCreateWithoutItemAssignmentsInput, UserUncheckedCreateWithoutItemAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutItemAssignmentsInput
+    upsert?: UserUpsertWithoutItemAssignmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutItemAssignmentsInput, UserUpdateWithoutItemAssignmentsInput>, UserUncheckedUpdateWithoutItemAssignmentsInput>
   }
 
   export type ItemCreateNestedOneWithoutScheduleInput = {
@@ -18363,17 +19846,18 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     household: HouseholdCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutCreatorInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -18385,6 +19869,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutCreatorInput = {
@@ -18470,6 +19955,26 @@ export namespace Prisma {
 
   export type RefreshTokenCreateManyUserInputEnvelope = {
     data: RefreshTokenCreateManyUserInput | RefreshTokenCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ItemAssigneeCreateWithoutUserInput = {
+    created_at?: Date | string
+    item: ItemCreateNestedOneWithoutAssigneesInput
+  }
+
+  export type ItemAssigneeUncheckedCreateWithoutUserInput = {
+    item_id: string
+    created_at?: Date | string
+  }
+
+  export type ItemAssigneeCreateOrConnectWithoutUserInput = {
+    where: ItemAssigneeWhereUniqueInput
+    create: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ItemAssigneeCreateManyUserInputEnvelope = {
+    data: ItemAssigneeCreateManyUserInput | ItemAssigneeCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -18603,7 +20108,7 @@ export namespace Prisma {
     NOT?: ItemScalarWhereInput | ItemScalarWhereInput[]
     item_id?: StringFilter<"Item"> | string
     name?: StringFilter<"Item"> | string
-    category_id?: StringFilter<"Item"> | string
+    category_id?: StringNullableFilter<"Item"> | string | null
     household_id?: StringFilter<"Item"> | string
     icon?: StringNullableFilter<"Item"> | string | null
     item_type?: EnumItemTypeFilter<"Item"> | $Enums.ItemType
@@ -18698,6 +20203,31 @@ export namespace Prisma {
     revoked_at?: DateTimeNullableFilter<"RefreshToken"> | Date | string | null
   }
 
+  export type ItemAssigneeUpsertWithWhereUniqueWithoutUserInput = {
+    where: ItemAssigneeWhereUniqueInput
+    update: XOR<ItemAssigneeUpdateWithoutUserInput, ItemAssigneeUncheckedUpdateWithoutUserInput>
+    create: XOR<ItemAssigneeCreateWithoutUserInput, ItemAssigneeUncheckedCreateWithoutUserInput>
+  }
+
+  export type ItemAssigneeUpdateWithWhereUniqueWithoutUserInput = {
+    where: ItemAssigneeWhereUniqueInput
+    data: XOR<ItemAssigneeUpdateWithoutUserInput, ItemAssigneeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ItemAssigneeUpdateManyWithWhereWithoutUserInput = {
+    where: ItemAssigneeScalarWhereInput
+    data: XOR<ItemAssigneeUpdateManyMutationInput, ItemAssigneeUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ItemAssigneeScalarWhereInput = {
+    AND?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
+    OR?: ItemAssigneeScalarWhereInput[]
+    NOT?: ItemAssigneeScalarWhereInput | ItemAssigneeScalarWhereInput[]
+    item_id?: StringFilter<"ItemAssignee"> | string
+    user_id?: StringFilter<"ItemAssignee"> | string
+    created_at?: DateTimeFilter<"ItemAssignee"> | Date | string
+  }
+
   export type UserCreateWithoutRefreshTokensInput = {
     user_id?: string
     email: string
@@ -18712,6 +20242,7 @@ export namespace Prisma {
     items?: ItemCreateNestedManyWithoutCreatorInput
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -18728,6 +20259,7 @@ export namespace Prisma {
     items?: ItemUncheckedCreateNestedManyWithoutCreatorInput
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -18760,6 +20292,7 @@ export namespace Prisma {
     items?: ItemUpdateManyWithoutCreatorNestedInput
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -18776,6 +20309,7 @@ export namespace Prisma {
     items?: ItemUncheckedUpdateManyWithoutCreatorNestedInput
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedHouseholdsInput = {
@@ -18792,6 +20326,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedHouseholdsInput = {
@@ -18808,6 +20343,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedHouseholdsInput = {
@@ -18925,17 +20461,18 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutHouseholdInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
@@ -18947,6 +20484,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutHouseholdInput = {
@@ -18984,6 +20522,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedHouseholdsInput = {
@@ -19000,6 +20539,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type HouseholdMemberUpsertWithWhereUniqueWithoutHouseholdInput = {
@@ -19137,6 +20677,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -19153,6 +20694,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -19220,6 +20762,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -19236,6 +20779,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type HouseholdCreateWithoutInvitationsInput = {
@@ -19281,6 +20825,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitationsInput = {
@@ -19297,6 +20842,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitationsInput = {
@@ -19364,6 +20910,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitationsInput = {
@@ -19380,6 +20927,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type HouseholdCreateWithoutHouseholdJoinRequestsInput = {
@@ -19425,6 +20973,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRequestsInput = {
@@ -19441,6 +20990,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRequestsInput = {
@@ -19508,6 +21058,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestsInput = {
@@ -19524,6 +21075,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type HouseholdCreateWithoutCategoriesInput = {
@@ -19570,6 +21122,7 @@ export namespace Prisma {
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutCategoryInput = {
@@ -19587,6 +21140,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutCategoryInput = {
@@ -19716,6 +21270,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutItemsInput = {
@@ -19732,6 +21287,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutItemsInput = {
@@ -19811,6 +21367,26 @@ export namespace Prisma {
 
   export type ReminderCreateManyItemInputEnvelope = {
     data: ReminderCreateManyItemInput | ReminderCreateManyItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ItemAssigneeCreateWithoutItemInput = {
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutItemAssignmentsInput
+  }
+
+  export type ItemAssigneeUncheckedCreateWithoutItemInput = {
+    user_id: string
+    created_at?: Date | string
+  }
+
+  export type ItemAssigneeCreateOrConnectWithoutItemInput = {
+    where: ItemAssigneeWhereUniqueInput
+    create: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput>
+  }
+
+  export type ItemAssigneeCreateManyItemInputEnvelope = {
+    data: ItemAssigneeCreateManyItemInput | ItemAssigneeCreateManyItemInput[]
     skipDuplicates?: boolean
   }
 
@@ -19903,6 +21479,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItemsInput = {
@@ -19919,6 +21496,7 @@ export namespace Prisma {
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ItemScheduleUpsertWithoutItemInput = {
@@ -19986,6 +21564,194 @@ export namespace Prisma {
     data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutItemInput>
   }
 
+  export type ItemAssigneeUpsertWithWhereUniqueWithoutItemInput = {
+    where: ItemAssigneeWhereUniqueInput
+    update: XOR<ItemAssigneeUpdateWithoutItemInput, ItemAssigneeUncheckedUpdateWithoutItemInput>
+    create: XOR<ItemAssigneeCreateWithoutItemInput, ItemAssigneeUncheckedCreateWithoutItemInput>
+  }
+
+  export type ItemAssigneeUpdateWithWhereUniqueWithoutItemInput = {
+    where: ItemAssigneeWhereUniqueInput
+    data: XOR<ItemAssigneeUpdateWithoutItemInput, ItemAssigneeUncheckedUpdateWithoutItemInput>
+  }
+
+  export type ItemAssigneeUpdateManyWithWhereWithoutItemInput = {
+    where: ItemAssigneeScalarWhereInput
+    data: XOR<ItemAssigneeUpdateManyMutationInput, ItemAssigneeUncheckedUpdateManyWithoutItemInput>
+  }
+
+  export type ItemCreateWithoutAssigneesInput = {
+    item_id?: string
+    name: string
+    icon?: string | null
+    item_type: $Enums.ItemType
+    notes?: string | null
+    purchase_link?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    category?: CategoryCreateNestedOneWithoutItemsInput
+    household: HouseholdCreateNestedOneWithoutItemsInput
+    creator: UserCreateNestedOneWithoutItemsInput
+    schedule?: ItemScheduleCreateNestedOneWithoutItemInput
+    histories?: ItemHistoryCreateNestedManyWithoutItemInput
+    reminders?: ReminderCreateNestedManyWithoutItemInput
+  }
+
+  export type ItemUncheckedCreateWithoutAssigneesInput = {
+    item_id?: string
+    name: string
+    category_id?: string | null
+    household_id: string
+    icon?: string | null
+    item_type: $Enums.ItemType
+    notes?: string | null
+    purchase_link?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by: string
+    schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
+    histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+  }
+
+  export type ItemCreateOrConnectWithoutAssigneesInput = {
+    where: ItemWhereUniqueInput
+    create: XOR<ItemCreateWithoutAssigneesInput, ItemUncheckedCreateWithoutAssigneesInput>
+  }
+
+  export type UserCreateWithoutItemAssignmentsInput = {
+    user_id?: string
+    email: string
+    email_verified?: boolean
+    password_hash?: string | null
+    name: string
+    updated_at?: Date | string
+    createdHouseholds?: HouseholdCreateNestedManyWithoutCreatorInput
+    memberships?: HouseholdMemberCreateNestedManyWithoutUserInput
+    invitations?: HouseholdInvitationCreateNestedManyWithoutInviterInput
+    requests?: HouseholdJoinRequestCreateNestedManyWithoutRequesterInput
+    items?: ItemCreateNestedManyWithoutCreatorInput
+    itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutItemAssignmentsInput = {
+    user_id?: string
+    email: string
+    email_verified?: boolean
+    password_hash?: string | null
+    name: string
+    updated_at?: Date | string
+    createdHouseholds?: HouseholdUncheckedCreateNestedManyWithoutCreatorInput
+    memberships?: HouseholdMemberUncheckedCreateNestedManyWithoutUserInput
+    invitations?: HouseholdInvitationUncheckedCreateNestedManyWithoutInviterInput
+    requests?: HouseholdJoinRequestUncheckedCreateNestedManyWithoutRequesterInput
+    items?: ItemUncheckedCreateNestedManyWithoutCreatorInput
+    itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutItemAssignmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutItemAssignmentsInput, UserUncheckedCreateWithoutItemAssignmentsInput>
+  }
+
+  export type ItemUpsertWithoutAssigneesInput = {
+    update: XOR<ItemUpdateWithoutAssigneesInput, ItemUncheckedUpdateWithoutAssigneesInput>
+    create: XOR<ItemCreateWithoutAssigneesInput, ItemUncheckedCreateWithoutAssigneesInput>
+    where?: ItemWhereInput
+  }
+
+  export type ItemUpdateToOneWithWhereWithoutAssigneesInput = {
+    where?: ItemWhereInput
+    data: XOR<ItemUpdateWithoutAssigneesInput, ItemUncheckedUpdateWithoutAssigneesInput>
+  }
+
+  export type ItemUpdateWithoutAssigneesInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutItemsNestedInput
+    household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
+    creator?: UserUpdateOneRequiredWithoutItemsNestedInput
+    schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
+    histories?: ItemHistoryUpdateManyWithoutItemNestedInput
+    reminders?: ReminderUpdateManyWithoutItemNestedInput
+  }
+
+  export type ItemUncheckedUpdateWithoutAssigneesInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    household_id?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    purchase_link?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
+    histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+  }
+
+  export type UserUpsertWithoutItemAssignmentsInput = {
+    update: XOR<UserUpdateWithoutItemAssignmentsInput, UserUncheckedUpdateWithoutItemAssignmentsInput>
+    create: XOR<UserCreateWithoutItemAssignmentsInput, UserUncheckedCreateWithoutItemAssignmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutItemAssignmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutItemAssignmentsInput, UserUncheckedUpdateWithoutItemAssignmentsInput>
+  }
+
+  export type UserUpdateWithoutItemAssignmentsInput = {
+    user_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdHouseholds?: HouseholdUpdateManyWithoutCreatorNestedInput
+    memberships?: HouseholdMemberUpdateManyWithoutUserNestedInput
+    invitations?: HouseholdInvitationUpdateManyWithoutInviterNestedInput
+    requests?: HouseholdJoinRequestUpdateManyWithoutRequesterNestedInput
+    items?: ItemUpdateManyWithoutCreatorNestedInput
+    itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutItemAssignmentsInput = {
+    user_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdHouseholds?: HouseholdUncheckedUpdateManyWithoutCreatorNestedInput
+    memberships?: HouseholdMemberUncheckedUpdateManyWithoutUserNestedInput
+    invitations?: HouseholdInvitationUncheckedUpdateManyWithoutInviterNestedInput
+    requests?: HouseholdJoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
+    items?: ItemUncheckedUpdateManyWithoutCreatorNestedInput
+    itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type ItemCreateWithoutScheduleInput = {
     item_id?: string
     name: string
@@ -19996,17 +21762,18 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutScheduleInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -20018,6 +21785,7 @@ export namespace Prisma {
     created_by: string
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutScheduleInput = {
@@ -20046,17 +21814,18 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutScheduleInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -20068,6 +21837,7 @@ export namespace Prisma {
     created_by?: StringFieldUpdateOperationsInput | string
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type ItemCreateWithoutHistoriesInput = {
@@ -20080,17 +21850,18 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     reminders?: ReminderCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutHistoriesInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -20102,6 +21873,7 @@ export namespace Prisma {
     created_by: string
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutHistoriesInput = {
@@ -20123,6 +21895,7 @@ export namespace Prisma {
     items?: ItemCreateNestedManyWithoutCreatorInput
     reminders?: ReminderCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutItemHistoriesInput = {
@@ -20139,6 +21912,7 @@ export namespace Prisma {
     items?: ItemUncheckedCreateNestedManyWithoutCreatorInput
     reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutItemHistoriesInput = {
@@ -20167,17 +21941,18 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutHistoriesInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -20189,6 +21964,7 @@ export namespace Prisma {
     created_by?: StringFieldUpdateOperationsInput | string
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type UserUpsertWithoutItemHistoriesInput = {
@@ -20216,6 +21992,7 @@ export namespace Prisma {
     items?: ItemUpdateManyWithoutCreatorNestedInput
     reminders?: ReminderUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutItemHistoriesInput = {
@@ -20232,6 +22009,7 @@ export namespace Prisma {
     items?: ItemUncheckedUpdateManyWithoutCreatorNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ItemCreateWithoutRemindersInput = {
@@ -20244,17 +22022,18 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
-    category: CategoryCreateNestedOneWithoutItemsInput
+    category?: CategoryCreateNestedOneWithoutItemsInput
     household: HouseholdCreateNestedOneWithoutItemsInput
     creator: UserCreateNestedOneWithoutItemsInput
     schedule?: ItemScheduleCreateNestedOneWithoutItemInput
     histories?: ItemHistoryCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeCreateNestedManyWithoutItemInput
   }
 
   export type ItemUncheckedCreateWithoutRemindersInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -20266,6 +22045,7 @@ export namespace Prisma {
     created_by: string
     schedule?: ItemScheduleUncheckedCreateNestedOneWithoutItemInput
     histories?: ItemHistoryUncheckedCreateNestedManyWithoutItemInput
+    assignees?: ItemAssigneeUncheckedCreateNestedManyWithoutItemInput
   }
 
   export type ItemCreateOrConnectWithoutRemindersInput = {
@@ -20287,6 +22067,7 @@ export namespace Prisma {
     items?: ItemCreateNestedManyWithoutCreatorInput
     itemHistories?: ItemHistoryCreateNestedManyWithoutCompleterInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRemindersInput = {
@@ -20303,6 +22084,7 @@ export namespace Prisma {
     items?: ItemUncheckedCreateNestedManyWithoutCreatorInput
     itemHistories?: ItemHistoryUncheckedCreateNestedManyWithoutCompleterInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    itemAssignments?: ItemAssigneeUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRemindersInput = {
@@ -20331,17 +22113,18 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutRemindersInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -20353,6 +22136,7 @@ export namespace Prisma {
     created_by?: StringFieldUpdateOperationsInput | string
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type UserUpsertWithoutRemindersInput = {
@@ -20380,6 +22164,7 @@ export namespace Prisma {
     items?: ItemUpdateManyWithoutCreatorNestedInput
     itemHistories?: ItemHistoryUpdateManyWithoutCompleterNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRemindersInput = {
@@ -20396,6 +22181,7 @@ export namespace Prisma {
     items?: ItemUncheckedUpdateManyWithoutCreatorNestedInput
     itemHistories?: ItemHistoryUncheckedUpdateManyWithoutCompleterNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    itemAssignments?: ItemAssigneeUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type HouseholdCreateManyCreatorInput = {
@@ -20429,7 +22215,7 @@ export namespace Prisma {
   export type ItemCreateManyCreatorInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     household_id: string
     icon?: string | null
     item_type: $Enums.ItemType
@@ -20461,6 +22247,11 @@ export namespace Prisma {
     created_at?: Date | string
     expires_at: Date | string
     revoked_at?: Date | string | null
+  }
+
+  export type ItemAssigneeCreateManyUserInput = {
+    item_id: string
+    created_at?: Date | string
   }
 
   export type HouseholdUpdateWithoutCreatorInput = {
@@ -20567,17 +22358,18 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     household?: HouseholdUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutCreatorInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -20589,12 +22381,13 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateManyWithoutCreatorInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     household_id?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
@@ -20674,6 +22467,21 @@ export namespace Prisma {
     revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type ItemAssigneeUpdateWithoutUserInput = {
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    item?: ItemUpdateOneRequiredWithoutAssigneesNestedInput
+  }
+
+  export type ItemAssigneeUncheckedUpdateWithoutUserInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItemAssigneeUncheckedUpdateManyWithoutUserInput = {
+    item_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type HouseholdMemberCreateManyHouseholdInput = {
     user_id: string
     role: $Enums.Role
@@ -20706,7 +22514,7 @@ export namespace Prisma {
   export type ItemCreateManyHouseholdInput = {
     item_id?: string
     name: string
-    category_id: string
+    category_id?: string | null
     icon?: string | null
     item_type: $Enums.ItemType
     notes?: string | null
@@ -20816,17 +22624,18 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneRequiredWithoutItemsNestedInput
+    category?: CategoryUpdateOneWithoutItemsNestedInput
     creator?: UserUpdateOneRequiredWithoutItemsNestedInput
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutHouseholdInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20838,12 +22647,13 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateManyWithoutHouseholdInput = {
     item_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category_id?: StringFieldUpdateOperationsInput | string
+    category_id?: NullableStringFieldUpdateOperationsInput | string | null
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     item_type?: EnumItemTypeFieldUpdateOperationsInput | $Enums.ItemType
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20883,6 +22693,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUpdateManyWithoutItemNestedInput
     reminders?: ReminderUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateWithoutCategoryInput = {
@@ -20900,6 +22711,7 @@ export namespace Prisma {
     schedule?: ItemScheduleUncheckedUpdateOneWithoutItemNestedInput
     histories?: ItemHistoryUncheckedUpdateManyWithoutItemNestedInput
     reminders?: ReminderUncheckedUpdateManyWithoutItemNestedInput
+    assignees?: ItemAssigneeUncheckedUpdateManyWithoutItemNestedInput
   }
 
   export type ItemUncheckedUpdateManyWithoutCategoryInput = {
@@ -20928,6 +22740,11 @@ export namespace Prisma {
     user_id: string
     remind_at: Date | string
     sent_at?: Date | string | null
+  }
+
+  export type ItemAssigneeCreateManyItemInput = {
+    user_id: string
+    created_at?: Date | string
   }
 
   export type ItemHistoryUpdateWithoutItemInput = {
@@ -20970,6 +22787,21 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     remind_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sent_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ItemAssigneeUpdateWithoutItemInput = {
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutItemAssignmentsNestedInput
+  }
+
+  export type ItemAssigneeUncheckedUpdateWithoutItemInput = {
+    user_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ItemAssigneeUncheckedUpdateManyWithoutItemInput = {
+    user_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

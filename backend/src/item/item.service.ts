@@ -41,8 +41,27 @@ export class ItemService {
     }
   }
 
+  private async assertMembersInHousehold(
+    householdId: string,
+    userIds: string[],
+  ) {
+    const members = await this.prisma.householdMember.findMany({
+      where: { household_id: householdId, user_id: { in: userIds } },
+    });
+    if (members.length !== userIds.length) {
+      throw new BadRequestException(
+        'assignee_user_ids must all be members of your household',
+      );
+    }
+  }
+
   async create(householdId: string, userId: string, dto: CreateItemDto) {
-    await this.assertCategoryInHousehold(householdId, dto.category_id);
+    if (dto.category_id) {
+      await this.assertCategoryInHousehold(householdId, dto.category_id);
+    }
+    if (dto.assignee_user_ids?.length) {
+      await this.assertMembersInHousehold(householdId, dto.assignee_user_ids);
+    }
 
     const now = new Date();
     const nextDueDate = computeInitialDueDate(
@@ -53,6 +72,9 @@ export class ItemService {
           ? new Date(dto.schedule.fixed_due_date)
           : null,
         recurrence_rule: dto.schedule.recurrence_rule,
+        initial_due_date: dto.schedule.initial_due_date
+          ? new Date(dto.schedule.initial_due_date)
+          : null,
       },
       now,
     );
@@ -85,6 +107,25 @@ export class ItemService {
         },
       });
 
+      let assignees: {
+        item_id: string;
+        user_id: string;
+        created_at: Date;
+        user: { user_id: string; name: string };
+      }[] = [];
+      if (dto.assignee_user_ids?.length) {
+        await tx.itemAssignee.createMany({
+          data: dto.assignee_user_ids.map((assigneeUserId) => ({
+            item_id: item.item_id,
+            user_id: assigneeUserId,
+          })),
+        });
+        assignees = await tx.itemAssignee.findMany({
+          where: { item_id: item.item_id },
+          include: { user: { select: { user_id: true, name: true } } },
+        });
+      }
+
       await this.reminderService.syncForItem(
         tx,
         item.item_id,
@@ -93,7 +134,7 @@ export class ItemService {
         dto.schedule.lead_time_days,
       );
 
-      return { ...item, schedule };
+      return { ...item, schedule, assignees };
     });
   }
 

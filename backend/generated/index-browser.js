@@ -196,6 +196,12 @@ exports.Prisma.ItemScalarFieldEnum = {
   created_by: 'created_by'
 };
 
+exports.Prisma.ItemAssigneeScalarFieldEnum = {
+  item_id: 'item_id',
+  user_id: 'user_id',
+  created_at: 'created_at'
+};
+
 exports.Prisma.ItemScheduleScalarFieldEnum = {
   item_id: 'item_id',
   tracking_mode: 'tracking_mode',
@@ -278,6 +284,7 @@ exports.Prisma.ModelName = {
   HouseholdJoinRequest: 'HouseholdJoinRequest',
   Category: 'Category',
   Item: 'Item',
+  ItemAssignee: 'ItemAssignee',
   ItemSchedule: 'ItemSchedule',
   ItemHistory: 'ItemHistory',
   Reminder: 'Reminder'
