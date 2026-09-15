@@ -1,10 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/network/extract_error.dart';
 import '../household/current_member.dart';
-import '../items/item_repository.dart';
 import '../items/item_type.dart';
+import '../items/items_controller.dart';
 import '../items/repeat_unit.dart';
 
 class AddItemFormState {
@@ -79,14 +77,14 @@ class AddItemFormState {
 }
 
 class AddItemController extends StateNotifier<AddItemFormState> {
-  AddItemController(this._itemApi, String? currentUserId)
+  AddItemController(this._createItem, String? currentUserId)
     : super(
         AddItemFormState(
           assigneeIds: currentUserId != null ? {currentUserId} : const {},
         ),
       );
 
-  final ItemApi _itemApi;
+  final Future<void> Function(Map<String, dynamic> body) _createItem;
 
   void setItemType(ItemType type) {
     state = state.copyWith(
@@ -155,12 +153,9 @@ class AddItemController extends StateNotifier<AddItemFormState> {
           'assignee_user_ids': state.assigneeIds.toList(),
       };
 
-      await _itemApi.createItem(body);
+      await _createItem(body);
       state = state.copyWith(submitting: false);
       return true;
-    } on DioException catch (e) {
-      state = state.copyWith(submitting: false, error: extractError(e));
-      return false;
     } catch (e) {
       state = state.copyWith(submitting: false, error: e.toString());
       return false;
@@ -173,5 +168,6 @@ final addItemControllerProvider = StateNotifierProvider.autoDispose<
   AddItemFormState
 >((ref) {
   final userId = ref.watch(currentUserIdProvider);
-  return AddItemController(ref.watch(itemRepositoryProvider), userId);
+  final itemsController = ref.watch(itemsControllerProvider.notifier);
+  return AddItemController(itemsController.createItem, userId);
 });

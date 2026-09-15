@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/sync/sync_providers.dart';
+import '../../core/sync/sync_status.dart';
 import '../../core/theme/app_theme.dart';
 import '../household/current_member.dart';
 import '../items/items_controller.dart';
@@ -19,6 +21,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final name = ref.watch(currentMemberNameProvider).valueOrNull;
     final itemsState = ref.watch(itemsControllerProvider);
+    final syncState = ref.watch(syncStatusProvider);
     final tasks = ref.watch(dashboardTasksProvider);
     final density = ref.watch(taskListDensityProvider);
     final doneCount = tasks.where((t) => t.isDone).length;
@@ -59,15 +62,23 @@ class DashboardScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              if (itemsState.error != null)
+              if (syncState.status == SyncStatus.offline)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.only(bottom: 12),
                   child: Text(
-                    itemsState.error!,
-                    style: AppTypography.body.copyWith(color: AppColors.rose),
+                    "You're offline — showing your last saved tasks.",
+                    style: AppTypography.meta.copyWith(color: AppColors.muted),
                   ),
                 )
-              else if (itemsState.loading && itemsState.items.isEmpty)
+              else if (syncState.lastIssue != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    syncState.lastIssue!,
+                    style: AppTypography.meta.copyWith(color: AppColors.rose),
+                  ),
+                ),
+              if (itemsState.loading && itemsState.items.isEmpty)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 32),
                   child: Center(child: CircularProgressIndicator(color: AppColors.forest)),
