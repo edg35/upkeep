@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/db/db_providers.dart';
 import '../../core/network/auth_token_holder.dart';
 import '../../core/storage/secure_token_storage.dart';
 import 'auth_repository.dart';
@@ -32,12 +33,14 @@ class AuthState {
 }
 
 class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._repository, this._tokenStorage) : super(const AuthState()) {
+  AuthController(this._repository, this._tokenStorage, {this._onLogout})
+    : super(const AuthState()) {
     AuthTokenHolder.onUnauthorized = _handleUnauthorized;
   }
 
   final AuthApi _repository;
   final TokenStorage _tokenStorage;
+  final Future<void> Function()? _onLogout;
 
   /// Whether the current session's tokens should be re-persisted to secure
   /// storage when they rotate (on signup, on a "keep me signed in" login,
@@ -99,6 +102,7 @@ class AuthController extends StateNotifier<AuthState> {
     state = const AuthState();
     _persistSession = false;
     await _tokenStorage.clear();
+    await _onLogout?.call();
     if (refreshToken != null) {
       try {
         await _repository.logout(refreshToken);
@@ -168,6 +172,7 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
   return AuthController(
     ref.watch(authRepositoryProvider),
     ref.watch(secureTokenStorageProvider),
+    onLogout: () => ref.read(localItemStoreProvider).clearAll(),
   );
 });
 

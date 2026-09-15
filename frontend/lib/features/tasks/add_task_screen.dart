@@ -8,7 +8,6 @@ import '../../shared/widgets/pill_button.dart';
 import '../categories/categories_provider.dart';
 import '../household/household_members_provider.dart';
 import '../items/item_type.dart';
-import '../items/items_controller.dart';
 import 'add_item_controller.dart';
 import 'widgets/assignee_avatar_row.dart';
 import 'widgets/first_due_chip_row.dart';
@@ -146,7 +145,6 @@ class AddTaskScreen extends ConsumerWidget {
                 onPressed: () async {
                   final ok = await controller.submit();
                   if (ok && context.mounted) {
-                    ref.invalidate(itemsControllerProvider);
                     context.pop();
                   }
                 },

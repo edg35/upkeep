@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/sync/sync_providers.dart';
 import 'core/theme/app_theme.dart';
 import 'router/app_router.dart';
 
@@ -10,6 +11,7 @@ class UpkeepApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(connectivitySyncProvider);
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(

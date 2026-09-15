@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/db/db_providers.dart';
 import 'category.dart';
-import 'category_repository.dart';
 
 /// Household categories ("rooms"), used to populate the add-item form's
-/// room picker. Read-only reference data, so a plain FutureProvider is
-/// enough — no submission state to justify a full StateNotifier controller.
-final categoriesProvider = FutureProvider<List<Category>>((ref) async {
-  final data = await ref.watch(categoryRepositoryProvider).listCategories();
-  return data.map(Category.fromJson).toList();
+/// room picker. Read-only in the app today, so this just streams the local
+/// mirror kept in sync by [SyncService] — no outbox needed.
+final categoriesProvider = StreamProvider<List<Category>>((ref) {
+  return ref.watch(localItemStoreProvider).watchCategories();
 });
