@@ -30,12 +30,14 @@ interface InitialScheduleInput {
   interval_days?: number | null;
   fixed_due_date?: Date | null;
   recurrence_rule?: string | null;
+  initial_due_date?: Date | null;
 }
 
 export function computeInitialDueDate(
   schedule: InitialScheduleInput,
   now: Date,
 ): Date {
+  if (schedule.initial_due_date) return schedule.initial_due_date;
   switch (schedule.tracking_mode) {
     case TrackingMode.INTERVAL:
       return addDays(now, schedule.interval_days!);

@@ -81,4 +81,24 @@ describe('CreateItemScheduleDto', () => {
 
     expect(errors).toHaveLength(0);
   });
+
+  it('accepts a valid initial_due_date override alongside any mode', async () => {
+    const errors = await validateSchedule({
+      tracking_mode: TrackingMode.INTERVAL,
+      interval_days: 7,
+      initial_due_date: '2026-09-05T00:00:00.000Z',
+    });
+
+    expect(errors).toHaveLength(0);
+  });
+
+  it('rejects a malformed initial_due_date', async () => {
+    const errors = await validateSchedule({
+      tracking_mode: TrackingMode.INTERVAL,
+      interval_days: 7,
+      initial_due_date: 'not-a-date',
+    });
+
+    expect(errors.length).toBeGreaterThan(0);
+  });
 });

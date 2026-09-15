@@ -104,6 +104,13 @@ export class CreateItemScheduleDto {
   @IsInt()
   @Min(0)
   lead_time_days?: number;
+
+  // Orthogonal override: when set, used directly as the item's first
+  // next_due_date regardless of tracking_mode. Not part of the schedule
+  // shape validation above since it's valid alongside any tracking_mode.
+  @IsOptional()
+  @IsISO8601()
+  initial_due_date?: string;
 }
 
 export class UpdateItemScheduleDto {

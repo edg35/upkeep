@@ -6,6 +6,7 @@ import '../../core/network/api_client.dart';
 abstract class ItemApi {
   Future<List<Map<String, dynamic>>> listItems();
   Future<Map<String, dynamic>> completeItem(String itemId);
+  Future<Map<String, dynamic>> createItem(Map<String, dynamic> body);
 }
 
 class ItemRepository implements ItemApi {
@@ -21,6 +22,12 @@ class ItemRepository implements ItemApi {
   @override
   Future<Map<String, dynamic>> completeItem(String itemId) async {
     final res = await _dio.post('/items/$itemId/complete', data: const {});
+    return res.data as Map<String, dynamic>;
+  }
+
+  @override
+  Future<Map<String, dynamic>> createItem(Map<String, dynamic> body) async {
+    final res = await _dio.post('/items', data: body);
     return res.data as Map<String, dynamic>;
   }
 }

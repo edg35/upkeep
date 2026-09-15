@@ -9,18 +9,30 @@ erDiagram
     User {
         string user_id PK
         string email
+        boolean email_verified
+        string password_hash
         string name
         DateTime updated_at
+    }
+    RefreshToken {
+        string token_id PK
+        string user_id FK
+        string token_hash
+        string device_info
+        DateTime created_at
+        DateTime expires_at
+        DateTime revoked_at
     }
     Household {
         string household_id PK
         string name
+        string invite_code
         string created_by FK
         DateTime updated_at
     }
     HouseholdMember {
-        string household_id PK "FK"
         string user_id PK "FK"
+        string household_id FK
         Role role
     }
     HouseholdInvitation {
@@ -51,10 +63,12 @@ erDiagram
         string item_id PK
         string name
         string category_id FK
+        string household_id FK
         string icon
         ItemType item_type
         string notes
         string purchase_link
+        DateTime deleted_at
         DateTime created_at
         DateTime updated_at
         string created_by FK
@@ -91,10 +105,12 @@ erDiagram
     User ||--o{ Item : "creates"
     User ||--o{ ItemHistory : "completes"
     User ||--o{ Reminder : "receives"
+    User ||--o{ RefreshToken : "has"
     Household ||--o{ HouseholdMember : "has"
     Household ||--o{ HouseholdInvitation : "has"
     Household ||--o{ HouseholdJoinRequest : "has"
     Household ||--o{ Category : "has"
+    Household ||--o{ Item : "has"
     Category ||--o{ Item : "contains"
     Item ||--o| ItemSchedule : "scheduled by"
     Item ||--o{ ItemHistory : "has"
@@ -109,6 +125,20 @@ erDiagram
 
 ```bash
 $ npm install
+```
+
+## Database
+
+Start Postgres via Docker Compose:
+
+```bash
+$ docker compose up -d
+```
+
+Then apply migrations (needed any time the database is new or was reset, e.g. after clearing the `postgres-data` volume — migrations do **not** run automatically on `docker compose up`):
+
+```bash
+$ npx prisma migrate deploy
 ```
 
 ## Compile and run the project

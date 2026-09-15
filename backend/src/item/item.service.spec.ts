@@ -12,9 +12,11 @@ describe('ItemService', () => {
     item: { create: jest.Mock; update: jest.Mock };
     itemSchedule: { create: jest.Mock; update: jest.Mock };
     itemHistory: { create: jest.Mock };
+    itemAssignee: { createMany: jest.Mock; findMany: jest.Mock };
   };
   let prisma: {
     category: { findFirst: jest.Mock };
+    householdMember: { findMany: jest.Mock };
     item: { findFirst: jest.Mock; findMany: jest.Mock; update: jest.Mock };
     $transaction: jest.Mock;
   };
@@ -25,9 +27,11 @@ describe('ItemService', () => {
       item: { create: jest.fn(), update: jest.fn() },
       itemSchedule: { create: jest.fn(), update: jest.fn() },
       itemHistory: { create: jest.fn() },
+      itemAssignee: { createMany: jest.fn(), findMany: jest.fn() },
     };
     prisma = {
       category: { findFirst: jest.fn() },
+      householdMember: { findMany: jest.fn() },
       item: { findFirst: jest.fn(), findMany: jest.fn(), update: jest.fn() },
       $transaction: jest.fn((cb: (tx: unknown) => unknown) => cb(tx)),
     };
@@ -53,6 +57,20 @@ describe('ItemService', () => {
         BadRequestException,
       );
       expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it('creates an item with no category_id at all, skipping category validation', async () => {
+      tx.item.create.mockResolvedValue({ item_id: 'i1' });
+
+      const { category_id, ...dtoWithoutCategory } = dto;
+      await service.create('h1', 'u1', dtoWithoutCategory as CreateItemDto);
+
+      expect(prisma.category.findFirst).not.toHaveBeenCalled();
+      expect(tx.item.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ category_id: undefined }),
+        }),
+      );
     });
 
     it('creates the Item and its ItemSchedule together with a computed next_due_date', async () => {
@@ -91,6 +109,75 @@ describe('ItemService', () => {
         'h1',
         expect.any(Date),
         undefined,
+      );
+    });
+
+    it('rejects an assignee_user_id that is not a member of the household', async () => {
+      prisma.category.findFirst.mockResolvedValue({
+        category_id: 'c1',
+        household_id: 'h1',
+      });
+      prisma.householdMember.findMany.mockResolvedValue([{ user_id: 'u1' }]);
+
+      await expect(
+        service.create('h1', 'u1', {
+          ...dto,
+          assignee_user_ids: ['u1', 'not-a-member'],
+        }),
+      ).rejects.toThrow(BadRequestException);
+      expect(prisma.$transaction).not.toHaveBeenCalled();
+    });
+
+    it('creates ItemAssignee rows and echoes them back in the response', async () => {
+      prisma.category.findFirst.mockResolvedValue({
+        category_id: 'c1',
+        household_id: 'h1',
+      });
+      prisma.householdMember.findMany.mockResolvedValue([
+        { user_id: 'u1' },
+        { user_id: 'u2' },
+      ]);
+      tx.item.create.mockResolvedValue({ item_id: 'i1' });
+      tx.itemAssignee.findMany.mockResolvedValue([
+        { item_id: 'i1', user_id: 'u1', user: { user_id: 'u1', name: 'A' } },
+        { item_id: 'i1', user_id: 'u2', user: { user_id: 'u2', name: 'B' } },
+      ]);
+
+      const result = await service.create('h1', 'u1', {
+        ...dto,
+        assignee_user_ids: ['u1', 'u2'],
+      });
+
+      expect(tx.itemAssignee.createMany).toHaveBeenCalledWith({
+        data: [
+          { item_id: 'i1', user_id: 'u1' },
+          { item_id: 'i1', user_id: 'u2' },
+        ],
+      });
+      expect(result.assignees).toHaveLength(2);
+    });
+
+    it('overrides the computed next_due_date when initial_due_date is provided', async () => {
+      prisma.category.findFirst.mockResolvedValue({
+        category_id: 'c1',
+        household_id: 'h1',
+      });
+      tx.item.create.mockResolvedValue({ item_id: 'i1' });
+
+      await service.create('h1', 'u1', {
+        ...dto,
+        schedule: {
+          ...dto.schedule,
+          initial_due_date: '2026-09-05T00:00:00.000Z',
+        },
+      });
+
+      expect(tx.itemSchedule.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            next_due_date: new Date('2026-09-05T00:00:00.000Z'),
+          }),
+        }),
       );
     });
   });
