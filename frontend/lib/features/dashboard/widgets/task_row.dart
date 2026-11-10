@@ -10,54 +10,60 @@ class TaskRow extends StatelessWidget {
     required this.task,
     required this.density,
     required this.onToggle,
+    this.onTap,
     this.completing = false,
   });
 
   final HomeTask task;
   final TaskListDensity density;
   final VoidCallback onToggle;
+  final VoidCallback? onTap;
   final bool completing;
 
   @override
   Widget build(BuildContext context) {
     final compact = density == TaskListDensity.compact;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: compact ? 10 : 14),
-      child: Row(
-        children: [
-          _Checkbox(
-            done: task.isDone,
-            late: task.isLate,
-            loading: completing,
-            onTap: onToggle,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  task.title,
-                  style: AppTypography.row.copyWith(
-                    decoration: task.isDone ? TextDecoration.lineThrough : null,
-                    color: task.isDone ? AppColors.muted : AppColors.ink,
-                  ),
-                ),
-                if (!compact) ...[
-                  const SizedBox(height: 2),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: compact ? 10 : 14),
+        child: Row(
+          children: [
+            _Checkbox(
+              done: task.isDone,
+              late: task.isLate,
+              loading: completing,
+              onTap: onToggle,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    task.subtitle,
-                    style: AppTypography.meta.copyWith(
-                      color: task.isLate ? AppColors.rose : AppColors.muted,
+                    task.title,
+                    style: AppTypography.row.copyWith(
+                      decoration: task.isDone ? TextDecoration.lineThrough : null,
+                      color: task.isDone ? AppColors.muted : AppColors.ink,
                     ),
                   ),
+                  if (!compact) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      task.subtitle,
+                      style: AppTypography.meta.copyWith(
+                        color: task.isLate ? AppColors.rose : AppColors.muted,
+                      ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-          _Trailing(task: task),
-        ],
+            _Trailing(task: task),
+          ],
+        ),
       ),
     );
   }

@@ -18,7 +18,7 @@ import '../features/household/onboarding_screen.dart';
 import '../features/household/pending_request_screen.dart';
 import '../features/items/items_screen.dart';
 import '../features/settings/settings_screen.dart';
-import '../features/tasks/add_task_screen.dart';
+import '../features/tasks/item_form_screen.dart';
 
 const _onboardingPaths = {
   '/onboarding',
@@ -101,7 +101,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/tasks/add',
-        builder: (context, state) => const AddTaskScreen(),
+        builder: (context, state) => const ItemFormScreen(),
+      ),
+      GoRoute(
+        path: '/tasks/edit/:id',
+        builder: (context, state) => ItemFormScreen(itemId: state.pathParameters['id']),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => ScaffoldWithNavBar(shell: shell),

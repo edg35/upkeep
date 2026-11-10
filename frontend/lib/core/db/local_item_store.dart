@@ -40,8 +40,10 @@ class LocalItemStore {
       id: row.itemId,
       name: row.name,
       itemType: row.itemType,
+      categoryId: row.categoryId,
       categoryColor: row.categoryColor,
       purchaseLink: row.purchaseLink,
+      assignees: _decodeAssignees(row.assigneesJson),
       schedule: ItemSchedule(
         trackingMode: row.trackingMode,
         nextDueDate: row.nextDueDate,
@@ -54,6 +56,13 @@ class LocalItemStore {
             )
           : null,
     );
+  }
+
+  List<ItemAssignee> _decodeAssignees(String? json) {
+    if (json == null) return const <ItemAssignee>[];
+    return (jsonDecode(json) as List)
+        .map((a) => ItemAssignee(userId: a['user_id'] as String, name: a['name'] as String))
+        .toList();
   }
 
   // ---- server -> local (full-refresh pull) --------------------------------
@@ -81,6 +90,7 @@ class LocalItemStore {
         ? histories.first as Map<String, dynamic>
         : null;
     final completer = latestHistory?['completer'] as Map<String, dynamic>?;
+    final assignees = json['assignees'] as List?;
 
     return LocalItemsCompanion.insert(
       itemId: json['item_id'] as String,
@@ -89,6 +99,16 @@ class LocalItemStore {
       categoryId: Value(json['category_id'] as String?),
       categoryColor: Value(category?['color'] as String?),
       purchaseLink: Value(json['purchase_link'] as String?),
+      assigneesJson: Value(
+        assignees != null
+            ? jsonEncode(
+                assignees
+                    .map((a) => ItemAssignee.fromJson(a as Map<String, dynamic>))
+                    .map((a) => {'user_id': a.userId, 'name': a.name})
+                    .toList(),
+              )
+            : null,
+      ),
       trackingMode: schedule?['tracking_mode'] as String? ?? 'INTERVAL',
       nextDueDate: schedule != null
           ? DateTime.parse(schedule['next_due_date'] as String).toLocal()
@@ -165,6 +185,36 @@ class LocalItemStore {
     final fixed = schedule['fixed_due_date'] as String?;
     if (fixed != null) return DateTime.parse(fixed).toLocal();
     return DateTime.now();
+  }
+
+  /// Optimistically applies an edit's locally-cached-relevant fields
+  /// (everything else — icon/notes/schedule detail — isn't mirrored locally
+  /// and only reaches the server; the next sync pull reconciles it).
+  Future<void> applyOptimisticUpdate({
+    required String itemId,
+    required Map<String, dynamic> body,
+  }) async {
+    final schedule = body['schedule'] as Map<String, dynamic>?;
+    await (_db.update(_db.localItems)..where((t) => t.itemId.equals(itemId))).write(
+      LocalItemsCompanion(
+        name: body.containsKey('name') ? Value(body['name'] as String) : const Value.absent(),
+        itemType: body.containsKey('item_type')
+            ? Value(body['item_type'] as String)
+            : const Value.absent(),
+        categoryId: body.containsKey('category_id')
+            ? Value(body['category_id'] as String?)
+            : const Value.absent(),
+        purchaseLink: body.containsKey('purchase_link')
+            ? Value(body['purchase_link'] as String?)
+            : const Value.absent(),
+        trackingMode: schedule != null
+            ? Value(schedule['tracking_mode'] as String)
+            : const Value.absent(),
+        nextDueDate: schedule != null
+            ? Value(_initialDueDateGuess(schedule))
+            : const Value.absent(),
+      ),
+    );
   }
 
   Future<void> applyOptimisticComplete(String itemId, DateTime completedAt) async {

@@ -16,11 +16,10 @@ class ReminderToggleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Material(
+      color: AppColors.card,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
       child: SwitchListTile(
         value: enabled,
         onChanged: onChanged,
