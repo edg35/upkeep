@@ -27,8 +27,8 @@ class SyncService {
   Future<void> syncNow() async {
     if (_running) return;
     _running = true;
-    _status.setSyncing();
     try {
+      _status.setSyncing();
       final drainResult = await _drainOutbox();
       if (drainResult.emptied) {
         await _pullFromServer();
@@ -87,6 +87,8 @@ class SyncService {
         await _store.remapLocalId(mutation.itemId, serverId);
       case OutboxMutationType.complete:
         await _itemApi.completeItem(mutation.itemId);
+      case OutboxMutationType.update:
+        await _itemApi.updateItem(mutation.itemId, payload);
     }
   }
 

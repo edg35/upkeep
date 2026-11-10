@@ -98,6 +98,7 @@ class DashboardScreen extends ConsumerWidget {
                     if (task.isDone) return;
                     ref.read(itemsControllerProvider.notifier).complete(id);
                   },
+                  onTapTask: (id) => context.push('/tasks/edit/$id'),
                 ),
             ],
           ),

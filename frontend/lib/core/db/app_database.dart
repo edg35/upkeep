@@ -14,6 +14,12 @@ class LocalItems extends Table {
   TextColumn get categoryId => text().nullable()();
   TextColumn get categoryColor => text().nullable()();
   TextColumn get purchaseLink => text().nullable()();
+
+  /// JSON-encoded `[{"user_id": ..., "name": ...}]` — kept as a plain text
+  /// blob rather than a join table since it's write-only from the server
+  /// pull and only ever read back out whole, for the items list's assignee
+  /// filter.
+  TextColumn get assigneesJson => text().nullable()();
   TextColumn get trackingMode => text()();
   DateTimeColumn get nextDueDate => dateTime()();
   DateTimeColumn get lastCompletedAt => dateTime().nullable()();
@@ -36,7 +42,7 @@ class LocalCategories extends Table {
   Set<Column> get primaryKey => {categoryId};
 }
 
-enum OutboxMutationType { create, complete }
+enum OutboxMutationType { create, complete, update }
 
 /// A queued write made while local-first, replayed against the API in FIFO
 /// (`id ASC`) order by [SyncService].
@@ -56,7 +62,17 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn(localItems, localItems.assigneesJson);
+      }
+    },
+  );
 
   Future<void> clearAll() async {
     await transaction(() async {

@@ -71,6 +71,17 @@ class $LocalItemsTable extends LocalItems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _assigneesJsonMeta = const VerificationMeta(
+    'assigneesJson',
+  );
+  @override
+  late final GeneratedColumn<String> assigneesJson = GeneratedColumn<String>(
+    'assignees_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _trackingModeMeta = const VerificationMeta(
     'trackingMode',
   );
@@ -135,6 +146,7 @@ class $LocalItemsTable extends LocalItems
     categoryId,
     categoryColor,
     purchaseLink,
+    assigneesJson,
     trackingMode,
     nextDueDate,
     lastCompletedAt,
@@ -198,6 +210,15 @@ class $LocalItemsTable extends LocalItems
         purchaseLink.isAcceptableOrUnknown(
           data['purchase_link']!,
           _purchaseLinkMeta,
+        ),
+      );
+    }
+    if (data.containsKey('assignees_json')) {
+      context.handle(
+        _assigneesJsonMeta,
+        assigneesJson.isAcceptableOrUnknown(
+          data['assignees_json']!,
+          _assigneesJsonMeta,
         ),
       );
     }
@@ -280,6 +301,10 @@ class $LocalItemsTable extends LocalItems
         DriftSqlType.string,
         data['${effectivePrefix}purchase_link'],
       ),
+      assigneesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}assignees_json'],
+      ),
       trackingMode: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}tracking_mode'],
@@ -316,6 +341,12 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
   final String? categoryId;
   final String? categoryColor;
   final String? purchaseLink;
+
+  /// JSON-encoded `[{"user_id": ..., "name": ...}]` — kept as a plain text
+  /// blob rather than a join table since it's write-only from the server
+  /// pull and only ever read back out whole, for the items list's assignee
+  /// filter.
+  final String? assigneesJson;
   final String trackingMode;
   final DateTime nextDueDate;
   final DateTime? lastCompletedAt;
@@ -331,6 +362,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
     this.categoryId,
     this.categoryColor,
     this.purchaseLink,
+    this.assigneesJson,
     required this.trackingMode,
     required this.nextDueDate,
     this.lastCompletedAt,
@@ -351,6 +383,9 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
     }
     if (!nullToAbsent || purchaseLink != null) {
       map['purchase_link'] = Variable<String>(purchaseLink);
+    }
+    if (!nullToAbsent || assigneesJson != null) {
+      map['assignees_json'] = Variable<String>(assigneesJson);
     }
     map['tracking_mode'] = Variable<String>(trackingMode);
     map['next_due_date'] = Variable<DateTime>(nextDueDate);
@@ -380,6 +415,9 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
       purchaseLink: purchaseLink == null && nullToAbsent
           ? const Value.absent()
           : Value(purchaseLink),
+      assigneesJson: assigneesJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(assigneesJson),
       trackingMode: Value(trackingMode),
       nextDueDate: Value(nextDueDate),
       lastCompletedAt: lastCompletedAt == null && nullToAbsent
@@ -406,6 +444,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
       categoryId: serializer.fromJson<String?>(json['categoryId']),
       categoryColor: serializer.fromJson<String?>(json['categoryColor']),
       purchaseLink: serializer.fromJson<String?>(json['purchaseLink']),
+      assigneesJson: serializer.fromJson<String?>(json['assigneesJson']),
       trackingMode: serializer.fromJson<String>(json['trackingMode']),
       nextDueDate: serializer.fromJson<DateTime>(json['nextDueDate']),
       lastCompletedAt: serializer.fromJson<DateTime?>(json['lastCompletedAt']),
@@ -425,6 +464,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
       'categoryId': serializer.toJson<String?>(categoryId),
       'categoryColor': serializer.toJson<String?>(categoryColor),
       'purchaseLink': serializer.toJson<String?>(purchaseLink),
+      'assigneesJson': serializer.toJson<String?>(assigneesJson),
       'trackingMode': serializer.toJson<String>(trackingMode),
       'nextDueDate': serializer.toJson<DateTime>(nextDueDate),
       'lastCompletedAt': serializer.toJson<DateTime?>(lastCompletedAt),
@@ -440,6 +480,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
     Value<String?> categoryId = const Value.absent(),
     Value<String?> categoryColor = const Value.absent(),
     Value<String?> purchaseLink = const Value.absent(),
+    Value<String?> assigneesJson = const Value.absent(),
     String? trackingMode,
     DateTime? nextDueDate,
     Value<DateTime?> lastCompletedAt = const Value.absent(),
@@ -454,6 +495,9 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
         ? categoryColor.value
         : this.categoryColor,
     purchaseLink: purchaseLink.present ? purchaseLink.value : this.purchaseLink,
+    assigneesJson: assigneesJson.present
+        ? assigneesJson.value
+        : this.assigneesJson,
     trackingMode: trackingMode ?? this.trackingMode,
     nextDueDate: nextDueDate ?? this.nextDueDate,
     lastCompletedAt: lastCompletedAt.present
@@ -478,6 +522,9 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
       purchaseLink: data.purchaseLink.present
           ? data.purchaseLink.value
           : this.purchaseLink,
+      assigneesJson: data.assigneesJson.present
+          ? data.assigneesJson.value
+          : this.assigneesJson,
       trackingMode: data.trackingMode.present
           ? data.trackingMode.value
           : this.trackingMode,
@@ -503,6 +550,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
           ..write('categoryId: $categoryId, ')
           ..write('categoryColor: $categoryColor, ')
           ..write('purchaseLink: $purchaseLink, ')
+          ..write('assigneesJson: $assigneesJson, ')
           ..write('trackingMode: $trackingMode, ')
           ..write('nextDueDate: $nextDueDate, ')
           ..write('lastCompletedAt: $lastCompletedAt, ')
@@ -520,6 +568,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
     categoryId,
     categoryColor,
     purchaseLink,
+    assigneesJson,
     trackingMode,
     nextDueDate,
     lastCompletedAt,
@@ -536,6 +585,7 @@ class LocalItem extends DataClass implements Insertable<LocalItem> {
           other.categoryId == this.categoryId &&
           other.categoryColor == this.categoryColor &&
           other.purchaseLink == this.purchaseLink &&
+          other.assigneesJson == this.assigneesJson &&
           other.trackingMode == this.trackingMode &&
           other.nextDueDate == this.nextDueDate &&
           other.lastCompletedAt == this.lastCompletedAt &&
@@ -550,6 +600,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
   final Value<String?> categoryId;
   final Value<String?> categoryColor;
   final Value<String?> purchaseLink;
+  final Value<String?> assigneesJson;
   final Value<String> trackingMode;
   final Value<DateTime> nextDueDate;
   final Value<DateTime?> lastCompletedAt;
@@ -563,6 +614,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
     this.categoryId = const Value.absent(),
     this.categoryColor = const Value.absent(),
     this.purchaseLink = const Value.absent(),
+    this.assigneesJson = const Value.absent(),
     this.trackingMode = const Value.absent(),
     this.nextDueDate = const Value.absent(),
     this.lastCompletedAt = const Value.absent(),
@@ -577,6 +629,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
     this.categoryId = const Value.absent(),
     this.categoryColor = const Value.absent(),
     this.purchaseLink = const Value.absent(),
+    this.assigneesJson = const Value.absent(),
     required String trackingMode,
     required DateTime nextDueDate,
     this.lastCompletedAt = const Value.absent(),
@@ -595,6 +648,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
     Expression<String>? categoryId,
     Expression<String>? categoryColor,
     Expression<String>? purchaseLink,
+    Expression<String>? assigneesJson,
     Expression<String>? trackingMode,
     Expression<DateTime>? nextDueDate,
     Expression<DateTime>? lastCompletedAt,
@@ -609,6 +663,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
       if (categoryId != null) 'category_id': categoryId,
       if (categoryColor != null) 'category_color': categoryColor,
       if (purchaseLink != null) 'purchase_link': purchaseLink,
+      if (assigneesJson != null) 'assignees_json': assigneesJson,
       if (trackingMode != null) 'tracking_mode': trackingMode,
       if (nextDueDate != null) 'next_due_date': nextDueDate,
       if (lastCompletedAt != null) 'last_completed_at': lastCompletedAt,
@@ -626,6 +681,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
     Value<String?>? categoryId,
     Value<String?>? categoryColor,
     Value<String?>? purchaseLink,
+    Value<String?>? assigneesJson,
     Value<String>? trackingMode,
     Value<DateTime>? nextDueDate,
     Value<DateTime?>? lastCompletedAt,
@@ -640,6 +696,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
       categoryId: categoryId ?? this.categoryId,
       categoryColor: categoryColor ?? this.categoryColor,
       purchaseLink: purchaseLink ?? this.purchaseLink,
+      assigneesJson: assigneesJson ?? this.assigneesJson,
       trackingMode: trackingMode ?? this.trackingMode,
       nextDueDate: nextDueDate ?? this.nextDueDate,
       lastCompletedAt: lastCompletedAt ?? this.lastCompletedAt,
@@ -669,6 +726,9 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
     }
     if (purchaseLink.present) {
       map['purchase_link'] = Variable<String>(purchaseLink.value);
+    }
+    if (assigneesJson.present) {
+      map['assignees_json'] = Variable<String>(assigneesJson.value);
     }
     if (trackingMode.present) {
       map['tracking_mode'] = Variable<String>(trackingMode.value);
@@ -702,6 +762,7 @@ class LocalItemsCompanion extends UpdateCompanion<LocalItem> {
           ..write('categoryId: $categoryId, ')
           ..write('categoryColor: $categoryColor, ')
           ..write('purchaseLink: $purchaseLink, ')
+          ..write('assigneesJson: $assigneesJson, ')
           ..write('trackingMode: $trackingMode, ')
           ..write('nextDueDate: $nextDueDate, ')
           ..write('lastCompletedAt: $lastCompletedAt, ')
@@ -1371,6 +1432,7 @@ typedef $$LocalItemsTableCreateCompanionBuilder =
       Value<String?> categoryId,
       Value<String?> categoryColor,
       Value<String?> purchaseLink,
+      Value<String?> assigneesJson,
       required String trackingMode,
       required DateTime nextDueDate,
       Value<DateTime?> lastCompletedAt,
@@ -1386,6 +1448,7 @@ typedef $$LocalItemsTableUpdateCompanionBuilder =
       Value<String?> categoryId,
       Value<String?> categoryColor,
       Value<String?> purchaseLink,
+      Value<String?> assigneesJson,
       Value<String> trackingMode,
       Value<DateTime> nextDueDate,
       Value<DateTime?> lastCompletedAt,
@@ -1430,6 +1493,11 @@ class $$LocalItemsTableFilterComposer
 
   ColumnFilters<String> get purchaseLink => $composableBuilder(
     column: $table.purchaseLink,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get assigneesJson => $composableBuilder(
+    column: $table.assigneesJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1498,6 +1566,11 @@ class $$LocalItemsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get assigneesJson => $composableBuilder(
+    column: $table.assigneesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get trackingMode => $composableBuilder(
     column: $table.trackingMode,
     builder: (column) => ColumnOrderings(column),
@@ -1554,6 +1627,11 @@ class $$LocalItemsTableAnnotationComposer
 
   GeneratedColumn<String> get purchaseLink => $composableBuilder(
     column: $table.purchaseLink,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get assigneesJson => $composableBuilder(
+    column: $table.assigneesJson,
     builder: (column) => column,
   );
 
@@ -1618,6 +1696,7 @@ class $$LocalItemsTableTableManager
                 Value<String?> categoryId = const Value.absent(),
                 Value<String?> categoryColor = const Value.absent(),
                 Value<String?> purchaseLink = const Value.absent(),
+                Value<String?> assigneesJson = const Value.absent(),
                 Value<String> trackingMode = const Value.absent(),
                 Value<DateTime> nextDueDate = const Value.absent(),
                 Value<DateTime?> lastCompletedAt = const Value.absent(),
@@ -1631,6 +1710,7 @@ class $$LocalItemsTableTableManager
                 categoryId: categoryId,
                 categoryColor: categoryColor,
                 purchaseLink: purchaseLink,
+                assigneesJson: assigneesJson,
                 trackingMode: trackingMode,
                 nextDueDate: nextDueDate,
                 lastCompletedAt: lastCompletedAt,
@@ -1646,6 +1726,7 @@ class $$LocalItemsTableTableManager
                 Value<String?> categoryId = const Value.absent(),
                 Value<String?> categoryColor = const Value.absent(),
                 Value<String?> purchaseLink = const Value.absent(),
+                Value<String?> assigneesJson = const Value.absent(),
                 required String trackingMode,
                 required DateTime nextDueDate,
                 Value<DateTime?> lastCompletedAt = const Value.absent(),
@@ -1659,6 +1740,7 @@ class $$LocalItemsTableTableManager
                 categoryId: categoryId,
                 categoryColor: categoryColor,
                 purchaseLink: purchaseLink,
+                assigneesJson: assigneesJson,
                 trackingMode: trackingMode,
                 nextDueDate: nextDueDate,
                 lastCompletedAt: lastCompletedAt,

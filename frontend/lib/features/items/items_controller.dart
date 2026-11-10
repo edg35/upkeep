@@ -41,7 +41,9 @@ class ItemsController extends StateNotifier<ItemsState> {
     _subscription = _store.watchItems().listen((items) {
       state = state.copyWith(items: items, loading: false);
     });
-    load();
+    // Deferred: syncing updates SyncStatusController, and Riverpod forbids
+    // touching another provider while this one is still being built.
+    Future.microtask(load);
   }
 
   final LocalItemStore _store;
@@ -68,6 +70,16 @@ class ItemsController extends StateNotifier<ItemsState> {
     await _store.enqueueMutation(
       itemId: localId,
       type: OutboxMutationType.create,
+      payload: body,
+    );
+    unawaited(_syncService.syncNow());
+  }
+
+  Future<void> updateItem(String itemId, Map<String, dynamic> body) async {
+    await _store.applyOptimisticUpdate(itemId: itemId, body: body);
+    await _store.enqueueMutation(
+      itemId: itemId,
+      type: OutboxMutationType.update,
       payload: body,
     );
     unawaited(_syncService.syncNow());

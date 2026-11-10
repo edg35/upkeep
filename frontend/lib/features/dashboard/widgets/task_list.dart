@@ -11,12 +11,14 @@ class TaskList extends StatelessWidget {
     required this.tasks,
     required this.density,
     required this.onToggle,
+    this.onTapTask,
     this.completingId,
   });
 
   final List<HomeTask> tasks;
   final TaskListDensity density;
   final ValueChanged<String> onToggle;
+  final ValueChanged<String>? onTapTask;
   final String? completingId;
 
   @override
@@ -37,6 +39,7 @@ class TaskList extends StatelessWidget {
                 density: density,
                 completing: task.id == completingId,
                 onToggle: () => onToggle(task.id),
+                onTap: onTapTask != null ? () => onTapTask!(task.id) : null,
               ),
             ),
         ],
@@ -57,6 +60,7 @@ class TaskList extends StatelessWidget {
               density: density,
               completing: tasks[i].id == completingId,
               onToggle: () => onToggle(tasks[i].id),
+              onTap: onTapTask != null ? () => onTapTask!(tasks[i].id) : null,
             ),
             if (i != tasks.length - 1) const Divider(height: 1, color: AppColors.paper),
           ],

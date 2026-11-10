@@ -12,12 +12,18 @@ class _FakeItemApi implements ItemApi {
   List<Map<String, dynamic>> serverItems = [];
   List<Map<String, dynamic>> createCalls = [];
   List<String> completeCalls = [];
+  List<(String, Map<String, dynamic>)> updateCalls = [];
 
   /// If set, the next createItem call throws this instead of succeeding.
   Object? nextCreateError;
 
   @override
   Future<List<Map<String, dynamic>>> listItems() async => serverItems;
+
+  @override
+  Future<Map<String, dynamic>> getItem(String itemId) async {
+    return serverItems.firstWhere((i) => i['item_id'] == itemId);
+  }
 
   @override
   Future<Map<String, dynamic>> createItem(Map<String, dynamic> body) async {
@@ -47,6 +53,12 @@ class _FakeItemApi implements ItemApi {
   @override
   Future<Map<String, dynamic>> completeItem(String itemId) async {
     completeCalls.add(itemId);
+    return {};
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateItem(String itemId, Map<String, dynamic> body) async {
+    updateCalls.add((itemId, body));
     return {};
   }
 }

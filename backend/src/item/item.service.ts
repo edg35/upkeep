@@ -141,6 +141,9 @@ export class ItemService {
   private readonly latestCompletionInclude = {
     schedule: true,
     category: true,
+    assignees: {
+      include: { user: { select: { user_id: true, name: true } } },
+    },
     histories: {
       orderBy: { completed_at: 'desc' as const },
       take: 1,

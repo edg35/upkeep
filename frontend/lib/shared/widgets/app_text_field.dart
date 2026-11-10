@@ -14,6 +14,8 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.onChanged,
     this.textCapitalization = TextCapitalization.none,
+    this.maxLines = 1,
+    this.initialValue,
   });
 
   final String label;
@@ -24,16 +26,20 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final void Function(String)? onChanged;
   final TextCapitalization textCapitalization;
+  final int maxLines;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: controller == null ? initialValue : null,
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
       onChanged: onChanged,
       textCapitalization: textCapitalization,
+      maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
         suffixIcon: suffixIcon,

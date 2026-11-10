@@ -16,7 +16,7 @@ class ItemTypeTabRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: ItemType.values.map((type) {
+      children: ItemType.values.where((type) => type != ItemType.bill).map((type) {
         final isSelected = type == selected;
         return Expanded(
           child: Padding(
