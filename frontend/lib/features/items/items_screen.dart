@@ -18,7 +18,7 @@ class ItemsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final itemsState = ref.watch(itemsControllerProvider);
     final items = ref.watch(filteredItemsProvider);
-    final filters = ref.watch(itemFiltersProvider);
+    final filters = ref.watch(effectiveItemFiltersProvider);
     final filtersController = ref.read(itemFiltersProvider.notifier);
     final categoriesAsync = ref.watch(categoriesProvider);
     final membersAsync = ref.watch(householdMembersProvider);
@@ -40,19 +40,24 @@ class ItemsScreen extends ConsumerWidget {
                 onItemTypeChanged: filtersController.setItemType,
                 onStatusChanged: filtersController.setStatus,
                 onAssigneeChanged: filtersController.setAssignee,
+                onSortChanged: filtersController.setSort,
                 onClearAll: filtersController.clearAll,
               ),
               const SizedBox(height: 16),
               if (itemsState.loading && itemsState.items.isEmpty)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 32),
-                  child: Center(child: CircularProgressIndicator(color: AppColors.forest)),
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppColors.forest),
+                  ),
                 )
               else if (items.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: Text(
-                    itemsState.items.isEmpty ? 'No items yet' : 'Nothing matches those filters',
+                    itemsState.items.isEmpty
+                        ? 'No items yet'
+                        : 'Nothing matches those filters',
                     style: AppTypography.body,
                   ),
                 )
@@ -74,9 +79,12 @@ class ItemsScreen extends ConsumerWidget {
                                 ItemStatus.completedToday) {
                               return;
                             }
-                            ref.read(itemsControllerProvider.notifier).complete(items[i].id);
+                            ref
+                                .read(itemsControllerProvider.notifier)
+                                .complete(items[i].id);
                           },
-                          onTap: () => context.push('/tasks/edit/${items[i].id}'),
+                          onTap: () =>
+                              context.push('/tasks/edit/${items[i].id}'),
                         ),
                         if (i != items.length - 1)
                           const Divider(height: 1, color: AppColors.paper),
