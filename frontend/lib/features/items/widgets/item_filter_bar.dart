@@ -17,6 +17,7 @@ class ItemFilterBar extends StatelessWidget {
     required this.onItemTypeChanged,
     required this.onStatusChanged,
     required this.onAssigneeChanged,
+    required this.onSortChanged,
     required this.onClearAll,
   });
 
@@ -27,6 +28,7 @@ class ItemFilterBar extends StatelessWidget {
   final ValueChanged<ItemType?> onItemTypeChanged;
   final ValueChanged<ItemStatus?> onStatusChanged;
   final ValueChanged<String?> onAssigneeChanged;
+  final ValueChanged<ItemSort> onSortChanged;
   final VoidCallback onClearAll;
 
   @override
@@ -38,24 +40,43 @@ class ItemFilterBar extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
+              FilterChipButton<ItemSort>(
+                label: 'Sort',
+                value: filters.sort,
+                allowClear: false,
+                emphasizeSelection: false,
+                options: [
+                  for (final s in ItemSort.values) FilterOption(s, s.label),
+                ],
+                onChanged: (s) {
+                  if (s != null) onSortChanged(s);
+                },
+              ),
+              const SizedBox(width: 8),
               FilterChipButton<String>(
                 label: 'Category',
                 value: filters.categoryId,
-                options: [for (final c in categories) FilterOption(c.id, c.name)],
+                options: [
+                  for (final c in categories) FilterOption(c.id, c.name),
+                ],
                 onChanged: onCategoryChanged,
               ),
               const SizedBox(width: 8),
               FilterChipButton<ItemType>(
                 label: 'Type',
                 value: filters.itemType,
-                options: [for (final t in ItemType.values) FilterOption(t, t.tabLabel)],
+                options: [
+                  for (final t in ItemType.values) FilterOption(t, t.tabLabel),
+                ],
                 onChanged: onItemTypeChanged,
               ),
               const SizedBox(width: 8),
               FilterChipButton<ItemStatus>(
                 label: 'Status',
                 value: filters.status,
-                options: [for (final s in ItemStatus.values) FilterOption(s, s.label)],
+                options: [
+                  for (final s in ItemStatus.values) FilterOption(s, s.label),
+                ],
                 onChanged: onStatusChanged,
               ),
               const SizedBox(width: 8),
@@ -64,7 +85,10 @@ class ItemFilterBar extends StatelessWidget {
                 value: filters.assigneeId,
                 options: [
                   for (final m in members)
-                    FilterOption(m['user_id'] as String, m['name'] as String? ?? 'Member'),
+                    FilterOption(
+                      m['user_id'] as String,
+                      m['name'] as String? ?? 'Member',
+                    ),
                 ],
                 onChanged: onAssigneeChanged,
               ),
@@ -73,7 +97,10 @@ class ItemFilterBar extends StatelessWidget {
                 GestureDetector(
                   onTap: onClearAll,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
                     child: Text(
                       'Clear all',
                       style: AppTypography.meta.copyWith(

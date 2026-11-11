@@ -19,6 +19,8 @@ class FilterChipButton<T> extends StatelessWidget {
     required this.options,
     required this.value,
     required this.onChanged,
+    this.allowClear = true,
+    this.emphasizeSelection = true,
   });
 
   final String label;
@@ -26,10 +28,23 @@ class FilterChipButton<T> extends StatelessWidget {
   final T? value;
   final ValueChanged<T?> onChanged;
 
+  /// Whether the sheet offers an "All" row that resets to null.
+  final bool allowClear;
+
+  /// Filled forest styling when a value is set. Off for controls that always
+  /// have a value (sort), which instead read "Label: Value" in neutral style.
+  final bool emphasizeSelection;
+
   @override
   Widget build(BuildContext context) {
-    final selectedLabel = options.where((o) => o.value == value).map((o) => o.label).firstOrNull;
-    final active = selectedLabel != null;
+    final selectedLabel = options
+        .where((o) => o.value == value)
+        .map((o) => o.label)
+        .firstOrNull;
+    final active = selectedLabel != null && emphasizeSelection;
+    final text = selectedLabel == null
+        ? label
+        : (emphasizeSelection ? selectedLabel : '$label: $selectedLabel');
 
     return GestureDetector(
       onTap: () => _showSheet(context),
@@ -43,7 +58,7 @@ class FilterChipButton<T> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              active ? selectedLabel : label,
+              text,
               style: AppTypography.meta.copyWith(
                 color: active ? AppColors.paper : AppColors.ink,
                 fontWeight: FontWeight.w600,
@@ -78,15 +93,18 @@ class FilterChipButton<T> extends StatelessWidget {
               children: [
                 Text(label, style: AppTypography.title),
                 const SizedBox(height: 8),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('All'),
-                  trailing: value == null ? const Icon(Icons.check_rounded, color: AppColors.sage) : null,
-                  onTap: () {
-                    onChanged(null);
-                    Navigator.of(context).pop();
-                  },
-                ),
+                if (allowClear)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('All'),
+                    trailing: value == null
+                        ? const Icon(Icons.check_rounded, color: AppColors.sage)
+                        : null,
+                    onTap: () {
+                      onChanged(null);
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 for (final option in options)
                   ListTile(
                     contentPadding: EdgeInsets.zero,
