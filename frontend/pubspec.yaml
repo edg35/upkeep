@@ -24,6 +24,8 @@ dependencies:
   drift_flutter: ^0.3.1
   connectivity_plus: ^7.3.1
   uuid: ^4.6.0
+  firebase_core: ^5.1.0
+  firebase_messaging: ^17.0.1
 
 dev_dependencies:
   flutter_test:
