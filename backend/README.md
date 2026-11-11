@@ -172,6 +172,7 @@ $ npm run test:cov
 ### Railway
 
 - Set the service root directory to `backend`. `railway.json` supplies the build and start commands (the build regenerates the Prisma client on Linux; start runs `prisma migrate deploy` first).
+- Railway's config file does not follow the service Root Directory. In the API service, go to Settings → Config-as-code and set the Railway config file path to `/backend/railway.json`. On the first deploy, confirm the build log shows `prisma generate` and the deploy log shows `prisma migrate deploy`.
 - Add a Postgres service. The API service reads its `DATABASE_URL` (reference the Postgres service's variable).
 - Required env vars:
   - `DATABASE_URL`
@@ -180,7 +181,7 @@ $ npm run test:cov
   - `FIREBASE_SERVICE_ACCOUNT` (optional): the Firebase service account JSON on a single line. Leave it unset to disable push; digests are then only logged.
   - `PORT` is provided by Railway.
 - **Keep exactly one replica.** The daily digest cron runs in-process, so more than one replica would send duplicate digests.
-- To trigger a digest by hand, run `npm run build && npm run sweep` (for example via `railway run`). It is a script, not an HTTP endpoint.
+- To trigger a digest by hand, run `npm run build && npm run sweep` (for example via `railway run`). It is a script, not an HTTP endpoint. When using `railway run npm run sweep` locally, `DATABASE_URL` must be the Postgres public (proxy) URL, not the internal hostname.
 
 ### NestJS general notes
 

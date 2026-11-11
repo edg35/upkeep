@@ -20,7 +20,7 @@ export const fcmProvider: Provider = {
       return getMessaging(app);
     } catch (err) {
       logger.error(
-        `Failed to initialise Firebase; push sending disabled: ${String(err)}`,
+        `Failed to initialise Firebase; push sending disabled (${err instanceof Error ? err.name : 'unknown'})`,
       );
       return null;
     }

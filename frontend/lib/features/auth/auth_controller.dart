@@ -100,12 +100,14 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    final refreshToken = state.refreshToken;
     // Runs while the access token is still set so the device can be
     // unregistered from push; failures must never block logout.
     try {
       await _beforeLogout?.call();
     } catch (_) {}
+    // Read after beforeLogout: a 401 there may have rotated the refresh token,
+    // and the old one is already revoked server-side.
+    final refreshToken = state.refreshToken;
     state = const AuthState();
     _persistSession = false;
     await _tokenStorage.clear();

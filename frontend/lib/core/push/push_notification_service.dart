@@ -29,12 +29,17 @@ class PushNotificationService {
 
   Future<void> onBeforeLogout() async {
     try {
-      final token = await _messaging.getToken();
-      if (token != null) {
-        await _api.unregister(token);
+      try {
+        final token = await _messaging.getToken();
+        if (token != null) {
+          await _api.unregister(token).timeout(const Duration(seconds: 5));
+        }
+      } catch (_) {}
+      // Invalidate the local FCM token even if unregister failed; the backend
+      // prunes it on the next send.
+      try {
         await _messaging.deleteToken();
-      }
-    } catch (_) {
+      } catch (_) {}
     } finally {
       await _refreshSub?.cancel();
       _refreshSub = null;

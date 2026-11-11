@@ -34,8 +34,12 @@ class _FakeAuthApi implements AuthApi {
         {'accessToken': 'refreshed-access', 'refreshToken': 'refreshed-refresh'};
   }
 
+  final loggedOutTokens = <String>[];
+
   @override
-  Future<void> logout(String refreshToken) async {}
+  Future<void> logout(String refreshToken) async {
+    loggedOutTokens.add(refreshToken);
+  }
 }
 
 class _FakeTokenStorage implements TokenStorage {
@@ -211,5 +215,19 @@ void main() {
       expect(c.state.isAuthenticated, isFalse);
       expect(storage.stored, isNull);
     });
+  });
+
+  test('logout revokes the refresh token current after beforeLogout', () async {
+    final c = AuthController(
+      api,
+      storage,
+      beforeLogout: () async {
+        // Simulates a 401 on DELETE /devices triggering a token rotation.
+        await AuthTokenHolder.onUnauthorized!();
+      },
+    );
+    await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: false);
+    await c.logout();
+    expect(api.loggedOutTokens, ['refreshed-refresh']);
   });
 }

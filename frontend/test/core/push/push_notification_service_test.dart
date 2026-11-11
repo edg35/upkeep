@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/push/device_api.dart';
 import 'package:frontend/core/push/push_messaging.dart';
@@ -33,6 +34,7 @@ class FakePushMessaging implements PushMessaging {
 class FakeDeviceApi implements DeviceApi {
   final calls = <String>[];
   bool failUnregister = false;
+  bool hangUnregister = false;
 
   @override
   Future<void> register(String token, String platform) async => calls.add('register:$token:$platform');
@@ -40,6 +42,7 @@ class FakeDeviceApi implements DeviceApi {
   @override
   Future<void> unregister(String token) async {
     calls.add('unregister:$token');
+    if (hangUnregister) await Completer<void>().future;
     if (failUnregister) throw Exception('boom');
   }
 }
@@ -103,5 +106,32 @@ void main() {
     await service.onAuthenticated();
     api.failUnregister = true;
     await service.onBeforeLogout();
+  });
+
+  test('onBeforeLogout deletes token even when unregister throws', () async {
+    await service.onAuthenticated();
+    messaging.calls.clear();
+    api.calls.clear();
+    api.failUnregister = true;
+    await service.onBeforeLogout();
+    expect(messaging.calls, ['deleteToken']);
+    api.calls.clear();
+    messaging.refresh.add('tok-3');
+    await Future<void>.delayed(Duration.zero);
+    expect(api.calls, isEmpty);
+  });
+
+  test('onBeforeLogout does not hang when unregister never completes', () {
+    fakeAsync((async) {
+      api.hangUnregister = true;
+      var done = false;
+      service.onBeforeLogout().then((_) => done = true);
+      async.flushMicrotasks();
+      expect(done, isFalse);
+      async.elapse(const Duration(seconds: 5));
+      async.flushMicrotasks();
+      expect(done, isTrue);
+      expect(messaging.calls, ['deleteToken']);
+    });
   });
 }
