@@ -32,48 +32,19 @@ export function buildDigest(
   };
 }
 
-function partsToMap(parts: Intl.DateTimeFormatPart[]): Record<string, number> {
-  const map: Record<string, number> = {};
-  for (const part of parts) {
-    if (part.type !== 'literal') map[part.type] = Number(part.value);
-  }
-  return map;
-}
-
-/** Last millisecond of `now`'s calendar day in `timeZone`. */
-export function endOfDayInZone(now: Date, timeZone: string): Date {
-  const ymd = partsToMap(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone,
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    }).formatToParts(now),
-  );
-
-  const naiveNextMidnight = Date.UTC(ymd.year, ymd.month - 1, ymd.day + 1);
-
-  const local = partsToMap(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone,
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hourCycle: 'h23',
-    }).formatToParts(new Date(naiveNextMidnight)),
-  );
-  const offset =
-    Date.UTC(
-      local.year,
-      local.month - 1,
-      local.day,
-      local.hour,
-      local.minute,
-      local.second,
-    ) - naiveNextMidnight;
-
-  return new Date(naiveNextMidnight - offset - 1);
+/**
+ * Reminders belong to their UTC calendar date (fixed dates are stored at
+ * 00:00Z). Returns the last millisecond of today's `timeZone` calendar date,
+ * expressed as that same date in UTC: `${D}T23:59:59.999Z`.
+ */
+export function sweepCutoff(now: Date, timeZone: string): Date {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now);
+  const get = (type: Intl.DateTimeFormatPartTypes): string =>
+    parts.find((p) => p.type === type)?.value ?? '';
+  return new Date(`${get('year')}-${get('month')}-${get('day')}T23:59:59.999Z`);
 }

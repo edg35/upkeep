@@ -1,35 +1,43 @@
 import {
   ENCOURAGING_PHRASES,
   buildDigest,
-  endOfDayInZone,
   pickPhrase,
+  sweepCutoff,
 } from './digest.util';
 
 const ET = 'America/New_York';
 
-describe('endOfDayInZone', () => {
-  it('returns end of day for 7 AM EST', () => {
-    expect(endOfDayInZone(new Date('2026-11-11T12:00:00Z'), ET)).toEqual(
-      new Date('2026-11-12T04:59:59.999Z'),
+describe('sweepCutoff', () => {
+  it('returns end of today ET as a UTC calendar date at 7 AM EST', () => {
+    expect(sweepCutoff(new Date('2026-11-11T12:00:00Z'), ET)).toEqual(
+      new Date('2026-11-11T23:59:59.999Z'),
     );
   });
 
-  it('returns end of day for 7 AM EDT', () => {
-    expect(endOfDayInZone(new Date('2026-07-01T11:00:00Z'), ET)).toEqual(
-      new Date('2026-07-02T03:59:59.999Z'),
+  it('returns end of today ET as a UTC calendar date at 7 AM EDT', () => {
+    expect(sweepCutoff(new Date('2026-07-01T11:00:00Z'), ET)).toEqual(
+      new Date('2026-07-01T23:59:59.999Z'),
     );
   });
 
   it('handles the DST end day', () => {
-    expect(endOfDayInZone(new Date('2026-11-01T12:00:00Z'), ET)).toEqual(
-      new Date('2026-11-02T04:59:59.999Z'),
+    expect(sweepCutoff(new Date('2026-11-01T12:00:00Z'), ET)).toEqual(
+      new Date('2026-11-01T23:59:59.999Z'),
     );
   });
 
-  it('uses the zone calendar day, not the UTC day', () => {
-    expect(endOfDayInZone(new Date('2026-11-12T04:30:00Z'), ET)).toEqual(
-      new Date('2026-11-12T04:59:59.999Z'),
+  it('uses the ET calendar date, not the UTC date', () => {
+    expect(sweepCutoff(new Date('2026-11-12T04:30:00Z'), ET)).toEqual(
+      new Date('2026-11-11T23:59:59.999Z'),
     );
+  });
+
+  it('includes today fixed-date and interval reminders but not tomorrow fixed-date ones', () => {
+    const cutoff = sweepCutoff(new Date('2026-03-06T12:00:00Z'), ET);
+    const included = (iso: string) => new Date(iso) <= cutoff;
+    expect(included('2026-03-07T00:00:00Z')).toBe(false);
+    expect(included('2026-03-06T00:00:00Z')).toBe(true);
+    expect(included('2026-03-06T20:00:00Z')).toBe(true);
   });
 });
 

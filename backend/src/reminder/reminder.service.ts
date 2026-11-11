@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
-import { buildDigest, endOfDayInZone, pickPhrase } from './digest.util';
+import { buildDigest, pickPhrase, sweepCutoff } from './digest.util';
 import { computeRemindAt } from './reminder.util';
 
 const DIGEST_TIME_ZONE = 'America/New_York';
@@ -80,7 +80,7 @@ export class ReminderService {
     const rows = await this.prisma.reminder.findMany({
       where: {
         sent_at: null,
-        remind_at: { lte: endOfDayInZone(now, DIGEST_TIME_ZONE) },
+        remind_at: { lte: sweepCutoff(now, DIGEST_TIME_ZONE) },
         item: { deleted_at: null },
         user: { memberships: { some: {} } },
       },

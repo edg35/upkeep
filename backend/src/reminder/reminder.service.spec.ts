@@ -241,7 +241,7 @@ describe('ReminderService', () => {
       expect(prisma.reminder.findMany).toHaveBeenCalledWith({
         where: {
           sent_at: null,
-          remind_at: { lte: new Date('2026-11-12T04:59:59.999Z') },
+          remind_at: { lte: new Date('2026-11-11T23:59:59.999Z') },
           item: { deleted_at: null },
           user: { memberships: { some: {} } },
         },
@@ -260,6 +260,21 @@ describe('ReminderService', () => {
           },
         },
       });
+    });
+
+    it('at 7am ET on Mar 6 selects through the Mar 6 UTC calendar date', async () => {
+      prisma.reminder.findMany.mockResolvedValue([]);
+
+      await service.sweepDue(new Date('2026-03-06T12:00:00Z'));
+
+      const [arg] = prisma.reminder.findMany.mock.calls[0] as [
+        { where: { remind_at: { lte: Date } } },
+      ];
+      const cutoff = arg.where.remind_at.lte;
+      expect(cutoff).toEqual(new Date('2026-03-06T23:59:59.999Z'));
+      expect(new Date('2026-03-07T00:00:00Z') <= cutoff).toBe(false);
+      expect(new Date('2026-03-06T00:00:00Z') <= cutoff).toBe(true);
+      expect(new Date('2026-03-06T20:00:00Z') <= cutoff).toBe(true);
     });
 
     it('skips reminders whose user is not a member of the item household', async () => {
