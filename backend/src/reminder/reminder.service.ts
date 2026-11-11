@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../notification/notification.service';
 import { computeRemindAt } from './reminder.util';
 
 @Injectable()
@@ -77,7 +77,10 @@ export class ReminderService {
     });
 
     for (const reminder of dueReminders) {
-      this.notificationService.notify(reminder);
+      await this.notificationService.sendDigest(reminder.user_id, {
+        title: 'Upkeep',
+        body: 'You have a task due today.',
+      });
       await this.prisma.reminder.update({
         where: { reminder_id: reminder.reminder_id },
         data: { sent_at: new Date() },

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../notification/notification.service';
 import { ReminderService } from './reminder.service';
 
 describe('ReminderService', () => {
@@ -15,7 +15,7 @@ describe('ReminderService', () => {
   let prisma: {
     reminder: { findMany: jest.Mock; update: jest.Mock };
   };
-  let notificationService: { notify: jest.Mock };
+  let notificationService: { sendDigest: jest.Mock };
 
   beforeEach(() => {
     tx = {
@@ -27,7 +27,7 @@ describe('ReminderService', () => {
     prisma = {
       reminder: { findMany: jest.fn(), update: jest.fn() },
     };
-    notificationService = { notify: jest.fn() };
+    notificationService = { sendDigest: jest.fn() };
     service = new ReminderService(
       prisma as unknown as PrismaService,
       notificationService as unknown as NotificationService,
@@ -221,7 +221,10 @@ describe('ReminderService', () => {
       expect(prisma.reminder.findMany).toHaveBeenCalledWith({
         where: { remind_at: { lte: expect.any(Date) }, sent_at: null },
       });
-      expect(notificationService.notify).toHaveBeenCalledWith(reminder);
+      expect(notificationService.sendDigest).toHaveBeenCalledWith('u1', {
+        title: 'Upkeep',
+        body: 'You have a task due today.',
+      });
       expect(prisma.reminder.update).toHaveBeenCalledWith({
         where: { reminder_id: 'r1' },
         data: { sent_at: expect.any(Date) },
@@ -233,7 +236,7 @@ describe('ReminderService', () => {
 
       await service.sweepDue();
 
-      expect(notificationService.notify).not.toHaveBeenCalled();
+      expect(notificationService.sendDigest).not.toHaveBeenCalled();
       expect(prisma.reminder.update).not.toHaveBeenCalled();
     });
   });
