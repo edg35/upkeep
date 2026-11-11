@@ -1,12 +1,17 @@
 // reminder/reminder.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
+import { buildDigest, endOfDayInZone, pickPhrase } from './digest.util';
 import { computeRemindAt } from './reminder.util';
+
+const DIGEST_TIME_ZONE = 'America/New_York';
 
 @Injectable()
 export class ReminderService {
+  private readonly logger = new Logger(ReminderService.name);
+
   constructor(
     private prisma: PrismaService,
     private notificationService: NotificationService,
@@ -71,20 +76,70 @@ export class ReminderService {
     );
   }
 
-  async sweepDue(): Promise<void> {
-    const dueReminders = await this.prisma.reminder.findMany({
-      where: { remind_at: { lte: new Date() }, sent_at: null },
+  async sweepDue(now: Date = new Date()): Promise<void> {
+    const rows = await this.prisma.reminder.findMany({
+      where: {
+        sent_at: null,
+        remind_at: { lte: endOfDayInZone(now, DIGEST_TIME_ZONE) },
+        item: { deleted_at: null },
+        user: { memberships: { some: {} } },
+      },
+      select: {
+        reminder_id: true,
+        item_id: true,
+        user_id: true,
+        item: {
+          select: { household_id: true, household: { select: { name: true } } },
+        },
+        user: {
+          select: { memberships: { select: { household_id: true } } },
+        },
+      },
     });
 
-    for (const reminder of dueReminders) {
-      await this.notificationService.sendDigest(reminder.user_id, {
-        title: 'Upkeep',
-        body: 'You have a task due today.',
-      });
-      await this.prisma.reminder.update({
-        where: { reminder_id: reminder.reminder_id },
-        data: { sent_at: new Date() },
-      });
+    // Prisma can't compare two columns in a relation filter, so drop rows whose
+    // user is no longer a member of the item's household here. Those rows are
+    // left untouched (not marked sent).
+    const byUser = new Map<
+      string,
+      { householdName: string; reminderIds: string[]; itemIds: Set<string> }
+    >();
+    for (const row of rows) {
+      if (row.user.memberships[0]?.household_id !== row.item.household_id) {
+        continue;
+      }
+      let group = byUser.get(row.user_id);
+      if (!group) {
+        group = {
+          householdName: row.item.household.name,
+          reminderIds: [],
+          itemIds: new Set(),
+        };
+        byUser.set(row.user_id, group);
+      }
+      group.reminderIds.push(row.reminder_id);
+      group.itemIds.add(row.item_id);
+    }
+
+    for (const [userId, group] of byUser) {
+      try {
+        const message = buildDigest(
+          group.householdName,
+          group.itemIds.size,
+          pickPhrase(),
+        );
+        await this.notificationService.sendDigest(userId, message);
+      } catch (err) {
+        this.logger.error(
+          `Failed to send digest to user ${userId}`,
+          err instanceof Error ? err.stack : String(err),
+        );
+      } finally {
+        await this.prisma.reminder.updateMany({
+          where: { reminder_id: { in: group.reminderIds } },
+          data: { sent_at: now },
+        });
+      }
     }
   }
 }
