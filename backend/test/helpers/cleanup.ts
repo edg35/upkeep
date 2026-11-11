@@ -1,6 +1,8 @@
 import { PrismaClient } from '../../generated';
 
 export async function cleanupDb(prisma: PrismaClient): Promise<void> {
+  await prisma.deviceToken.deleteMany();
+  await prisma.itemAssignee.deleteMany();
   await prisma.itemHistory.deleteMany();
   await prisma.reminder.deleteMany();
   await prisma.itemSchedule.deleteMany();

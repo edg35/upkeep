@@ -9,6 +9,7 @@ import { HouseholdModule } from './household/household.module';
 import { CategoryModule } from './category/category.module';
 import { ItemModule } from './item/item.module';
 import { ReminderModule } from './reminder/reminder.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ReminderModule } from './reminder/reminder.module';
     CategoryModule,
     ItemModule,
     ReminderModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
