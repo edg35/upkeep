@@ -10,6 +10,7 @@ describe('ItemService', () => {
   let service: ItemService;
   let tx: {
     item: { create: jest.Mock; update: jest.Mock };
+    reminder: { deleteMany: jest.Mock };
     itemSchedule: { create: jest.Mock; update: jest.Mock };
     itemHistory: { create: jest.Mock };
     itemAssignee: { createMany: jest.Mock; findMany: jest.Mock };
@@ -25,6 +26,7 @@ describe('ItemService', () => {
   beforeEach(() => {
     tx = {
       item: { create: jest.fn(), update: jest.fn() },
+      reminder: { deleteMany: jest.fn() },
       itemSchedule: { create: jest.fn(), update: jest.fn() },
       itemHistory: { create: jest.fn() },
       itemAssignee: { createMany: jest.fn(), findMany: jest.fn() },
@@ -237,13 +239,28 @@ describe('ItemService', () => {
         item_id: 'i1',
         household_id: 'h1',
       });
-      prisma.item.update.mockResolvedValue({});
+      tx.item.update.mockResolvedValue({});
 
       await service.remove('h1', 'i1');
 
-      expect(prisma.item.update).toHaveBeenCalledWith({
+      expect(tx.item.update).toHaveBeenCalledWith({
         where: { item_id: 'i1' },
         data: { deleted_at: expect.any(Date) },
+      });
+    });
+
+    it('remove deletes unsent reminders for the item', async () => {
+      prisma.item.findFirst.mockResolvedValue({
+        item_id: 'i1',
+        household_id: 'h1',
+      });
+      tx.item.update.mockResolvedValue({});
+
+      await service.remove('h1', 'i1');
+
+      expect(prisma.$transaction).toHaveBeenCalled();
+      expect(tx.reminder.deleteMany).toHaveBeenCalledWith({
+        where: { item_id: 'i1', sent_at: null },
       });
     });
 
