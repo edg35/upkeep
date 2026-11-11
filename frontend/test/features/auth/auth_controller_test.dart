@@ -189,4 +189,27 @@ void main() {
       expect(api.refreshCalls, 0);
     });
   });
+
+  group('logout push hook', () {
+    test('calls beforeLogout while the access token is still set', () async {
+      String? seen;
+      final c = AuthController(api, storage, beforeLogout: () async {
+        seen = AuthTokenHolder.accessToken;
+      });
+      await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: true);
+      await c.logout();
+      expect(seen, isNotNull);
+      expect(c.state.isAuthenticated, isFalse);
+    });
+
+    test('logout succeeds when beforeLogout throws', () async {
+      final c = AuthController(api, storage, beforeLogout: () async {
+        throw Exception('unregister failed');
+      });
+      await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: true);
+      await c.logout();
+      expect(c.state.isAuthenticated, isFalse);
+      expect(storage.stored, isNull);
+    });
+  });
 }
