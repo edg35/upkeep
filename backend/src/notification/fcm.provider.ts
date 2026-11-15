@@ -4,6 +4,16 @@ import { getMessaging, Messaging } from 'firebase-admin/messaging';
 
 export const FCM_MESSAGING = 'FCM_MESSAGING';
 
+/**
+ * Parses the single-line service-account JSON. Some env loaders (dotenv,
+ * Prisma's) expand the `\n` escapes in `private_key` into real newlines,
+ * which JSON.parse rejects. Minified JSON has no structural newlines, so any
+ * raw newline belongs to a string value and can be re-escaped safely.
+ */
+export function parseServiceAccount(raw: string): Record<string, string> {
+  return JSON.parse(raw.replace(/\r?\n/g, '\\n')) as Record<string, string>;
+}
+
 export const fcmProvider: Provider = {
   provide: FCM_MESSAGING,
   useFactory: (): Messaging | null => {
@@ -15,7 +25,7 @@ export const fcmProvider: Provider = {
     }
     try {
       const app = initializeApp({
-        credential: cert(JSON.parse(raw) as Record<string, string>),
+        credential: cert(parseServiceAccount(raw)),
       });
       return getMessaging(app);
     } catch (err) {
