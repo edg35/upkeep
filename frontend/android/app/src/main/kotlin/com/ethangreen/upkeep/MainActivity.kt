@@ -1,4 +1,4 @@
-package com.example.frontend
+package com.ethangreen.upkeep
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

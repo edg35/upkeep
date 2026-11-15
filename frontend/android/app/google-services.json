@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1086936603911",
+    "project_id": "upkeep-1f4b2",
+    "storage_bucket": "upkeep-1f4b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086936603911:android:de6b14d5467a8df988b9a2",
+        "android_client_info": {
+          "package_name": "com.ethangreen.upkeep"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA_G_KUtHyLrZ-b3Lv76A_nJ6QkTmlidY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
