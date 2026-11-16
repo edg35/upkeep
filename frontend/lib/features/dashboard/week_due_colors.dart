@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../shared/utils/day_math.dart';
 import '../items/item.dart';
 import 'home_task.dart';
 
@@ -8,9 +9,12 @@ import 'home_task.dart';
 /// color, for the week-glance dots. Only reflects each item's *next* due
 /// date (items don't carry a full future recurrence series), so it's most
 /// accurate for the current week.
-Map<DateTime, Color> dueColorsForWeek(List<HouseholdItem> items, DateTime weekStart) {
-  final start = DateTime(weekStart.year, weekStart.month, weekStart.day);
-  final end = start.add(const Duration(days: 7));
+Map<DateTime, Color> dueColorsForWeek(
+  List<HouseholdItem> items,
+  DateTime weekStart,
+) {
+  final start = dateOnly(weekStart);
+  final end = addDays(start, 7);
   final colors = <DateTime, Color>{};
 
   for (final item in items) {

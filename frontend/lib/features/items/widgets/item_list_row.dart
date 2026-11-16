@@ -1,34 +1,43 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../shared/utils/day_math.dart';
 import '../../dashboard/home_task.dart' show parseHexColor;
 import '../item.dart';
 import '../item_status.dart';
 
 const _monthAbbrev = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
-
-DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
 String _subtitle(HouseholdItem item, ItemStatus status, DateTime now) {
   final schedule = item.schedule;
   if (schedule == null) return '';
-  final today = _dateOnly(now);
+  final today = dateOnly(now);
 
   switch (status) {
     case ItemStatus.completedToday:
       final by = item.latestCompletion?.completedByName;
       return by != null ? 'Done by $by' : 'Done today';
     case ItemStatus.overdue:
-      final days = today.difference(_dateOnly(schedule.nextDueDate)).inDays;
+      final days = daysBetween(schedule.nextDueDate, today);
       return '$days day${days == 1 ? '' : 's'} late';
     case ItemStatus.dueSoon:
     case ItemStatus.upcoming:
-      final due = _dateOnly(schedule.nextDueDate);
+      final due = dateOnly(schedule.nextDueDate);
       if (due == today) return 'Due today';
-      if (due == today.add(const Duration(days: 1))) return 'Due tomorrow';
+      if (due == addDays(today, 1)) return 'Due tomorrow';
       return 'Due ${_monthAbbrev[due.month - 1]} ${due.day}';
   }
 }
@@ -66,7 +75,10 @@ class ItemListRow extends StatelessWidget {
                 height: 26,
                 child: Padding(
                   padding: EdgeInsets.all(3),
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.sage),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.sage,
+                  ),
                 ),
               )
             else
@@ -80,10 +92,17 @@ class ItemListRow extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     border: done
                         ? null
-                        : Border.all(color: late ? AppColors.rose : AppColors.muted, width: 1.5),
+                        : Border.all(
+                            color: late ? AppColors.rose : AppColors.muted,
+                            width: 1.5,
+                          ),
                   ),
                   child: done
-                      ? const Icon(Icons.check_rounded, size: 18, color: AppColors.paper)
+                      ? const Icon(
+                          Icons.check_rounded,
+                          size: 18,
+                          color: AppColors.paper,
+                        )
                       : null,
                 ),
               ),

@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../shared/utils/day_math.dart';
 import '../../items/items_controller.dart';
 import '../week_due_colors.dart';
 
 const _monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const _dayLetters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -25,9 +36,9 @@ class _WeekGlanceState extends ConsumerState<WeekGlance> {
   @override
   Widget build(BuildContext context) {
     final today = DateTime.now();
-    final startOfThisWeek = today.subtract(Duration(days: today.weekday - 1));
-    final weekStart = startOfThisWeek.add(Duration(days: 7 * _weekOffset));
-    final days = List.generate(7, (i) => weekStart.add(Duration(days: i)));
+    final startOfThisWeek = addDays(today, -(today.weekday - 1));
+    final weekStart = addDays(startOfThisWeek, 7 * _weekOffset);
+    final days = List.generate(7, (i) => addDays(weekStart, i));
     final monthLabel = '${_monthNames[weekStart.month - 1]} ${weekStart.year}';
 
     final items = ref.watch(itemsControllerProvider).items;
@@ -63,11 +74,17 @@ class _WeekGlanceState extends ConsumerState<WeekGlance> {
                 _DayColumn(
                   letter: _dayLetters[i],
                   day: days[i].day,
-                  isToday: _weekOffset == 0 &&
+                  isToday:
+                      _weekOffset == 0 &&
                       days[i].year == today.year &&
                       days[i].month == today.month &&
                       days[i].day == today.day,
-                  dueColor: dueColors[DateTime(days[i].year, days[i].month, days[i].day)],
+                  dueColor:
+                      dueColors[DateTime(
+                        days[i].year,
+                        days[i].month,
+                        days[i].day,
+                      )],
                 ),
             ],
           ),
@@ -144,7 +161,10 @@ class _DayColumn extends StatelessWidget {
           child: dueColor == null
               ? null
               : DecoratedBox(
-                  decoration: BoxDecoration(color: dueColor, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: dueColor,
+                    shape: BoxShape.circle,
+                  ),
                 ),
         ),
       ],
