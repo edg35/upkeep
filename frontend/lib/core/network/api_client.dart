@@ -11,6 +11,8 @@ import 'auth_token_holder.dart';
 // 10.0.2.2 is its alias for that. Every other target (iOS simulator, web,
 // desktop) talks to the backend via plain localhost.
 String get _baseUrl {
+  const override = String.fromEnvironment('API_BASE_URL');
+  if (override.isNotEmpty) return override;
   if (!kIsWeb && Platform.isAndroid) return 'http://10.0.2.2:3000';
   return 'http://localhost:3000';
 }

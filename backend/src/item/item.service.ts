@@ -251,9 +251,14 @@ export class ItemService {
 
   async remove(householdId: string, itemId: string) {
     await this.findOne(householdId, itemId);
-    return this.prisma.item.update({
-      where: { item_id: itemId },
-      data: { deleted_at: new Date() },
+    return this.prisma.$transaction(async (tx) => {
+      await tx.reminder.deleteMany({
+        where: { item_id: itemId, sent_at: null },
+      });
+      return tx.item.update({
+        where: { item_id: itemId },
+        data: { deleted_at: new Date() },
+      });
     });
   }
 

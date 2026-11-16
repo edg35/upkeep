@@ -10,13 +10,17 @@ import {
 import { randomBytes } from 'crypto';
 import { Prisma } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
+import { ReminderService } from '../reminder/reminder.service';
 
 const INVITE_EXPIRY_DAYS = 7;
 const INVITE_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no ambiguous 0/O/1/I
 
 @Injectable()
 export class HouseholdService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private reminderService: ReminderService,
+  ) {}
 
   private generateInviteCode(name: string): string {
     const prefix = (name.replace(/[^A-Za-z]/g, '').toUpperCase() + 'XXX').slice(
@@ -252,7 +256,25 @@ export class HouseholdService {
       }
     }
 
-    return this.prisma.householdMember.delete({ where: { user_id: userId } });
+    return this.prisma.$transaction(async (tx) => {
+      const assigned = await tx.itemAssignee.findMany({
+        where: { user_id: userId, item: { household_id: membership.household_id } },
+        select: { item_id: true },
+      });
+      await tx.itemAssignee.deleteMany({
+        where: { user_id: userId, item: { household_id: membership.household_id } },
+      });
+      await tx.reminder.deleteMany({
+        where: { user_id: userId, sent_at: null },
+      });
+      const deleted = await tx.householdMember.delete({
+        where: { user_id: userId },
+      });
+      for (const { item_id } of assigned) {
+        await this.reminderService.resyncItem(tx, item_id);
+      }
+      return deleted;
+    });
   }
 
   async transferOwnership(

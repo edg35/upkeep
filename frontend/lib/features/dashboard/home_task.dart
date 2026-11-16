@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../shared/utils/day_math.dart';
 import '../items/item.dart';
 import '../items/items_controller.dart';
 
@@ -32,8 +33,6 @@ Color? parseHexColor(String? hex) {
   return Color(cleaned.length == 6 ? 0xFF000000 | value : value);
 }
 
-DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
-
 String _formatTime(DateTime time) {
   final hour = time.hour % 12 == 0 ? 12 : time.hour % 12;
   final minute = time.minute.toString().padLeft(2, '0');
@@ -44,8 +43,8 @@ String _formatTime(DateTime time) {
 /// Items due today, overdue, or completed today — sorted late-first, then
 /// due-today, then completed-today last.
 List<HomeTask> buildTodayTasks(List<HouseholdItem> items, DateTime now) {
-  final today = _dateOnly(now);
-  final tomorrow = today.add(const Duration(days: 1));
+  final today = dateOnly(now);
+  final tomorrow = addDays(today, 1);
 
   final tasks = <(int order, HomeTask task)>[];
 
@@ -54,7 +53,8 @@ List<HomeTask> buildTodayTasks(List<HouseholdItem> items, DateTime now) {
     if (schedule == null) continue;
 
     final completedAt = schedule.lastCompletedAt;
-    final completedToday = completedAt != null &&
+    final completedToday =
+        completedAt != null &&
         !completedAt.isBefore(today) &&
         completedAt.isBefore(tomorrow);
     final dueTodayOrOverdue = schedule.nextDueDate.isBefore(tomorrow);
@@ -72,7 +72,7 @@ List<HomeTask> buildTodayTasks(List<HouseholdItem> items, DateTime now) {
         ),
       ));
     } else if (dueTodayOrOverdue) {
-      final overdueDays = today.difference(_dateOnly(schedule.nextDueDate)).inDays;
+      final overdueDays = daysBetween(schedule.nextDueDate, today);
       final isLate = overdueDays > 0;
       tasks.add((
         isLate ? 0 : 1,

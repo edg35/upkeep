@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/db/db_providers.dart';
 import '../../core/network/auth_token_holder.dart';
+import '../../core/push/push_providers.dart';
 import '../../core/storage/secure_token_storage.dart';
 import 'auth_repository.dart';
 
@@ -33,7 +34,7 @@ class AuthState {
 }
 
 class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._repository, this._tokenStorage, {this._onLogout})
+  AuthController(this._repository, this._tokenStorage, {this._onLogout, this._beforeLogout})
     : super(const AuthState()) {
     AuthTokenHolder.onUnauthorized = _handleUnauthorized;
   }
@@ -41,6 +42,7 @@ class AuthController extends StateNotifier<AuthState> {
   final AuthApi _repository;
   final TokenStorage _tokenStorage;
   final Future<void> Function()? _onLogout;
+  final Future<void> Function()? _beforeLogout;
 
   /// Whether the current session's tokens should be re-persisted to secure
   /// storage when they rotate (on signup, on a "keep me signed in" login,
@@ -98,6 +100,13 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    // Runs while the access token is still set so the device can be
+    // unregistered from push; failures must never block logout.
+    try {
+      await _beforeLogout?.call();
+    } catch (_) {}
+    // Read after beforeLogout: a 401 there may have rotated the refresh token,
+    // and the old one is already revoked server-side.
     final refreshToken = state.refreshToken;
     state = const AuthState();
     _persistSession = false;
@@ -173,6 +182,7 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
     ref.watch(authRepositoryProvider),
     ref.watch(secureTokenStorageProvider),
     onLogout: () => ref.read(localItemStoreProvider).clearAll(),
+    beforeLogout: () => ref.read(pushNotificationServiceProvider).onBeforeLogout(),
   );
 });
 

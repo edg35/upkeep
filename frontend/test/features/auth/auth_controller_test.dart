@@ -34,8 +34,12 @@ class _FakeAuthApi implements AuthApi {
         {'accessToken': 'refreshed-access', 'refreshToken': 'refreshed-refresh'};
   }
 
+  final loggedOutTokens = <String>[];
+
   @override
-  Future<void> logout(String refreshToken) async {}
+  Future<void> logout(String refreshToken) async {
+    loggedOutTokens.add(refreshToken);
+  }
 }
 
 class _FakeTokenStorage implements TokenStorage {
@@ -188,5 +192,42 @@ void main() {
       expect(refreshed, false);
       expect(api.refreshCalls, 0);
     });
+  });
+
+  group('logout push hook', () {
+    test('calls beforeLogout while the access token is still set', () async {
+      String? seen;
+      final c = AuthController(api, storage, beforeLogout: () async {
+        seen = AuthTokenHolder.accessToken;
+      });
+      await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: true);
+      await c.logout();
+      expect(seen, isNotNull);
+      expect(c.state.isAuthenticated, isFalse);
+    });
+
+    test('logout succeeds when beforeLogout throws', () async {
+      final c = AuthController(api, storage, beforeLogout: () async {
+        throw Exception('unregister failed');
+      });
+      await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: true);
+      await c.logout();
+      expect(c.state.isAuthenticated, isFalse);
+      expect(storage.stored, isNull);
+    });
+  });
+
+  test('logout revokes the refresh token current after beforeLogout', () async {
+    final c = AuthController(
+      api,
+      storage,
+      beforeLogout: () async {
+        // Simulates a 401 on DELETE /devices triggering a token rotation.
+        await AuthTokenHolder.onUnauthorized!();
+      },
+    );
+    await c.login(email: 'a@b.com', password: 'pw', keepSignedIn: false);
+    await c.logout();
+    expect(api.loggedOutTokens, ['refreshed-refresh']);
   });
 }

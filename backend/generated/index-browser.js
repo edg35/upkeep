@@ -230,6 +230,14 @@ exports.Prisma.ReminderScalarFieldEnum = {
   sent_at: 'sent_at'
 };
 
+exports.Prisma.DeviceTokenScalarFieldEnum = {
+  token: 'token',
+  user_id: 'user_id',
+  platform: 'platform',
+  created_at: 'created_at',
+  last_seen_at: 'last_seen_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -275,6 +283,11 @@ exports.TrackingMode = exports.$Enums.TrackingMode = {
   RECURRING: 'RECURRING'
 };
 
+exports.DevicePlatform = exports.$Enums.DevicePlatform = {
+  IOS: 'IOS',
+  ANDROID: 'ANDROID'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
@@ -287,7 +300,8 @@ exports.Prisma.ModelName = {
   ItemAssignee: 'ItemAssignee',
   ItemSchedule: 'ItemSchedule',
   ItemHistory: 'ItemHistory',
-  Reminder: 'Reminder'
+  Reminder: 'Reminder',
+  DeviceToken: 'DeviceToken'
 };
 
 /**
