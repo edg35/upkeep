@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../shared/widgets/upkeep_logo.dart';
 import 'widgets/auth_pill_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -21,15 +22,7 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: AppColors.mint,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.home_rounded, size: 18, color: AppColors.forest),
-                  ),
+                  const UpkeepLogo(height: 30),
                   const SizedBox(width: 12),
                   Text(
                     'Upkeep',
@@ -43,9 +36,14 @@ class WelcomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(28),
                   child: ColoredBox(
                     color: AppColors.ink.withValues(alpha: 0.35),
-                    child: CustomPaint(
-                      painter: const _HatchPainter(),
-                      child: const SizedBox.expand(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Image.asset(
+                        'assets/branding/welcome_plant.png',
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        excludeFromSemantics: true,
+                      ),
                     ),
                   ),
                 ),
@@ -100,25 +98,4 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Stand-in for the hand-drawn house + plants illustration until a real
-/// asset is supplied — a soft diagonal hatch on the hero panel.
-class _HatchPainter extends CustomPainter {
-  const _HatchPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.paper.withValues(alpha: 0.12)
-      ..strokeWidth = 2;
-
-    const gap = 14.0;
-    for (var x = -size.height; x < size.width; x += gap) {
-      canvas.drawLine(Offset(x, size.height), Offset(x + size.height, 0), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

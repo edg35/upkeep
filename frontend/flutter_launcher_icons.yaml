@@ -1,0 +1,12 @@
+# Regenerate with: dart run flutter_launcher_icons
+# Note: v0.14 rewrites ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS in
+# ios/Runner.xcodeproj/project.pbxproj to "AppIcon"; revert that file after running.
+flutter_launcher_icons:
+  image_path: "assets/branding/icon.png"
+  android: true  # overwrite the existing ic_launcher
+  ios: true
+  remove_alpha_ios: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#1D4B3B"
+  adaptive_icon_foreground: "assets/branding/icon_foreground.png"
+  adaptive_icon_monochrome: "assets/branding/icon_foreground.png"

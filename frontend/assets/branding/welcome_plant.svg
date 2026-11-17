@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720">
+  <defs>
+    <path id="leaf" d="M0 0 C70 -40 64 -150 0 -190 C-64 -150 -70 -40 0 0 Z"/>
+    <path id="vein" d="M0 -14 Q5 -100 0 -170" fill="none" stroke="#1D4B3B" stroke-width="6" stroke-linecap="round"/>
+    <path id="drop" d="M0 -22 C7 -10 13 -2 13 6 A13 13 0 0 1 -13 6 C-13 -2 -7 -10 0 -22 Z" fill="#9EC1DC"/>
+  </defs>
+  <!-- cloud -->
+  <g fill="#F5F1E8" transform="translate(0 -20)">
+    <circle cx="232" cy="150" r="52"/>
+    <circle cx="305" cy="118" r="72"/>
+    <circle cx="380" cy="148" r="56"/>
+    <rect x="180" y="148" width="255" height="62" rx="31"/>
+  </g>
+  <!-- rain -->
+  <use href="#drop" x="224" y="236"/>
+  <use href="#drop" x="300" y="226"/>
+  <use href="#drop" x="376" y="240"/>
+  <use href="#drop" x="262" y="296"/>
+  <use href="#drop" x="340" y="290"/>
+  <use href="#drop" x="190" y="318" opacity="0.75"/>
+  <use href="#drop" x="414" y="312" opacity="0.75"/>
+  <!-- shadow -->
+  <ellipse cx="300" cy="690" rx="120" ry="14" fill="#12312A" opacity="0.6"/>
+  <!-- stem -->
+  <path d="M300 540 C296 480 306 440 300 380" fill="none" stroke="#4CA771" stroke-width="12" stroke-linecap="round"/>
+  <!-- leaves -->
+  <g transform="translate(298 520) rotate(-62) scale(0.85)"><use href="#leaf" fill="#CBE7C8"/><use href="#vein"/></g>
+  <g transform="translate(302 500) rotate(60) scale(0.9)"><use href="#leaf" fill="#4CA771"/><use href="#vein"/></g>
+  <g transform="translate(300 455) rotate(-38) scale(0.8)"><use href="#leaf" fill="#4CA771"/><use href="#vein"/></g>
+  <g transform="translate(302 440) rotate(36) scale(0.72)"><use href="#leaf" fill="#CBE7C8"/><use href="#vein"/></g>
+  <g transform="translate(300 392) rotate(-4) scale(0.55)"><use href="#leaf" fill="#4CA771"/><use href="#vein"/></g>
+  <!-- pot -->
+  <path d="M222 560 H378 L360 676 Q358 686 348 686 H252 Q242 686 240 676 Z" fill="#D98F4E"/>
+  <rect x="204" y="528" width="192" height="42" rx="12" fill="#E7A86E"/>
+  <ellipse cx="300" cy="531" rx="80" ry="7" fill="#12312A" opacity="0.55"/>
+</svg>
