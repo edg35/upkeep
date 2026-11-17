@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:frontend/app.dart';
 import 'package:frontend/core/storage/secure_token_storage.dart';
+import 'package:frontend/shared/widgets/upkeep_logo.dart';
 
 class _FakeTokenStorage implements TokenStorage {
   @override
@@ -28,5 +29,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Welcome home.'), findsOneWidget);
+    // The brand mark appears once, in the header; the hero panel holds the
+    // plant illustration instead.
+    expect(find.byType(UpkeepLogo), findsOneWidget);
   });
 }
