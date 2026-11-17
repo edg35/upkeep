@@ -18,6 +18,12 @@ describe('parseServiceAccount', () => {
     expect(parseServiceAccount(expanded)).toEqual(account);
   });
 
+  it('ignores a trailing newline from a copy-paste', () => {
+    expect(parseServiceAccount(`${JSON.stringify(account)}\n`)).toEqual(
+      account,
+    );
+  });
+
   it('throws on malformed JSON', () => {
     expect(() => parseServiceAccount('{not json')).toThrow(SyntaxError);
   });

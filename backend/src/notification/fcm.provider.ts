@@ -8,10 +8,15 @@ export const FCM_MESSAGING = 'FCM_MESSAGING';
  * Parses the single-line service-account JSON. Some env loaders (dotenv,
  * Prisma's) expand the `\n` escapes in `private_key` into real newlines,
  * which JSON.parse rejects. Minified JSON has no structural newlines, so any
- * raw newline belongs to a string value and can be re-escaped safely.
+ * raw newline belongs to a string value and can be re-escaped safely. Outer
+ * whitespace is trimmed first: a trailing newline from a copy-paste (e.g.
+ * `jq -c ... | pbcopy`) would otherwise become a stray `\n` after the `}`.
  */
 export function parseServiceAccount(raw: string): Record<string, string> {
-  return JSON.parse(raw.replace(/\r?\n/g, '\\n')) as Record<string, string>;
+  return JSON.parse(raw.trim().replace(/\r?\n/g, '\\n')) as Record<
+    string,
+    string
+  >;
 }
 
 export const fcmProvider: Provider = {
