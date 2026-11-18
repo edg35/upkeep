@@ -71,6 +71,9 @@ List<HomeTask> buildTodayTasks(List<HouseholdItem> items, DateTime now) {
           isDone: true,
         ),
       ));
+    } else if (schedule.isOneTimeDone) {
+      // Finished one-time task from an earlier day: never roll it forward.
+      continue;
     } else if (dueTodayOrOverdue) {
       final overdueDays = daysBetween(schedule.nextDueDate, today);
       final isLate = overdueDays > 0;

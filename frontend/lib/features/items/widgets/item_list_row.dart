@@ -29,7 +29,7 @@ String _subtitle(HouseholdItem item, ItemStatus status, DateTime now) {
   switch (status) {
     case ItemStatus.completedToday:
       final by = item.latestCompletion?.completedByName;
-      return by != null ? 'Done by $by' : 'Done today';
+      return by != null ? 'Done by $by' : 'Done';
     case ItemStatus.overdue:
       final days = daysBetween(schedule.nextDueDate, today);
       return '$days day${days == 1 ? '' : 's'} late';

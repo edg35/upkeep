@@ -83,4 +83,78 @@ void main() {
     expect(after.schedule!.lastCompletedAt, completedAt);
     expect(after.schedule!.nextDueDate, before.schedule!.nextDueDate);
   });
+
+  group('one-time completion (PER-32)', () {
+    Map<String, dynamic> fixedItem({String? lastCompletedAt, List? histories}) => {
+      'item_id': 'f',
+      'name': 'Dentist',
+      'item_type': 'APPOINTMENT',
+      'category_id': null,
+      'purchase_link': null,
+      'updated_at': '2026-11-17T00:00:00.000Z',
+      'schedule': {
+        'tracking_mode': 'FIXED_DATE',
+        'next_due_date': '2026-11-17T00:00:00.000Z',
+        'last_completed_at': lastCompletedAt,
+      },
+      'histories': histories ?? const [],
+    };
+
+    test('takes completion from the schedule, not stale history', () async {
+      await store.upsertItemsFromServer([
+        fixedItem(
+          lastCompletedAt: null,
+          histories: [
+            {'completed_at': '2026-11-10T15:00:00.000Z', 'completer': {'name': 'Sam'}},
+          ],
+        ),
+      ]);
+
+      final item = (await store.watchItems().first).single;
+      expect(item.schedule!.lastCompletedAt, isNull);
+      expect(item.schedule!.isOneTimeDone, isFalse);
+    });
+
+    test('a synced completed one-time item is done', () async {
+      await store.upsertItemsFromServer([
+        fixedItem(lastCompletedAt: '2026-11-17T15:00:00.000Z'),
+      ]);
+
+      final item = (await store.watchItems().first).single;
+      expect(item.schedule!.isOneTimeDone, isTrue);
+    });
+
+    test('rescheduling a done one-time item offline reopens it', () async {
+      await store.upsertItemsFromServer([
+        fixedItem(lastCompletedAt: '2026-11-17T15:00:00.000Z'),
+      ]);
+
+      await store.applyOptimisticUpdate(itemId: 'f', body: {
+        'schedule': {
+          'tracking_mode': 'FIXED_DATE',
+          'fixed_due_date': '2026-12-01T00:00:00.000Z',
+        },
+      });
+
+      final item = (await store.watchItems().first).single;
+      expect(item.schedule!.isOneTimeDone, isFalse);
+    });
+
+    test('editing a done one-time item without moving its date keeps it done', () async {
+      await store.upsertItemsFromServer([
+        fixedItem(lastCompletedAt: '2026-11-17T15:00:00.000Z'),
+      ]);
+
+      await store.applyOptimisticUpdate(itemId: 'f', body: {
+        'name': 'Dentist (Dr. Lee)',
+        'schedule': {
+          'tracking_mode': 'FIXED_DATE',
+          'fixed_due_date': '2026-11-17T00:00:00.000Z',
+        },
+      });
+
+      final item = (await store.watchItems().first).single;
+      expect(item.schedule!.isOneTimeDone, isTrue);
+    });
+  });
 }
