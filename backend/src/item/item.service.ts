@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ItemSchedule, ItemType } from '../../generated';
+import { ItemSchedule, ItemType, TrackingMode } from '../../generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { ReminderService } from '../reminder/reminder.service';
 import { CompleteItemDto } from './dto/complete-item.dto';
@@ -13,6 +13,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import {
   computeInitialDueDate,
   computeNextDueDateOnCompletion,
+  isOneTimeDone,
 } from './schedule.util';
 
 interface ItemFilters {
@@ -222,6 +223,16 @@ export class ItemService {
         const leadTimeDays =
           dto.schedule.lead_time_days ?? existing!.lead_time_days;
 
+        // A completed one-time task stays done unless it is moved to a new
+        // date (or switched into FIXED_DATE), which makes it a fresh task.
+        const rescheduledOneTime =
+          trackingMode === TrackingMode.FIXED_DATE &&
+          (existing!.tracking_mode !== TrackingMode.FIXED_DATE ||
+            existing!.next_due_date.getTime() !== nextDueDate.getTime());
+        const lastCompletedAt = rescheduledOneTime
+          ? null
+          : existing!.last_completed_at;
+
         schedule = await tx.itemSchedule.update({
           where: { item_id: itemId },
           data: {
@@ -233,15 +244,20 @@ export class ItemService {
             recurrence_rule: dto.schedule.recurrence_rule,
             lead_time_days: dto.schedule.lead_time_days,
             next_due_date: nextDueDate,
+            ...(rescheduledOneTime ? { last_completed_at: null } : {}),
           },
         });
 
+        const done = isOneTimeDone({
+          tracking_mode: trackingMode,
+          last_completed_at: lastCompletedAt,
+        });
         await this.reminderService.syncForItem(
           tx,
           itemId,
           householdId,
           nextDueDate,
-          leadTimeDays,
+          done ? null : leadTimeDays,
         );
       }
 
@@ -308,7 +324,8 @@ export class ItemService {
         itemId,
         householdId,
         nextDueDate,
-        schedule.lead_time_days,
+        // A completed one-time task has nothing left to remind about.
+        isOneTimeDone(updatedSchedule) ? null : schedule.lead_time_days,
       );
 
       return { item: { ...item, schedule: updatedSchedule }, history };

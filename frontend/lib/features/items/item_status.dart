@@ -30,7 +30,8 @@ ItemStatus computeItemStatus(HouseholdItem item, DateTime now) {
   if (schedule == null) return ItemStatus.upcoming;
 
   final completedAt = schedule.lastCompletedAt;
-  if (completedAt != null && !dateOnly(completedAt).isBefore(today)) {
+  if (schedule.isOneTimeDone ||
+      (completedAt != null && !dateOnly(completedAt).isBefore(today))) {
     return ItemStatus.completedToday;
   }
 

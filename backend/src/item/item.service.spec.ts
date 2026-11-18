@@ -11,7 +11,11 @@ describe('ItemService', () => {
   let tx: {
     item: { create: jest.Mock; update: jest.Mock };
     reminder: { deleteMany: jest.Mock };
-    itemSchedule: { create: jest.Mock; update: jest.Mock };
+    itemSchedule: {
+      create: jest.Mock;
+      update: jest.Mock;
+      findUnique: jest.Mock;
+    };
     itemHistory: { create: jest.Mock };
     itemAssignee: { createMany: jest.Mock; findMany: jest.Mock };
   };
@@ -27,7 +31,11 @@ describe('ItemService', () => {
     tx = {
       item: { create: jest.fn(), update: jest.fn() },
       reminder: { deleteMany: jest.fn() },
-      itemSchedule: { create: jest.fn(), update: jest.fn() },
+      itemSchedule: {
+        create: jest.fn(),
+        update: jest.fn(),
+        findUnique: jest.fn(),
+      },
       itemHistory: { create: jest.fn() },
       itemAssignee: { createMany: jest.fn(), findMany: jest.fn() },
     };
@@ -318,11 +326,107 @@ describe('ItemService', () => {
       );
     });
 
+    it('keeps a completed FIXED_DATE item on its date and clears its reminders', async () => {
+      const due = new Date('2026-11-17T00:00:00.000Z');
+      const completedAt = new Date('2026-11-17T15:00:00.000Z');
+      prisma.item.findFirst.mockResolvedValue({
+        item_id: 'i1',
+        household_id: 'h1',
+        created_at: new Date('2026-11-01T00:00:00.000Z'),
+        schedule: {
+          tracking_mode: TrackingMode.FIXED_DATE,
+          fixed_due_date: due,
+          next_due_date: due,
+          lead_time_days: 1,
+        },
+      });
+      tx.itemHistory.create.mockResolvedValue({ history_id: 'h1' });
+      tx.itemSchedule.update.mockResolvedValue({
+        tracking_mode: TrackingMode.FIXED_DATE,
+        next_due_date: due,
+        last_completed_at: completedAt,
+      });
+
+      await service.complete('h1', 'i1', 'u1', {
+        completed_at: completedAt.toISOString(),
+      });
+
+      expect(tx.itemSchedule.update).toHaveBeenCalledWith({
+        where: { item_id: 'i1' },
+        data: { last_completed_at: completedAt, next_due_date: due },
+      });
+      // null lead time: delete pending reminders, create none.
+      expect(reminderService.syncForItem).toHaveBeenCalledWith(
+        tx,
+        'i1',
+        'h1',
+        due,
+        null,
+      );
+    });
+
     it('throws NotFoundException when the item does not exist in this household', async () => {
       prisma.item.findFirst.mockResolvedValue(null);
 
       await expect(service.complete('h1', 'i1', 'u1', {})).rejects.toThrow(
         NotFoundException,
+      );
+    });
+  });
+  describe('update', () => {
+    const oldDue = new Date('2026-11-17T00:00:00.000Z');
+    const completedAt = new Date('2026-11-17T15:00:00.000Z');
+
+    beforeEach(() => {
+      prisma.item.findFirst.mockResolvedValue({ item_id: 'i1' });
+      tx.item.update.mockResolvedValue({ item_id: 'i1' });
+      tx.itemSchedule.findUnique.mockResolvedValue({
+        tracking_mode: TrackingMode.FIXED_DATE,
+        fixed_due_date: oldDue,
+        next_due_date: oldDue,
+        last_completed_at: completedAt,
+        lead_time_days: 1,
+      });
+      tx.itemSchedule.update.mockResolvedValue({});
+    });
+
+    it('reopens a completed one-time item when it is moved to a new date', async () => {
+      const newDue = new Date('2026-12-01T00:00:00.000Z');
+
+      await service.update('h1', 'i1', {
+        schedule: { fixed_due_date: newDue.toISOString() },
+      });
+
+      expect(tx.itemSchedule.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            next_due_date: newDue,
+            last_completed_at: null,
+          }),
+        }),
+      );
+      expect(reminderService.syncForItem).toHaveBeenCalledWith(
+        tx,
+        'i1',
+        'h1',
+        newDue,
+        1,
+      );
+    });
+
+    it('keeps a completed one-time item done when its date is unchanged', async () => {
+      await service.update('h1', 'i1', { schedule: { lead_time_days: 3 } });
+
+      const [[{ data }]] = tx.itemSchedule.update.mock.calls as [
+        [{ data: Record<string, unknown> }],
+      ];
+      expect(data).not.toHaveProperty('last_completed_at');
+      expect(reminderService.syncForItem).toHaveBeenCalledWith(
+        tx,
+        'i1',
+        'h1',
+        oldDue,
+        null,
       );
     });
   });

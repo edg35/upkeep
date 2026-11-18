@@ -3,6 +3,7 @@ import { TrackingMode } from '../../generated';
 import {
   computeInitialDueDate,
   computeNextDueDateOnCompletion,
+  isOneTimeDone,
 } from './schedule.util';
 
 describe('computeInitialDueDate', () => {
@@ -139,4 +140,35 @@ describe('computeNextDueDateOnCompletion', () => {
       ),
     ).toThrow(ConflictException);
   });
+});
+
+describe('isOneTimeDone', () => {
+  const completed = new Date('2026-11-17T15:00:00.000Z');
+
+  it('is true for a FIXED_DATE item that has been completed', () => {
+    expect(
+      isOneTimeDone({
+        tracking_mode: TrackingMode.FIXED_DATE,
+        last_completed_at: completed,
+      }),
+    ).toBe(true);
+  });
+
+  it('is false for a FIXED_DATE item that has not been completed', () => {
+    expect(
+      isOneTimeDone({
+        tracking_mode: TrackingMode.FIXED_DATE,
+        last_completed_at: null,
+      }),
+    ).toBe(false);
+  });
+
+  it.each([TrackingMode.INTERVAL, TrackingMode.RECURRING])(
+    'is false for a completed %s item, which rolls forward instead',
+    (mode) => {
+      expect(
+        isOneTimeDone({ tracking_mode: mode, last_completed_at: completed }),
+      ).toBe(false);
+    },
+  );
 });

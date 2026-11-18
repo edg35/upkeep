@@ -74,3 +74,19 @@ export function computeNextDueDateOnCompletion(
       );
   }
 }
+
+/**
+ * A FIXED_DATE item is a one-time task: once it has been completed it stays
+ * done. Its next_due_date is left on the original date (for history/calendar
+ * placement), so callers must check this instead of comparing due dates, or
+ * a finished task reads as overdue the next day (PER-32).
+ */
+export function isOneTimeDone(schedule: {
+  tracking_mode: TrackingMode;
+  last_completed_at?: Date | null;
+}): boolean {
+  return (
+    schedule.tracking_mode === TrackingMode.FIXED_DATE &&
+    schedule.last_completed_at != null
+  );
+}

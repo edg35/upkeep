@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
 import { buildDigest, pickPhrase, sweepCutoff } from './digest.util';
 import { computeRemindAt } from './reminder.util';
+import { isOneTimeDone } from '../item/schedule.util';
 
 const DIGEST_TIME_ZONE = 'America/New_York';
 
@@ -72,7 +73,7 @@ export class ReminderService {
       itemId,
       item.household_id,
       item.schedule.next_due_date,
-      item.schedule.lead_time_days,
+      isOneTimeDone(item.schedule) ? null : item.schedule.lead_time_days,
     );
   }
 

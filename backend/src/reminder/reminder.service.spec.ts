@@ -201,6 +201,26 @@ describe('ReminderService', () => {
         skipDuplicates: true,
       });
     });
+
+    it('creates no reminders for a completed one-time item', async () => {
+      tx.item.findUnique.mockResolvedValue({
+        household_id: 'h1',
+        deleted_at: null,
+        schedule: {
+          tracking_mode: 'FIXED_DATE',
+          last_completed_at: new Date('2026-03-10T15:00:00.000Z'),
+          next_due_date: new Date('2026-03-10T00:00:00.000Z'),
+          lead_time_days: 2,
+        },
+      });
+
+      await service.resyncItem(tx as unknown as Prisma.TransactionClient, 'i1');
+
+      expect(tx.reminder.deleteMany).toHaveBeenCalledWith({
+        where: { item_id: 'i1', sent_at: null },
+      });
+      expect(tx.reminder.createMany).not.toHaveBeenCalled();
+    });
   });
 
   describe('sweepDue', () => {

@@ -113,11 +113,14 @@ class LocalItemStore {
       nextDueDate: schedule != null
           ? DateTime.parse(schedule['next_due_date'] as String).toLocal()
           : DateTime.now(),
-      lastCompletedAt: Value(
-        latestHistory != null
-            ? DateTime.parse(latestHistory['completed_at'] as String).toLocal()
-            : null,
-      ),
+      // The schedule's own completion stamp is authoritative: the server
+      // clears it when a finished one-time task is rescheduled, while its
+      // history keeps the old entry.
+      lastCompletedAt: Value(_parseLocal(
+        schedule != null
+            ? schedule['last_completed_at'] as String?
+            : latestHistory?['completed_at'] as String?,
+      )),
       lastCompletedByName: Value(completer?['name'] as String?),
       updatedAt: Value(
         json['updated_at'] != null
@@ -171,6 +174,9 @@ class LocalItemStore {
     );
   }
 
+  DateTime? _parseLocal(String? iso) =>
+      iso != null ? DateTime.parse(iso).toLocal() : null;
+
   /// Best-effort local due date for a just-created item, used only until
   /// the create mutation syncs and the real server-computed value replaces
   /// it. The server is the source of truth for schedule math (RRULE etc.).
@@ -195,8 +201,22 @@ class LocalItemStore {
     required Map<String, dynamic> body,
   }) async {
     final schedule = body['schedule'] as Map<String, dynamic>?;
+    final newDue = schedule != null ? _initialDueDateGuess(schedule) : null;
+
+    // Mirror the server: moving a one-time task to a new date reopens it.
+    var reopen = false;
+    if (schedule != null && schedule['tracking_mode'] == 'FIXED_DATE') {
+      final existing = await (_db.select(_db.localItems)
+            ..where((t) => t.itemId.equals(itemId)))
+          .getSingleOrNull();
+      reopen = existing != null &&
+          (existing.trackingMode != 'FIXED_DATE' ||
+              !existing.nextDueDate.isAtSameMomentAs(newDue!));
+    }
+
     await (_db.update(_db.localItems)..where((t) => t.itemId.equals(itemId))).write(
       LocalItemsCompanion(
+        lastCompletedAt: reopen ? const Value(null) : const Value.absent(),
         name: body.containsKey('name') ? Value(body['name'] as String) : const Value.absent(),
         itemType: body.containsKey('item_type')
             ? Value(body['item_type'] as String)
@@ -210,9 +230,7 @@ class LocalItemStore {
         trackingMode: schedule != null
             ? Value(schedule['tracking_mode'] as String)
             : const Value.absent(),
-        nextDueDate: schedule != null
-            ? Value(_initialDueDateGuess(schedule))
-            : const Value.absent(),
+        nextDueDate: newDue != null ? Value(newDue) : const Value.absent(),
       ),
     );
   }

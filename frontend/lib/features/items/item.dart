@@ -9,6 +9,11 @@ class ItemSchedule {
   final DateTime nextDueDate;
   final DateTime? lastCompletedAt;
 
+  /// A FIXED_DATE item is a one-time task: once completed it stays done, even
+  /// though [nextDueDate] still points at its (now past) original date.
+  bool get isOneTimeDone =>
+      trackingMode == 'FIXED_DATE' && lastCompletedAt != null;
+
   factory ItemSchedule.fromJson(Map<String, dynamic> json) {
     return ItemSchedule(
       trackingMode: json['tracking_mode'] as String,
